@@ -1,13 +1,3 @@
-"""
-transform.py - Transform module for Weather Data Pipeline
-
-This script transforms raw weather data from Open-Meteo API into a structured format.
-It combines data from both the forecast and air quality APIs into a single list of daily records.
-
-Author: Your Name
-Date: May 5, 2025
-"""
-
 import pandas as pd
 from datetime import datetime
 
@@ -54,6 +44,15 @@ def transform_weather_data(weather_data, air_data):
             "time": air_data["hourly"]["time"][latest_index] if "time" in air_data["hourly"] else "N/A"
         }
     
+    # Helper function to safely round numbers and handle None/NA values
+    def safe_round(value, decimals=2):
+        if value is None or value == "N/A":
+            return 0
+        try:
+            return round(float(value), decimals)
+        except (TypeError, ValueError):
+            return 0
+    
     transformed_data = []
     
     # Process each day in the forecast
@@ -69,8 +68,8 @@ def transform_weather_data(weather_data, air_data):
             "current_condition": get_weather_description(current_weathercode),
             "wind_kph": current_windspeed,
             "wind_dir": get_wind_direction(current_winddirection),
-            "pm2_5": round(latest_air_quality.get("pm2_5", 0), 2),
-            "pm10": round(latest_air_quality.get("pm10", 0), 2),
+            "pm2_5": safe_round(latest_air_quality.get("pm2_5")),
+            "pm10": safe_round(latest_air_quality.get("pm10")),
             "us_aqi": latest_air_quality.get("us_aqi", "N/A"),
             "aqi_category": get_aqi_category(latest_air_quality.get("us_aqi")),
             "forecast_max_temp": weather_data["daily"]["temperature_2m_max"][i] if "temperature_2m_max" in weather_data["daily"] else "N/A",
@@ -180,36 +179,3 @@ def get_aqi_category(aqi):
             return "Hazardous"
     except (ValueError, TypeError):
         return "Unknown"
-
-
-# Example usage (uncomment for testing)
-"""
-if __name__ == "__main__":
-    # Import extract module to get sample data
-    import extract
-    
-    # Define latitude and longitude for testing
-    LAT = 27.7  # Kathmandu Latitude
-    LON = 85.3  # Kathmandu Longitude
-    
-    # Fetch data using extract module
-    weather_data = extract.fetch_weather_forecast(LAT, LON)
-    air_data = extract.fetch_air_quality(LAT, LON)
-    
-    # Transform the data
-    transformed_list = transform_weather_data(weather_data, air_data)
-    
-    # Print the results
-    print("\n----- TRANSFORMED WEATHER DATA -----")
-    for day in transformed_list:
-        print(f"\nDate: {day['date']}")
-        print(f"Location: {day['latitude']}, {day['longitude']} ({day['timezone']})")
-        print(f"Current: {day['current_temp_c']}°C, {day['current_condition']}")
-        print(f"Forecast: Max {day['forecast_max_temp']}°C, Min {day['forecast_min_temp']}°C")
-        print(f"Air Quality: PM2.5: {day['pm2_5']}, PM10: {day['pm10']}, AQI: {day['us_aqi']} ({day['aqi_category']})")
-    
-    # Convert to DataFrame
-    df = transform_to_dataframe(weather_data, air_data)
-    print("\n----- DATAFRAME SAMPLE -----")
-    print(df.head())
-"""

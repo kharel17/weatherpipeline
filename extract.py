@@ -71,12 +71,3 @@ def display_summary(weather_data, air_data):
         print(f"  - US AQI: {aqi}")
     except IndexError:
         print("[ERROR] No recent air quality data found.")
-
-# ----- EXECUTION -----
-if __name__ == "__main__":
-    LAT = 27.7      # Kathmandu Latitude
-    LON = 85.3      # Kathmandu Longitude
-
-    weather = fetch_weather_forecast(LAT, LON)
-    air = fetch_air_quality(LAT, LON)
-    display_summary(weather, air)
