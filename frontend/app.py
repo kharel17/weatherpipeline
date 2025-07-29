@@ -4,16 +4,26 @@ Modern weather dashboard with ARIMA forecasting and beautiful Tailwind CSS inter
 """
 
 import os
+import sys
 import logging
+import requests
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, jsonify, session, flash, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
 
-# Local imports
-from models.database import init_database, WeatherRecord, get_database_stats
-from etl.pipeline import WeatherETLPipeline
-from models.forecast import ForecastManager, quick_forecast, STATSMODELS_AVAILABLE
-from utils.helpers import validate_coordinates, get_location_name, categorize_air_quality
+# Add the parent directory to Python path to find our modules
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+try:
+    # Local imports - now Python can find them
+    from models.database import init_database, WeatherRecord, get_database_stats
+    from etl.pipeline import WeatherETLPipeline
+    from models.forecast import ForecastManager, quick_forecast, STATSMODELS_AVAILABLE
+    from utils.helpers import validate_coordinates, get_location_name, categorize_air_quality
+except ImportError as e:
+    print(f"Import error: {e}")
+    print("Please make sure you're running from the project root directory")
+    print("Or install the modules: pip install -e .")
+    sys.exit(1)
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -74,13 +84,18 @@ def weather():
         # If no recent data, run ETL pipeline
         if not latest_record or _is_data_stale(latest_record):
             logger.info(f"Fetching fresh weather data for {lat}, {lon}")
-            pipeline = WeatherETLPipeline()
-            success = pipeline.run(lat, lon, display_summary=False)
-            
-            if success:
-                latest_record = WeatherRecord.get_latest_for_location(lat, lon)
-            else:
-                flash('Unable to fetch weather data. Please try again.', 'error')
+            try:
+                pipeline = WeatherETLPipeline()
+                success = pipeline.run(lat, lon, display_summary=False)
+                
+                if success:
+                    latest_record = WeatherRecord.get_latest_for_location(lat, lon)
+                else:
+                    flash('Unable to fetch weather data. Please try again later.', 'error')
+                    return redirect(url_for('index'))
+            except Exception as e:
+                logger.error(f"ETL pipeline error: {e}")
+                flash('Weather service temporarily unavailable. Please try again later.', 'error')
                 return redirect(url_for('index'))
         
         if not latest_record:
@@ -126,77 +141,6 @@ def weather():
         return redirect(url_for('index'))
 
 
-@app.route('/history')
-def history():
-    """Historical weather data page"""
-    try:
-        lat = request.args.get('lat', type=float)
-        lon = request.args.get('lon', type=float)
-        days = request.args.get('days', 30, type=int)
-        
-        if not lat or not lon:
-            flash('Please provide valid coordinates', 'error')
-            return redirect(url_for('index'))
-        
-        # Get historical data
-        historical_records = WeatherRecord.get_historical_for_location(lat, lon, days=days)
-        
-        location_name = get_location_name(lat, lon)
-        
-        # Prepare data for charts
-        chart_data = _prepare_chart_data(historical_records)
-        
-        return render_template('history.html',
-                             location={'name': location_name, 'lat': lat, 'lon': lon},
-                             historical_data=historical_records,
-                             chart_data=chart_data,
-                             days=days)
-        
-    except Exception as e:
-        logger.error(f"Error in history route: {e}")
-        flash('An error occurred while fetching historical data', 'error')
-        return redirect(url_for('index'))
-
-
-@app.route('/forecast')
-def forecast():
-    """Detailed forecast page with ARIMA predictions"""
-    try:
-        lat = request.args.get('lat', type=float)
-        lon = request.args.get('lon', type=float)
-        
-        if not lat or not lon:
-            flash('Please provide valid coordinates', 'error')
-            return redirect(url_for('index'))
-        
-        if not STATSMODELS_AVAILABLE:
-            flash('Forecasting not available. Please install statsmodels.', 'error')
-            return redirect(url_for('weather', lat=lat, lon=lon))
-        
-        # Generate forecast
-        manager = ForecastManager(min_data_points=5)
-        forecast_result = manager.create_temperature_forecast(lat, lon, days=5)
-        
-        if "error" in forecast_result:
-            flash(f'Unable to generate forecast: {forecast_result["error"]}', 'error')
-            return redirect(url_for('weather', lat=lat, lon=lon))
-        
-        location_name = get_location_name(lat, lon)
-        
-        # Get historical data for context
-        historical_records = WeatherRecord.get_historical_for_location(lat, lon, days=30)
-        
-        return render_template('forecast.html',
-                             location={'name': location_name, 'lat': lat, 'lon': lon},
-                             forecast=forecast_result,
-                             historical_data=historical_records)
-        
-    except Exception as e:
-        logger.error(f"Error in forecast route: {e}")
-        flash('An error occurred while generating forecast', 'error')
-        return redirect(url_for('index'))
-
-
 @app.route('/dashboard')
 def dashboard():
     """Multi-location dashboard"""
@@ -226,6 +170,27 @@ def dashboard():
     return render_template('dashboard.html', dashboard_data=dashboard_data)
 
 
+@app.route('/stats')
+def stats():
+    """System statistics page"""
+    try:
+        db_stats = get_database_stats()
+        
+        system_stats = {
+            'database': db_stats,
+            'forecasting_available': STATSMODELS_AVAILABLE,
+            'total_favorites': len(session.get('favorites', [])),
+            'app_version': '1.0.0'
+        }
+        
+        return render_template('stats.html', stats=system_stats)
+        
+    except Exception as e:
+        logger.error(f"Stats error: {e}")
+        flash('Error loading statistics', 'error')
+        return redirect(url_for('index'))
+
+
 # API Routes
 @app.route('/api/weather/<float:lat>/<float:lon>')
 def api_weather(lat, lon):
@@ -250,30 +215,53 @@ def api_weather(lat, lon):
         return jsonify({'error': 'Internal server error'}), 500
 
 
-@app.route('/api/forecast/<float:lat>/<float:lon>')
-def api_forecast(lat, lon):
-    """API endpoint for forecast data"""
+@app.route('/api/geocode/<city_name>')
+def api_geocode(city_name):
+    """API endpoint to convert city name to coordinates"""
     try:
-        if not validate_coordinates(lat, lon):
-            return jsonify({'error': 'Invalid coordinates'}), 400
+        # Use OpenStreetMap Nominatim for geocoding
+        url = "https://nominatim.openstreetmap.org/search"
+        params = {
+            'q': city_name,
+            'format': 'json',
+            'limit': 1,
+            'addressdetails': 1
+        }
+        headers = {
+            'User-Agent': 'WeatherInsightEngine/1.0'
+        }
         
-        if not STATSMODELS_AVAILABLE:
-            return jsonify({'error': 'Forecasting not available'}), 503
+        response = requests.get(url, params=params, headers=headers, timeout=5)
         
-        days = request.args.get('days', 3, type=int)
-        forecast_result = quick_forecast(lat, lon, days)
-        
-        if "error" in forecast_result:
-            return jsonify({'error': forecast_result['error']}), 400
-        
-        return jsonify({
-            'success': True,
-            'data': forecast_result
-        })
-        
+        if response.status_code == 200:
+            data = response.json()
+            
+            if data:
+                location = data[0]
+                return jsonify({
+                    'success': True,
+                    'latitude': float(location['lat']),
+                    'longitude': float(location['lon']),
+                    'display_name': location['display_name'],
+                    'name': location.get('name', city_name)
+                })
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': 'Location not found'
+                }), 404
+        else:
+            return jsonify({
+                'success': False,
+                'error': 'Geocoding service unavailable'
+            }), 503
+            
     except Exception as e:
-        logger.error(f"API forecast error: {e}")
-        return jsonify({'error': 'Internal server error'}), 500
+        logger.error(f"Geocoding error: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Internal server error'
+        }), 500
 
 
 @app.route('/api/update-weather', methods=['POST'])
@@ -363,27 +351,6 @@ def remove_favorite():
         return jsonify({'error': 'Internal server error'}), 500
 
 
-@app.route('/stats')
-def stats():
-    """System statistics page"""
-    try:
-        db_stats = get_database_stats()
-        
-        system_stats = {
-            'database': db_stats,
-            'forecasting_available': STATSMODELS_AVAILABLE,
-            'total_favorites': len(session.get('favorites', [])),
-            'app_version': '1.0.0'
-        }
-        
-        return render_template('stats.html', stats=system_stats)
-        
-    except Exception as e:
-        logger.error(f"Stats error: {e}")
-        flash('Error loading statistics', 'error')
-        return redirect(url_for('index'))
-
-
 # Helper functions
 def _is_data_stale(record, hours=2):
     """Check if weather data is stale (older than specified hours)"""
@@ -392,30 +359,6 @@ def _is_data_stale(record, hours=2):
     
     cutoff_time = datetime.utcnow() - timedelta(hours=hours)
     return record.created_at < cutoff_time
-
-
-def _prepare_chart_data(records):
-    """Prepare historical data for charts"""
-    if not records:
-        return {}
-    
-    dates = [r.date for r in records]
-    temps = [r.current_temp_c for r in records if r.current_temp_c is not None]
-    max_temps = [r.forecast_max_temp for r in records if r.forecast_max_temp is not None]
-    min_temps = [r.forecast_min_temp for r in records if r.forecast_min_temp is not None]
-    precipitation = [r.precipitation_mm for r in records if r.precipitation_mm is not None]
-    aqi_values = [r.us_aqi for r in records if r.us_aqi is not None]
-    
-    return {
-        'dates': dates,
-        'temperature': {
-            'current': temps,
-            'max': max_temps,
-            'min': min_temps
-        },
-        'precipitation': precipitation,
-        'air_quality': aqi_values
-    }
 
 
 # Error handlers
