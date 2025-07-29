@@ -11,26 +11,14 @@ import load
 
 
 def run_pipeline(latitude, longitude, save_to_db=True, save_to_csv=True, display_summary=True):
-    """
-    Run the complete ETL pipeline.
-    
-    Args:
-        latitude (float): Latitude for weather location
-        longitude (float): Longitude for weather location
-        save_to_db (bool): Whether to save data to SQLite database
-        save_to_csv (bool): Whether to save data to CSV file
-        display_summary (bool): Whether to display data summary
-        
-    Returns:
-        bool: True if successful, False otherwise
-    """
     print("\n===== WEATHER DATA PIPELINE STARTED =====")
     start_time = time.time()
     
     # Step 1: Extract data
     print("\n----- EXTRACTION PHASE -----")
-    weather_data = extract.fetch_weather_forecast(latitude, longitude)
-    air_data = extract.fetch_air_quality(latitude, longitude)
+    fetcher = extract.WeatherFetcher(latitude, longitude)
+    weather_data = fetcher.fetch_weather_forecast()
+    air_data = fetcher.fetch_air_quality()
     
     if not weather_data or not air_data:
         print("[ERROR] Extraction failed. Pipeline terminated.")
@@ -38,7 +26,8 @@ def run_pipeline(latitude, longitude, save_to_db=True, save_to_csv=True, display
     
     # Step 2: Transform data
     print("\n----- TRANSFORMATION PHASE -----")
-    transformed_data = transform.transform_weather_data(weather_data, air_data)
+    transformer = transform.WeatherTransformer(weather_data, air_data)
+    transformed_data = transformer.transform()
     
     if not transformed_data:
         print("[ERROR] Transformation failed. Pipeline terminated.")
@@ -47,16 +36,19 @@ def run_pipeline(latitude, longitude, save_to_db=True, save_to_csv=True, display
     # Step 3: Load data
     print("\n----- LOADING PHASE -----")
     
+    # Create loader instance
+    loader = load.WeatherLoader(transformed_data)
+    
     # Save to SQLite database if requested
     if save_to_db:
-        load.create_sqlite_tables()  # Ensure tables are created
-        db_success = load.save_to_sqlite(transformed_data)
+        load.WeatherLoader.create_sqlite_tables()  # Ensure tables are created
+        db_success = loader.save_to_sqlite()
         if not db_success:
             print("[WARNING] Failed to save data to database.")
     
     # Save to CSV file if requested
     if save_to_csv:
-        csv_path = load.save_to_csv(transformed_data)
+        csv_path = loader.save_to_csv()
         if not csv_path:
             print("[WARNING] Failed to save data to CSV.")
     
@@ -72,14 +64,7 @@ def run_pipeline(latitude, longitude, save_to_db=True, save_to_csv=True, display
 
 
 def show_data_summary(transformed_data, weather_data, air_data):
-    """
-    Display a summary of the processed weather data.
-    
-    Args:
-        transformed_data (list): List of transformed weather data dictionaries
-        weather_data (dict): Raw weather data
-        air_data (dict): Raw air quality data
-    """
+    # Display data summary
     print("\n----- DATA SUMMARY -----")
     
     # Display basic info
@@ -110,12 +95,7 @@ def show_data_summary(transformed_data, weather_data, air_data):
 
 
 def parse_arguments():
-    """
-    Parse command line arguments.
-    
-    Returns:
-        argparse.Namespace: Parsed command line arguments
-    """
+    # Parse command-line arguments
     parser = argparse.ArgumentParser(description='Weather Data ETL Pipeline')
     
     # Required arguments

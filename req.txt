@@ -1,0 +1,21 @@
+# Core Framework
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+
+# Data Processing
+pandas==2.1.4
+numpy==1.25.2
+requests==2.31.0
+
+# Database
+sqlalchemy==2.0.23
+
+# Forecasting and Statistics
+statsmodels==0.14.0
+scipy==1.11.4
+
+# Environment and Configuration
+python-dotenv==1.0.0
+
+# Date and Time
+python-dateutil==2.8.2
