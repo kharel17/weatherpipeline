@@ -127,7 +127,7 @@ def parse_arguments():
     
     # If no location is provided, default to Kathmandu
     if args.lat is None or args.lon is None:
-        args.lat, args.lon = predefined_locations['kathmandu']
+        args.lat, args.lon = predefined_locations['Banglore']
         print(f"[INFO] No location specified. Using default: Kathmandu ({args.lat}, {args.lon})")
     
     return args

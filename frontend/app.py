@@ -400,4 +400,4 @@ if __name__ == '__main__':
     logger.info(f"Debug mode: {debug}")
     logger.info(f"Forecasting available: {STATSMODELS_AVAILABLE}")
     
-    app.run(host='0.0.0.0', port=port, debug=debug)
+    app.run(host='127.0.0.1', port=5050, debug=False)

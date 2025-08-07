@@ -1,21 +1,16 @@
-"""
-ETL Pipeline Orchestrator
-Main class that coordinates the Extract, Transform, Load operations
-"""
-
 import logging
 import time
 import os
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Optional, Tuple, Dict, Any, List
 
 from .extract import WeatherExtractor
 from .transform import WeatherTransformer
 from .load import WeatherLoader
+from models.database import init_database, db_session
 
 logger = logging.getLogger(__name__)
-
 
 class WeatherETLPipeline:
     """
@@ -30,18 +25,18 @@ class WeatherETLPipeline:
             data_dir: Directory for data storage
             enable_logging: Enable detailed logging
         """
-        self.data_dir = data_dir
+        self.data_dir = Path(data_dir)  # Convert to Path object
         self.enable_logging = enable_logging
         self.execution_stats = {}
+        self.start_time = time.time()
         
         # Create data directory structure
-        data_path = Path(self.data_dir)
-        data_path.mkdir(exist_ok=True)
+        self.data_dir.mkdir(exist_ok=True)
         
         # Create subdirectories
         subdirs = ['logs', 'csv_exports', 'json_exports']
         for subdir in subdirs:
-            (data_path / subdir).mkdir(exist_ok=True)
+            (self.data_dir / subdir).mkdir(exist_ok=True)
         
         if self.enable_logging:
             self._setup_logging()
@@ -67,14 +62,14 @@ class WeatherETLPipeline:
         Returns:
             bool: True if pipeline completed successfully
         """
-        pipeline_start_time = time.time()
+        self.start_time = time.time()
         
         try:
             logger.info("="*60)
             logger.info("WEATHER DATA ETL PIPELINE STARTED")
             logger.info("="*60)
             logger.info(f"Location: {latitude}, {longitude}")
-            logger.info(f"Timestamp: {datetime.now().isoformat()}")
+            logger.info(f"Timestamp: {datetime.now(timezone.utc).isoformat()}")
             
             # Step 1: Extract
             logger.info("\n" + "-"*40)
@@ -109,22 +104,25 @@ class WeatherETLPipeline:
             )
             
             # Calculate total execution time
-            total_execution_time = time.time() - pipeline_start_time
+            total_execution_time = time.time() - self.start_time
             self.execution_stats['total_time'] = total_execution_time
             
             # Display summary if requested
             if display_summary:
                 self._display_execution_summary(transformed_data, load_success)
             
-            # Log completion
+            # Log completion based on load success
             logger.info("\n" + "="*60)
-            logger.info(f"PIPELINE COMPLETED SUCCESSFULLY IN {total_execution_time:.2f} SECONDS")
+            if load_success:
+                logger.info(f"PIPELINE COMPLETED SUCCESSFULLY IN {total_execution_time:.2f} SECONDS")
+            else:
+                logger.info(f"PIPELINE COMPLETED WITH ERRORS IN {total_execution_time:.2f} SECONDS")
             logger.info("="*60)
             
-            return True
+            return load_success
             
         except Exception as e:
-            total_execution_time = time.time() - pipeline_start_time
+            total_execution_time = time.time() - self.start_time
             logger.error(f"Pipeline failed after {total_execution_time:.2f} seconds: {e}")
             return False
 
@@ -162,14 +160,14 @@ class WeatherETLPipeline:
                 
                 if success:
                     successful_locations.append((lat, lon))
-                    logger.info(f"✅ Location {i} completed successfully")
+                    logger.info(f"[SUCCESS] Location {i} completed successfully")
                 else:
                     failed_locations.append((lat, lon))
-                    logger.error(f"❌ Location {i} failed")
+                    logger.error(f"[FAILURE] Location {i} failed")
                     
             except Exception as e:
                 failed_locations.append((lat, lon))
-                logger.error(f"❌ Location {i} failed with error: {e}")
+                logger.error(f"[FAILURE] Location {i} failed with error: {e}")
         
         batch_execution_time = time.time() - batch_start_time
         
@@ -268,7 +266,7 @@ class WeatherETLPipeline:
     def _load_data(self, transformed_data: List[Dict], 
                    save_to_db: bool = True, 
                    save_to_csv: bool = True, 
-                   save_to_json: bool = False) -> Dict[str, Any]:
+                   save_to_json: bool = False) -> bool:
         """
         Execute data loading step
         
@@ -279,42 +277,47 @@ class WeatherETLPipeline:
             save_to_json: Save to JSON file
             
         Returns:
-            Dict: Loading results
+            bool: True if loading completed successfully
         """
         load_start_time = time.time()
-        results = {}
         
         try:
             # Create loader
-            loader = WeatherLoader(transformed_data, self.data_dir)
+            loader = WeatherLoader(transformed_data, str(self.data_dir))  # Convert Path to string for compatibility
+            
+            # Initialize database if not already done
+            if save_to_db and not db_session:
+                init_database(f"sqlite:///{self.data_dir / 'weather_data.db'}")
+                if not db_session:
+                    raise RuntimeError("Failed to initialize database session")
             
             # Create database tables if saving to DB
             if save_to_db:
-                WeatherLoader.create_sqlite_tables(data_dir=self.data_dir)
+                WeatherLoader.create_sqlite_tables(data_dir=str(self.data_dir))
                 db_success = loader.save_to_sqlite()
-                results['database'] = db_success
                 if db_success:
-                    logger.info("✅ Data saved to SQLite database")
+                    logger.info("[SUCCESS] Data saved to SQLite database")
                 else:
-                    logger.error("❌ Failed to save to database")
+                    logger.error("[FAILURE] Failed to save to database")
+                    return False
             
             # Save to CSV if requested
             if save_to_csv:
                 csv_path = loader.save_to_csv()
-                results['csv'] = csv_path
                 if csv_path:
-                    logger.info(f"✅ Data saved to CSV: {csv_path}")
+                    logger.info(f"[SUCCESS] Data saved to CSV: {csv_path}")
                 else:
-                    logger.error("❌ Failed to save to CSV")
+                    logger.error("[FAILURE] Failed to save to CSV")
+                    return False
             
             # Save to JSON if requested
             if save_to_json:
                 json_path = loader.save_to_json()
-                results['json'] = json_path
                 if json_path:
-                    logger.info(f"✅ Data saved to JSON: {json_path}")
+                    logger.info(f"[SUCCESS] Data saved to JSON: {json_path}")
                 else:
-                    logger.error("❌ Failed to save to JSON")
+                    logger.error("[FAILURE] Failed to save to JSON")
+                    return False
             
             # Log quality metrics
             load_time = time.time() - load_start_time
@@ -327,20 +330,19 @@ class WeatherETLPipeline:
             )
             
             logger.info(f"Data loading completed in {load_time:.2f} seconds")
-            
-            return results
+            return True
             
         except Exception as e:
             logger.error(f"Data loading failed: {e}")
-            return {}
+            return False
 
-    def _display_execution_summary(self, transformed_data: List[Dict], load_results: Dict[str, Any]) -> None:
+    def _display_execution_summary(self, transformed_data: List[Dict], load_success: bool) -> None:
         """
         Display execution summary
         
         Args:
             transformed_data: Transformed data records
-            load_results: Results from data loading
+            load_success: Whether loading was successful
         """
         logger.info("\n" + "="*60)
         logger.info("EXECUTION SUMMARY")
@@ -388,14 +390,20 @@ class WeatherETLPipeline:
         
         # Storage results
         logger.info(f"\nData Storage:")
-        for format_type, result in load_results.items():
-            status = "✅ Success" if result else "❌ Failed"
-            logger.info(f"  {format_type.upper()}: {status}")
+        if save_to_db:
+            status = "[SUCCESS]" if load_success else "[FAILURE]"
+            logger.info(f"  DATABASE: {status}")
+        if save_to_csv:
+            status = "[SUCCESS]" if load_success else "[FAILURE]"
+            logger.info(f"  CSV: {status}")
+        if save_to_json:
+            status = "[SUCCESS]" if load_success else "[FAILURE]"
+            logger.info(f"  JSON: {status}")
 
     def _setup_logging(self) -> None:
         """Setup detailed logging configuration"""
         # Ensure logs directory exists
-        logs_dir = Path(self.data_dir) / "logs"
+        logs_dir = self.data_dir / "logs"
         logs_dir.mkdir(parents=True, exist_ok=True)
         
         log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -405,7 +413,7 @@ class WeatherETLPipeline:
         
         try:
             log_file = logs_dir / "etl_pipeline.log"
-            file_handler = logging.FileHandler(log_file)
+            file_handler = logging.FileHandler(log_file, encoding='utf-8')
             file_handler.setFormatter(logging.Formatter(log_format))
             handlers.append(file_handler)
         except (OSError, PermissionError) as e:
@@ -429,7 +437,7 @@ class WeatherETLPipeline:
         """
         return {
             **self.execution_stats,
-            'timestamp': datetime.now().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'pipeline_version': '1.0.0'
         }
 
@@ -466,23 +474,22 @@ class WeatherETLPipeline:
             Dict: Health check results
         """
         health_status = {
-            'timestamp': datetime.now().isoformat(),
+            'timestamp': datetime.now(timezone.utc).isoformat(),
             'overall_status': 'healthy',
             'components': {}
         }
         
         try:
             # Check data directory
-            data_path = Path(self.data_dir)
             health_status['components']['data_directory'] = {
-                'status': 'healthy' if data_path.exists() else 'unhealthy',
-                'path': str(data_path),
-                'writable': data_path.is_dir() and os.access(data_path, os.W_OK) if data_path.exists() else False
+                'status': 'healthy' if self.data_dir.exists() else 'unhealthy',
+                'path': str(self.data_dir),
+                'writable': self.data_dir.is_dir() and os.access(self.data_dir, os.W_OK) if self.data_dir.exists() else False
             }
             
             # Check database
             try:
-                WeatherLoader.get_database_stats(data_dir=self.data_dir)
+                WeatherLoader.get_database_stats(data_dir=str(self.data_dir))
                 health_status['components']['database'] = {'status': 'healthy'}
             except Exception as e:
                 health_status['components']['database'] = {'status': 'unhealthy', 'error': str(e)}

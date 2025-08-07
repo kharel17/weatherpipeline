@@ -12,6 +12,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Union
+from models.database import db_session, WeatherRecord, Base, engine, init_database
 
 logger = logging.getLogger(__name__)
 
@@ -120,11 +121,11 @@ class WeatherLoader:
 
     def save_to_sqlite(self, db_name: str = 'weather_data.db', table_name: str = 'weather_records') -> bool:
         """
-        Save data to SQLite database with improved error handling
+        Save data to SQLite database using SQLAlchemy session
         
         Args:
             db_name: Database filename
-            table_name: Table name for weather data
+            table_name: Table name for weather data (should be 'weather_records')
             
         Returns:
             bool: True if successful, False otherwise
@@ -134,31 +135,27 @@ class WeatherLoader:
                 logger.warning("No data to save to SQLite")
                 return False
             
-            db_path = self.data_dir / db_name
+            # Initialize database if session is not set
+            if not db_session:
+                init_database(f"sqlite:///{self.data_dir / db_name}")
+                if not db_session:
+                    raise RuntimeError("Failed to initialize database session")
             
-            # Create connection with proper error handling
-            with sqlite3.connect(db_path) as conn:
-                # Enable foreign keys and other optimizations
-                conn.execute("PRAGMA foreign_keys = ON")
-                conn.execute("PRAGMA journal_mode = WAL")
-                
-                # Save data to table
-                records_saved = self.data.to_sql(
-                    table_name, 
-                    conn, 
-                    if_exists='append', 
-                    index=False,
-                    method='multi'  # Faster bulk insert
-                )
-                
-                logger.info(f"Successfully saved {len(self.data)} records to SQLite: {db_path}")
-                return True
-                
-        except sqlite3.Error as e:
-            logger.error(f"SQLite error: {e}")
-            return False
+            for record in self.data.to_dict('records'):
+                # Check for existing record to avoid duplicates
+                existing = db_session.query(WeatherRecord).filter_by(
+                    date=record['date'],
+                    latitude=record['latitude'],
+                    longitude=record['longitude']
+                ).first()
+                if not existing:
+                    db_session.add(WeatherRecord.from_dict(record))
+            db_session.commit()
+            logger.info(f"Successfully saved {len(self.data)} records to {table_name}")
+            return True
         except Exception as e:
-            logger.error(f"Failed to save data to SQLite: {e}")
+            logger.error(f"Failed to save data to {table_name}: {e}")
+            db_session.rollback()
             return False
 
     def save_all_formats(self, base_filename: Optional[str] = None) -> Dict[str, Optional[str]]:
@@ -192,7 +189,7 @@ class WeatherLoader:
     @staticmethod
     def create_sqlite_tables(db_name: str = 'weather_data.db', data_dir: str = "data") -> bool:
         """
-        Create SQLite database tables with enhanced schema
+        Create SQLite database tables based on SQLAlchemy models
         
         Args:
             db_name: Database filename
@@ -206,89 +203,10 @@ class WeatherLoader:
             data_path.mkdir(exist_ok=True)
             db_path = data_path / db_name
             
-            with sqlite3.connect(db_path) as conn:
-                cursor = conn.cursor()
-                
-                # Create main weather records table with enhanced schema
-                cursor.execute('''
-                    CREATE TABLE IF NOT EXISTS weather_records (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        
-                        -- Temporal data
-                        date TEXT NOT NULL,
-                        last_updated TEXT,
-                        measurement_time TEXT,
-                        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-                        
-                        -- Location data
-                        latitude REAL NOT NULL,
-                        longitude REAL NOT NULL,
-                        timezone TEXT,
-                        elevation REAL,
-                        
-                        -- Current weather
-                        current_temp_c REAL,
-                        current_condition TEXT,
-                        wind_kph REAL,
-                        wind_dir TEXT,
-                        
-                        -- Daily forecast
-                        forecast_max_temp REAL,
-                        forecast_min_temp REAL,
-                        precipitation_mm REAL,
-                        uv_index REAL,
-                        weather_code INTEGER,
-                        forecast_condition TEXT,
-                        
-                        -- Air quality
-                        pm2_5 REAL,
-                        pm10 REAL,
-                        us_aqi INTEGER,
-                        european_aqi INTEGER,
-                        aqi_category TEXT,
-                        
-                        -- Metadata
-                        data_source TEXT DEFAULT 'open-meteo',
-                        
-                        -- Constraints
-                        UNIQUE(date, latitude, longitude)
-                    )
-                ''')
-                
-                # Create indexes for better query performance
-                indexes = [
-                    "CREATE INDEX IF NOT EXISTS idx_date ON weather_records (date)",
-                    "CREATE INDEX IF NOT EXISTS idx_location ON weather_records (latitude, longitude)",
-                    "CREATE INDEX IF NOT EXISTS idx_date_location ON weather_records (date, latitude, longitude)",
-                    "CREATE INDEX IF NOT EXISTS idx_created_at ON weather_records (created_at)",
-                    "CREATE INDEX IF NOT EXISTS idx_aqi ON weather_records (us_aqi)"
-                ]
-                
-                for index_sql in indexes:
-                    cursor.execute(index_sql)
-                
-                # Create data quality summary table
-                cursor.execute('''
-                    CREATE TABLE IF NOT EXISTS data_quality_log (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
-                        records_processed INTEGER,
-                        records_saved INTEGER,
-                        errors_count INTEGER,
-                        processing_time_seconds REAL,
-                        location_lat REAL,
-                        location_lon REAL,
-                        notes TEXT
-                    )
-                ''')
-                
-                conn.commit()
-                logger.info(f"SQLite database and tables created successfully: {db_path}")
-                return True
-                
-        except sqlite3.Error as e:
-            logger.error(f"SQLite error creating tables: {e}")
-            return False
+            # Use SQLAlchemy to create tables based on models
+            Base.metadata.create_all(engine)
+            logger.info(f"SQLite database and tables created successfully: {db_path}")
+            return True
         except Exception as e:
             logger.error(f"Failed to create SQLite tables: {e}")
             return False

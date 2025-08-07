@@ -188,6 +188,7 @@ class WeatherExtractor:
             if key not in self.weather_data:
                 logger.error(f"Missing required weather data key: {key}")
                 return False
+            
         
         # Validate current weather data
         current = self.weather_data.get('current_weather', {})
