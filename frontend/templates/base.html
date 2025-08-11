@@ -1,416 +1,612 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Weather Insight Engine{% endblock %}</title>
-    
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Chart.js for beautiful data visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <!-- Custom Tailwind Configuration -->
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        weather: {
-                            primary: '#3B82F6',
-                            secondary: '#10B981',
-                            accent: '#F59E0B',
-                            danger: '#EF4444',
-                            warning: '#F59E0B',
-                            info: '#06B6D4',
-                            dark: '#1F2937',
-                            light: '#F9FAFB'
-                        }
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-in-out',
-                        'slide-up': 'slideUp 0.3s ease-out',
-                        'bounce-gentle': 'bounceGentle 2s ease-in-out infinite',
-                        'pulse-slow': 'pulse 3s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' }
-                        },
-                        slideUp: {
-                            '0%': { transform: 'translateY(20px)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' }
-                        },
-                        bounceGentle: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-5px)' }
-                        }
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              weather: {
+                primary: "#3B82F6",
+                secondary: "#10B981",
+                accent: "#F59E0B",
+                danger: "#EF4444",
+                warning: "#F59E0B",
+                info: "#06B6D4",
+                dark: "#1F2937",
+                light: "#F9FAFB",
+              },
+            },
+            animation: {
+              "fade-in": "fadeIn 0.5s ease-in-out",
+              "slide-up": "slideUp 0.3s ease-out",
+              "bounce-gentle": "bounceGentle 2s ease-in-out infinite",
+              "pulse-slow": "pulse 3s ease-in-out infinite",
+            },
+            keyframes: {
+              fadeIn: {
+                "0%": { opacity: "0" },
+                "100%": { opacity: "1" },
+              },
+              slideUp: {
+                "0%": { transform: "translateY(20px)", opacity: "0" },
+                "100%": { transform: "translateY(0)", opacity: "1" },
+              },
+              bounceGentle: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-5px)" },
+              },
+            },
+          },
+        },
+      };
     </script>
-    
+
     <style>
-        .bg-weather-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      .bg-weather-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .bg-forecast-gradient {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
+
+      .bg-air-quality-gradient {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      }
+
+      .glass {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      .weather-icon:hover {
+        transform: scale(1.1);
+        transition: transform 0.3s ease;
+      }
+
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
         }
-        
-        .bg-forecast-gradient {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        100% {
+          transform: rotate(360deg);
         }
-        
-        .bg-air-quality-gradient {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-        
-        .glass {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
-        
-        .weather-icon:hover {
-            transform: scale(1.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
     </style>
-    
+
     {% block extra_head %}{% endblock %}
-</head>
-<body class="h-full bg-gradient-to-br from-blue-50 via-white to-cyan-50">
+  </head>
+  <body class="h-full bg-gradient-to-br from-blue-50 via-white to-cyan-50">
     <!-- Navigation -->
     <nav class="bg-white shadow-lg border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo and brand -->
-                <div class="flex items-center">
-                    <a href="{{ url_for('index') }}" class="flex items-center space-x-3">
-                        <div class="bg-blue-600 p-2 rounded-lg">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
-                            </svg>
-                        </div>
-                        <span class="text-xl font-bold text-gray-900">{{ app_name }}</span>
-                    </a>
-                </div>
-                
-                <!-- Desktop navigation -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="{{ url_for('index') }}" class="text-gray-600 hover:text-blue-600 transition-colors duration-200 font-medium">
-                        Home
-                    </a>
-                    <a href="{{ url_for('dashboard') }}" class="text-gray-600 hover:text-blue-600 transition-colors duration-200 font-medium">
-                        Dashboard
-                    </a>
-                    <a href="{{ url_for('stats') }}" class="text-gray-600 hover:text-blue-600 transition-colors duration-200 font-medium">
-                        Statistics
-                    </a>
-                    
-                    <!-- Forecasting status indicator -->
-                    {% if forecasting_available %}
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            </svg>
-                            Forecasting Active
-                        </span>
-                    {% else %}
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                            </svg>
-                            Limited Features
-                        </span>
-                    {% endif %}
-                </div>
-                
-                <!-- Mobile menu button -->
-                <div class="md:hidden">
-                    <button id="mobileMenuToggle" class="text-gray-600 hover:text-blue-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path id="menuOpenIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                            <path id="menuCloseIcon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Mobile navigation menu -->
-            <div id="mobileMenu" class="hidden md:hidden">
-                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200">
-                    <a href="{{ url_for('index') }}" class="block px-3 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md">
-                        Home
-                    </a>
-                    <a href="{{ url_for('dashboard') }}" class="block px-3 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md">
-                        Dashboard
-                    </a>
-                    <a href="{{ url_for('stats') }}" class="block px-3 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md">
-                        Statistics
-                    </a>
-                </div>
-            </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <!-- Logo and brand -->
+          <div class="flex items-center">
+            <a
+              href="{{ url_for('index') }}"
+              class="flex items-center space-x-3"
+            >
+              <div class="bg-blue-600 p-2 rounded-lg">
+                <svg
+                  class="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-xl font-bold text-gray-900"
+                >{{ app_name }}</span
+              >
+            </a>
+          </div>
+
+          <!-- Desktop navigation -->
+          <div class="hidden md:flex items-center space-x-8">
+            <a
+              href="{{ url_for('index') }}"
+              class="text-gray-600 hover:text-blue-600 transition-colors duration-200 font-medium"
+            >
+              Home
+            </a>
+            <a
+              href="{{ url_for('dashboard') }}"
+              class="text-gray-600 hover:text-blue-600 transition-colors duration-200 font-medium"
+            >
+              Dashboard
+            </a>
+            <a
+              href="{{ url_for('stats') }}"
+              class="text-gray-600 hover:text-blue-600 transition-colors duration-200 font-medium"
+            >
+              Statistics
+            </a>
+
+            <!-- Forecasting status indicator -->
+            {% if forecasting_available %}
+            <span
+              class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
+            >
+              <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              Forecasting Active
+            </span>
+            {% else %}
+            <span
+              class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"
+            >
+              <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              Limited Features
+            </span>
+            {% endif %}
+          </div>
+
+          <!-- Mobile menu button -->
+          <div class="md:hidden">
+            <button
+              id="mobileMenuToggle"
+              class="text-gray-600 hover:text-blue-600"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  id="menuOpenIcon"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
+                <path
+                  id="menuCloseIcon"
+                  class="hidden"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+          </div>
         </div>
+
+        <!-- Mobile navigation menu -->
+        <div id="mobileMenu" class="hidden md:hidden">
+          <div
+            class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200"
+          >
+            <a
+              href="{{ url_for('index') }}"
+              class="block px-3 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md"
+            >
+              Home
+            </a>
+            <a
+              href="{{ url_for('dashboard') }}"
+              class="block px-3 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md"
+            >
+              Dashboard
+            </a>
+            <a
+              href="{{ url_for('stats') }}"
+              class="block px-3 py-2 text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md"
+            >
+              Statistics
+            </a>
+          </div>
+        </div>
+      </div>
     </nav>
-    
+
     <!-- Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div id="flashMessages" class="fixed top-20 right-4 z-50 space-y-2">
-                {% for category, message in messages %}
-                    <div class="flash-message bg-white rounded-lg shadow-lg p-4 border-l-4 max-w-sm transform translate-x-full transition-transform duration-300
-                         {% if category == 'error' %}border-red-500{% elif category == 'warning' %}border-yellow-500{% elif category == 'info' %}border-blue-500{% else %}border-green-500{% endif %}">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                {% if category == 'error' %}
-                                    <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                                    </svg>
-                                {% elif category == 'warning' %}
-                                    <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                    </svg>
-                                {% elif category == 'info' %}
-                                    <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                                    </svg>
-                                {% else %}
-                                    <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                    </svg>
-                                {% endif %}
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900">
-                                    {{ message }}
-                                </p>
-                            </div>
-                            <div class="ml-auto pl-3">
-                                <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-gray-400 hover:text-gray-600">
-                                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-    
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <div id="flashMessages" class="fixed top-20 right-4 z-50 space-y-2">
+      {% for category, message in messages %}
+      <div
+        class="flash-message bg-white rounded-lg shadow-lg p-4 border-l-4 max-w-sm transform translate-x-full transition-transform duration-300 {% if category == 'error' %}border-red-500{% elif category == 'warning' %}border-yellow-500{% elif category == 'info' %}border-blue-500{% else %}border-green-500{% endif %}"
+      >
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            {% if category == 'error' %}
+            <svg
+              class="h-5 w-5 text-red-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            {% elif category == 'warning' %}
+            <svg
+              class="h-5 w-5 text-yellow-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            {% elif category == 'info' %}
+            <svg
+              class="h-5 w-5 text-blue-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            {% else %}
+            <svg
+              class="h-5 w-5 text-green-400"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            {% endif %}
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-900">{{ message }}</p>
+          </div>
+          <div class="ml-auto pl-3">
+            <button
+              onclick="this.parentElement.parentElement.parentElement.remove()"
+              class="text-gray-400 hover:text-gray-600"
+            >
+              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
+
     <!-- Main content -->
-    <main class="flex-1">
-        {% block content %}{% endblock %}
-    </main>
-    
+    <main class="flex-1">{% block content %}{% endblock %}</main>
+
     <!-- Footer -->
     <footer class="bg-gray-900 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <!-- Brand section -->
-                <div class="col-span-1 md:col-span-2">
-                    <div class="flex items-center space-x-3 mb-4">
-                        <div class="bg-blue-600 p-2 rounded-lg">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
-                            </svg>
-                        </div>
-                        <span class="text-xl font-bold">{{ app_name }}</span>
-                    </div>
-                    <p class="text-gray-300 mb-4 max-w-md">
-                        Advanced weather forecasting powered by ARIMA modeling. Get accurate predictions 
-                        with confidence intervals for any location worldwide.
-                    </p>
-                    <div class="flex space-x-4">
-                        {% if forecasting_available %}
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                </svg>
-                                ARIMA Forecasting
-                            </span>
-                        {% endif %}
-                    </div>
-                </div>
-                
-                <!-- Navigation links -->
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Navigation</h3>
-                    <ul class="space-y-2">
-                        <li><a href="{{ url_for('index') }}" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
-                        <li><a href="{{ url_for('dashboard') }}" class="text-gray-300 hover:text-white transition-colors">Dashboard</a></li>
-                        <li><a href="{{ url_for('stats') }}" class="text-gray-300 hover:text-white transition-colors">Statistics</a></li>
-                    </ul>
-                </div>
-                
-                <!-- Features -->
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Features</h3>
-                    <ul class="space-y-2 text-gray-300">
-                        <li class="flex items-center">
-                            <svg class="w-4 h-4 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            7-Day Forecasts
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="w-4 h-4 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            Air Quality Data
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="w-4 h-4 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            Historical Analysis
-                        </li>
-                        <li class="flex items-center">
-                            <svg class="w-4 h-4 mr-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            Multi-location Support
-                        </li>
-                    </ul>
-                </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <!-- Brand section -->
+          <div class="col-span-1 md:col-span-2">
+            <div class="flex items-center space-x-3 mb-4">
+              <div class="bg-blue-600 p-2 rounded-lg">
+                <svg
+                  class="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-xl font-bold">{{ app_name }}</span>
             </div>
-            
-            <!-- Bottom footer -->
-            <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-gray-400 text-sm">
-                    © {{ current_year }} Weather Insight Engine. Built with Flask, ARIMA, and modern web technologies.
-                </p>
-                <div class="flex items-center space-x-4 mt-4 md:mt-0">
-                    <span class="text-gray-400 text-sm">Powered by Open-Meteo API</span>
-                    <div class="flex items-center space-x-2">
-                        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse-slow"></div>
-                        <span class="text-gray-400 text-xs">Live Data</span>
-                    </div>
-                </div>
+            <p class="text-gray-300 mb-4 max-w-md">
+              Advanced weather forecasting powered by ARIMA modeling. Get
+              accurate predictions with confidence intervals for any location
+              worldwide.
+            </p>
+            <div class="flex space-x-4">
+              {% if forecasting_available %}
+              <span
+                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
+              >
+                <svg
+                  class="w-3 h-3 mr-1"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                ARIMA Forecasting
+              </span>
+              {% endif %}
             </div>
+          </div>
+
+          <!-- Navigation links -->
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Navigation</h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="{{ url_for('index') }}"
+                  class="text-gray-300 hover:text-white transition-colors"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('dashboard') }}"
+                  class="text-gray-300 hover:text-white transition-colors"
+                  >Dashboard</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('stats') }}"
+                  class="text-gray-300 hover:text-white transition-colors"
+                  >Statistics</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Features -->
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Features</h3>
+            <ul class="space-y-2 text-gray-300">
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-2 text-green-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                7-Day Forecasts
+              </li>
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-2 text-green-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                Air Quality Data
+              </li>
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-2 text-green-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                Historical Analysis
+              </li>
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-2 text-green-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                Multi-location Support
+              </li>
+            </ul>
+          </div>
         </div>
+
+        <!-- Bottom footer -->
+        <div
+          class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center"
+        >
+          <p class="text-gray-400 text-sm">
+            © {{ current_year }} Weather Insight Engine. Built with Flask,
+            ARIMA, and modern web technologies.
+          </p>
+          <div class="flex items-center space-x-4 mt-4 md:mt-0">
+            <span class="text-gray-400 text-sm">Powered by Open-Meteo API</span>
+            <div class="flex items-center space-x-2">
+              <div
+                class="w-2 h-2 bg-green-400 rounded-full animate-pulse-slow"
+              ></div>
+              <span class="text-gray-400 text-xs">Live Data</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </footer>
-    
+
     <!-- Loading overlay -->
-    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-        <div class="flex items-center justify-center h-full">
-            <div class="bg-white rounded-lg p-6 text-center">
-                <div class="spinner mx-auto mb-4"></div>
-                <p class="text-gray-600">Loading weather data...</p>
-            </div>
+    <div
+      id="loadingOverlay"
+      class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden"
+    >
+      <div class="flex items-center justify-center h-full">
+        <div class="bg-white rounded-lg p-6 text-center">
+          <div class="spinner mx-auto mb-4"></div>
+          <p class="text-gray-600">Loading weather data...</p>
         </div>
+      </div>
     </div>
-    
+
     <!-- JavaScript utilities -->
     <script>
-        // Mobile menu toggle
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const menuOpenIcon = document.getElementById('menuOpenIcon');
-            const menuCloseIcon = document.getElementById('menuCloseIcon');
-            
-            if (mobileMenuToggle) {
-                mobileMenuToggle.addEventListener('click', function() {
-                    mobileMenu.classList.toggle('hidden');
-                    menuOpenIcon.classList.toggle('hidden');
-                    menuCloseIcon.classList.toggle('hidden');
-                });
-            }
-            
-            // Flash messages auto-show and auto-hide
-            const flashMessages = document.querySelectorAll('.flash-message');
-            flashMessages.forEach((message, index) => {
-                // Animate in
-                setTimeout(() => {
-                    message.style.transform = 'translateX(0)';
-                }, index * 200);
-                
-                // Auto-hide after 5 seconds
-                setTimeout(() => {
-                    message.style.transform = 'translateX(100%)';
-                    setTimeout(() => message.remove(), 300);
-                }, 5000 + (index * 200));
-            });
+      // Mobile menu toggle
+      document.addEventListener("DOMContentLoaded", function () {
+        const mobileMenuToggle = document.getElementById("mobileMenuToggle");
+        const mobileMenu = document.getElementById("mobileMenu");
+        const menuOpenIcon = document.getElementById("menuOpenIcon");
+        const menuCloseIcon = document.getElementById("menuCloseIcon");
+
+        if (mobileMenuToggle) {
+          mobileMenuToggle.addEventListener("click", function () {
+            mobileMenu.classList.toggle("hidden");
+            menuOpenIcon.classList.toggle("hidden");
+            menuCloseIcon.classList.toggle("hidden");
+          });
+        }
+
+        // Flash messages auto-show and auto-hide
+        const flashMessages = document.querySelectorAll(".flash-message");
+        flashMessages.forEach((message, index) => {
+          // Animate in
+          setTimeout(() => {
+            message.style.transform = "translateX(0)";
+          }, index * 200);
+
+          // Auto-hide after 5 seconds
+          setTimeout(() => {
+            message.style.transform = "translateX(100%)";
+            setTimeout(() => message.remove(), 300);
+          }, 5000 + index * 200);
         });
-        
-        // Global functions for the app
-        window.WeatherApp = {
-            // Show loading overlay
-            showLoading() {
-                document.getElementById('loadingOverlay').style.display = 'flex';
-            },
-            
-            // Hide loading overlay
-            hideLoading() {
-                document.getElementById('loadingOverlay').style.display = 'none';
-            },
-            
-            // Format temperature with unit
-            formatTemperature(temp, unit = '°C') {
-                if (temp === null || temp === undefined) return 'N/A';
-                return `${parseFloat(temp).toFixed(1)}${unit}`;
-            },
-            
-            // Format date nicely
-            formatDate(dateString) {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('en-US', { 
-                    weekday: 'short', 
-                    month: 'short', 
-                    day: 'numeric' 
-                });
-            },
-            
-            // Show flash message
-            showFlash(message, category = 'info') {
-                const flashContainer = document.getElementById('flashMessages') || document.body;
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `flash-message bg-white rounded-lg shadow-lg p-4 border-l-4 max-w-sm transform translate-x-full transition-transform duration-300 ${
-                    category === 'error' ? 'border-red-500' : 
-                    category === 'warning' ? 'border-yellow-500' : 
-                    category === 'info' ? 'border-blue-500' : 'border-green-500'
-                }`;
-                
-                const iconColor = category === 'error' ? 'text-red-400' : 
-                                 category === 'warning' ? 'text-yellow-400' : 
-                                 category === 'info' ? 'text-blue-400' : 'text-green-400';
-                
-                messageDiv.innerHTML = `
+      });
+
+      // Global functions for the app
+      window.WeatherApp = {
+        // Show loading overlay
+        showLoading() {
+          document.getElementById("loadingOverlay").style.display = "flex";
+        },
+
+        // Hide loading overlay
+        hideLoading() {
+          document.getElementById("loadingOverlay").style.display = "none";
+        },
+
+        // Format temperature with unit
+        formatTemperature(temp, unit = "°C") {
+          if (temp === null || temp === undefined) return "N/A";
+          return `${parseFloat(temp).toFixed(1)}${unit}`;
+        },
+
+        // Format date nicely
+        formatDate(dateString) {
+          const date = new Date(dateString);
+          return date.toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+          });
+        },
+
+        // Show flash message
+        showFlash(message, category = "info") {
+          const flashContainer =
+            document.getElementById("flashMessages") || document.body;
+          const messageDiv = document.createElement("div");
+          messageDiv.className = `flash-message bg-white rounded-lg shadow-lg p-4 border-l-4 max-w-sm transform translate-x-full transition-transform duration-300 ${
+            category === "error"
+              ? "border-red-500"
+              : category === "warning"
+              ? "border-yellow-500"
+              : category === "info"
+              ? "border-blue-500"
+              : "border-green-500"
+          }`;
+
+          const iconColor =
+            category === "error"
+              ? "text-red-400"
+              : category === "warning"
+              ? "text-yellow-400"
+              : category === "info"
+              ? "text-blue-400"
+              : "text-green-400";
+
+          messageDiv.innerHTML = `
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
                             <svg class="h-5 w-5 ${iconColor}" fill="currentColor" viewBox="0 0 20 20">
@@ -429,38 +625,38 @@
                         </div>
                     </div>
                 `;
-                
-                flashContainer.appendChild(messageDiv);
-                
-                // Animate in
-                setTimeout(() => {
-                    messageDiv.style.transform = 'translateX(0)';
-                }, 100);
-                
-                // Auto-hide after 5 seconds
-                setTimeout(() => {
-                    messageDiv.style.transform = 'translateX(100%)';
-                    setTimeout(() => messageDiv.remove(), 300);
-                }, 5000);
-            },
-            
-            // Fetch weather data
-            async fetchWeatherData(lat, lon) {
-                try {
-                    this.showLoading();
-                    const response = await fetch(`/api/weather/${lat}/${lon}`);
-                    const data = await response.json();
-                    this.hideLoading();
-                    return data;
-                } catch (error) {
-                    this.hideLoading();
-                    this.showFlash('Failed to fetch weather data', 'error');
-                    throw error;
-                }
-            }
-        };
+
+          flashContainer.appendChild(messageDiv);
+
+          // Animate in
+          setTimeout(() => {
+            messageDiv.style.transform = "translateX(0)";
+          }, 100);
+
+          // Auto-hide after 5 seconds
+          setTimeout(() => {
+            messageDiv.style.transform = "translateX(100%)";
+            setTimeout(() => messageDiv.remove(), 300);
+          }, 5000);
+        },
+
+        // Fetch weather data
+        async fetchWeatherData(lat, lon) {
+          try {
+            this.showLoading();
+            const response = await fetch(`/api/weather/${lat}/${lon}`);
+            const data = await response.json();
+            this.hideLoading();
+            return data;
+          } catch (error) {
+            this.hideLoading();
+            this.showFlash("Failed to fetch weather data", "error");
+            throw error;
+          }
+        },
+      };
     </script>
-    
+
     {% block extra_scripts %}{% endblock %}
-</body>
+  </body>
 </html>

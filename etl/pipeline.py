@@ -162,14 +162,14 @@ class WeatherETLPipeline:
                 
                 if success:
                     successful_locations.append((lat, lon))
-                    logger.info(f"✅ Location {i} completed successfully")
+                    logger.info(f"[SUCCESS] Location {i} completed successfully")
                 else:
                     failed_locations.append((lat, lon))
-                    logger.error(f"❌ Location {i} failed")
+                    logger.error(f" Location {i} failed")
                     
             except Exception as e:
                 failed_locations.append((lat, lon))
-                logger.error(f"❌ Location {i} failed with error: {e}")
+                logger.error(f" Location {i} failed with error: {e}")
         
         batch_execution_time = time.time() - batch_start_time
         
@@ -294,27 +294,27 @@ class WeatherETLPipeline:
                 db_success = loader.save_to_sqlite()
                 results['database'] = db_success
                 if db_success:
-                    logger.info("✅ Data saved to SQLite database")
+                    logger.info("[SUCCESS] Data saved to SQLite database")
                 else:
-                    logger.error("❌ Failed to save to database")
+                    logger.error(" Failed to save to database")
             
             # Save to CSV if requested
             if save_to_csv:
                 csv_path = loader.save_to_csv()
                 results['csv'] = csv_path
                 if csv_path:
-                    logger.info(f"✅ Data saved to CSV: {csv_path}")
+                    logger.info(f"[SUCCESS] Data saved to CSV: {csv_path}")
                 else:
-                    logger.error("❌ Failed to save to CSV")
+                    logger.error(" Failed to save to CSV")
             
             # Save to JSON if requested
             if save_to_json:
                 json_path = loader.save_to_json()
                 results['json'] = json_path
                 if json_path:
-                    logger.info(f"✅ Data saved to JSON: {json_path}")
+                    logger.info(f"[SUCCESS] Data saved to JSON: {json_path}")
                 else:
-                    logger.error("❌ Failed to save to JSON")
+                    logger.error(" Failed to save to JSON")
             
             # Log quality metrics
             load_time = time.time() - load_start_time
@@ -322,7 +322,7 @@ class WeatherETLPipeline:
             
             loader.log_data_quality(
                 processing_time=self.execution_stats.get('total_time', 0),
-                errors_count=0,  # Could be enhanced to track errors
+                errors_count=0,  
                 notes=f"ETL pipeline execution"
             )
             
@@ -389,7 +389,7 @@ class WeatherETLPipeline:
         # Storage results
         logger.info(f"\nData Storage:")
         for format_type, result in load_results.items():
-            status = "✅ Success" if result else "❌ Failed"
+            status = "[SUCCESS] Success" if result else "❌ Failed"
             logger.info(f"  {format_type.upper()}: {status}")
 
     def _setup_logging(self) -> None:

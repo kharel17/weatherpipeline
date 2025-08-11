@@ -9,6 +9,7 @@ import pandas as pd
 from sqlalchemy import create_engine, Column, Integer, Float, String, DateTime, Text, Index, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm.query import Query
 from sqlalchemy.sql import func
 from sqlalchemy.exc import SQLAlchemyError
 import logging
@@ -21,6 +22,17 @@ Base = declarative_base()
 # Global database session
 db_session = None
 engine = None
+
+
+class QueryProperty:
+    """Property that provides query functionality to SQLAlchemy models"""
+    def __init__(self, session):
+        self.session = session
+    
+    def __get__(self, obj, cls):
+        if obj is not None:
+            return obj
+        return self.session.query(cls)
 
 
 class WeatherRecord(Base):
@@ -185,6 +197,14 @@ class WeatherRecord(Base):
         except Exception as e:
             logger.error(f"Error getting historical records: {e}")
             return []
+    
+    @classmethod
+    def get_history_for_location(cls, latitude: float, longitude: float, 
+                               days: int = 30, tolerance: float = 0.01) -> List['WeatherRecord']:
+        """
+        Alias for get_historical_for_location to match your app.py expectations
+        """
+        return cls.get_historical_for_location(latitude, longitude, days, tolerance)
     
     @classmethod
     def get_temperature_series(cls, latitude: float, longitude: float, 
@@ -396,6 +416,14 @@ class LocationSummary(Base):
             db_session.rollback()
 
 
+def add_query_property():
+    """Add query property to all models after database initialization"""
+    if db_session:
+        WeatherRecord.query = QueryProperty(db_session)
+        DataQualityLog.query = QueryProperty(db_session)
+        LocationSummary.query = QueryProperty(db_session)
+
+
 # Database management functions
 def init_database(database_url: str = "sqlite:///data/weather_data.db"):
     """
@@ -413,6 +441,9 @@ def init_database(database_url: str = "sqlite:///data/weather_data.db"):
         
         # Create all tables
         Base.metadata.create_all(engine)
+        
+        # Add query property to models
+        add_query_property()
         
         logger.info(f"Database initialized successfully: {database_url}")
         return True

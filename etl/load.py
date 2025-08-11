@@ -1,6 +1,6 @@
 """
 Enhanced Weather Data Loader
-Improved version with better error handling, multiple export formats, and database operations
+Improved version with better error handling, duplicate record handling, and multiple export formats
 """
 
 import os
@@ -120,7 +120,7 @@ class WeatherLoader:
 
     def save_to_sqlite(self, db_name: str = 'weather_data.db', table_name: str = 'weather_records') -> bool:
         """
-        Save data to SQLite database with improved error handling
+        Save data to SQLite database with improved duplicate handling
         
         Args:
             db_name: Database filename
@@ -142,23 +142,147 @@ class WeatherLoader:
                 conn.execute("PRAGMA foreign_keys = ON")
                 conn.execute("PRAGMA journal_mode = WAL")
                 
-                # Save data to table
-                records_saved = self.data.to_sql(
-                    table_name, 
-                    conn, 
-                    if_exists='append', 
-                    index=False,
-                    method='multi'  # Faster bulk insert
-                )
+                cursor = conn.cursor()
                 
-                logger.info(f"Successfully saved {len(self.data)} records to SQLite: {db_path}")
-                return True
+                # Process each record individually to handle duplicates
+                inserted_count = 0
+                updated_count = 0
+                
+                for _, record in self.data.iterrows():
+                    try:
+                        # Try to insert the record first
+                        self._insert_record(cursor, record, table_name)
+                        inserted_count += 1
+                        
+                    except sqlite3.IntegrityError as e:
+                        if "UNIQUE constraint failed" in str(e):
+                            # Record exists, update it instead
+                            if self._update_record(cursor, record, table_name):
+                                updated_count += 1
+                                logger.debug(f"Updated existing record for {record.get('date')} at {record.get('latitude')}, {record.get('longitude')}")
+                            else:
+                                logger.warning(f"Failed to update record for {record.get('date')}")
+                        else:
+                            # Different integrity error - re-raise
+                            logger.error(f"Integrity error: {e}")
+                            raise e
+                
+                conn.commit()
+                
+                total_processed = inserted_count + updated_count
+                logger.info(f"Successfully processed {total_processed} records to SQLite: {db_path}")
+                logger.info(f"  - Inserted: {inserted_count} new records")
+                logger.info(f"  - Updated: {updated_count} existing records")
+                
+                return total_processed > 0
                 
         except sqlite3.Error as e:
             logger.error(f"SQLite error: {e}")
             return False
         except Exception as e:
             logger.error(f"Failed to save data to SQLite: {e}")
+            return False
+
+    def _insert_record(self, cursor: sqlite3.Cursor, record: pd.Series, table_name: str) -> None:
+        """
+        Insert a single record into the database
+        
+        Args:
+            cursor: Database cursor
+            record: Single record to insert
+            table_name: Target table name
+        """
+        # Define the column mapping
+        columns = [
+            'date', 'latitude', 'longitude', 'timezone', 'elevation',
+            'current_temp_c', 'current_condition', 'wind_kph', 'wind_dir',
+            'forecast_max_temp', 'forecast_min_temp', 'precipitation_mm', 
+            'uv_index', 'weather_code', 'forecast_condition',
+            'pm2_5', 'pm10', 'us_aqi', 'european_aqi', 'aqi_category',
+            'measurement_time', 'last_updated', 'created_at', 'data_source'
+        ]
+        
+        # Prepare values (handle missing columns)
+        values = []
+        for col in columns:
+            if col in record.index:
+                value = record[col]
+                # Handle NaN values
+                if pd.isna(value):
+                    values.append(None)
+                else:
+                    values.append(value)
+            else:
+                # Provide defaults for missing columns
+                if col == 'created_at':
+                    values.append(datetime.now().isoformat())
+                elif col == 'data_source':
+                    values.append('open-meteo')
+                else:
+                    values.append(None)
+        
+        # Create the INSERT SQL
+        placeholders = ', '.join(['?' for _ in columns])
+        column_names = ', '.join(columns)
+        
+        sql = f"""
+            INSERT INTO {table_name} 
+            ({column_names})
+            VALUES ({placeholders})
+        """
+        
+        cursor.execute(sql, values)
+
+    def _update_record(self, cursor: sqlite3.Cursor, record: pd.Series, table_name: str) -> bool:
+        """
+        Update an existing record in the database
+        
+        Args:
+            cursor: Database cursor
+            record: Record data to update
+            table_name: Target table name
+            
+        Returns:
+            bool: True if update was successful
+        """
+        try:
+            # Define updatable columns (excluding key columns and timestamps)
+            update_columns = [
+                'current_temp_c', 'current_condition', 'wind_kph', 'wind_dir',
+                'forecast_max_temp', 'forecast_min_temp', 'precipitation_mm',
+                'uv_index', 'weather_code', 'forecast_condition',
+                'pm2_5', 'pm10', 'us_aqi', 'european_aqi', 'aqi_category',
+                'timezone', 'elevation', 'measurement_time'
+            ]
+            
+            # Build SET clause
+            set_clauses = []
+            values = []
+            
+            for col in update_columns:
+                if col in record.index:
+                    set_clauses.append(f"{col} = ?")
+                    value = record[col]
+                    values.append(None if pd.isna(value) else value)
+            
+            # Add last_updated timestamp
+            set_clauses.append("last_updated = ?")
+            values.append(datetime.now().isoformat())
+            
+            # Add WHERE clause values
+            values.extend([record['date'], record['latitude'], record['longitude']])
+            
+            sql = f"""
+                UPDATE {table_name} 
+                SET {', '.join(set_clauses)}
+                WHERE date = ? AND latitude = ? AND longitude = ?
+            """
+            
+            cursor.execute(sql, values)
+            return cursor.rowcount > 0
+            
+        except Exception as e:
+            logger.error(f"Failed to update record: {e}")
             return False
 
     def save_all_formats(self, base_filename: Optional[str] = None) -> Dict[str, Optional[str]]:
@@ -267,7 +391,7 @@ class WeatherLoader:
                 for index_sql in indexes:
                     cursor.execute(index_sql)
                 
-                # Create data quality summary table
+                # Create data quality summary table with pipeline_version column
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS data_quality_log (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -278,7 +402,8 @@ class WeatherLoader:
                         processing_time_seconds REAL,
                         location_lat REAL,
                         location_lon REAL,
-                        notes TEXT
+                        notes TEXT,
+                        pipeline_version TEXT DEFAULT '1.0.0'
                     )
                 ''')
                 
@@ -457,11 +582,11 @@ class WeatherLoader:
                 cursor.execute('''
                     INSERT INTO data_quality_log 
                     (records_processed, records_saved, errors_count, processing_time_seconds, 
-                     location_lat, location_lon, notes)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                     location_lat, location_lon, notes, pipeline_version)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 ''', (
                     len(self.data), len(self.data), errors_count, processing_time,
-                    lat, lon, notes
+                    lat, lon, notes, '1.0.0'
                 ))
                 conn.commit()
                 
