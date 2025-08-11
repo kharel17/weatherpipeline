@@ -2139,3 +2139,544 @@ Data Storage:
 2025-08-12 02:40:23,616 - models.forecast.manager - INFO - ForecastManager initialized
 2025-08-12 02:40:23,616 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 27.7, 85.3
 2025-08-12 02:40:23,618 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:40:23] "GET /weather?lat=27.7&lon=85.3 HTTP/1.1" 200 -
+2025-08-12 02:49:54,841 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 02:49:54,842 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:49:54,842 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 02:49:54,842 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:49:54,842 - etl.pipeline - INFO - Location: 40.71, -74.01
+2025-08-12 02:49:54,842 - etl.pipeline - INFO - Timestamp: 2025-08-12T02:49:54.842685
+2025-08-12 02:49:54,842 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:49:54,843 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 02:49:54,843 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:49:54,843 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 40.71, -74.01
+2025-08-12 02:49:54,843 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 02:49:54,843 - etl.extract - INFO - Fetching weather forecast for 40.71, -74.01
+2025-08-12 02:49:55,979 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 02:49:55,979 - etl.extract - INFO - Fetching air quality data for 40.71, -74.01
+2025-08-12 02:49:56,854 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 02:49:56,854 - etl.extract - INFO - Data extraction completed in 2.01 seconds
+2025-08-12 02:49:56,854 - etl.extract - INFO - Data validation successful
+2025-08-12 02:49:56,855 - etl.pipeline - INFO - Extraction completed in 2.01 seconds
+2025-08-12 02:49:56,855 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 02:49:56,855 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 02:49:56,855 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:49:56,855 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 02:49:56,855 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:49:56,855 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 02:49:56,855 - etl.transform - INFO - Starting data transformation
+2025-08-12 02:49:56,856 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-12 02:49:56,856 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-12 02:49:56,856 - etl.pipeline - INFO - Records created: 7
+2025-08-12 02:49:56,856 - etl.pipeline - INFO - Date range: 2025-08-11 to 2025-08-17
+2025-08-12 02:49:56,856 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:49:56,856 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-12 02:49:56,856 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:49:56,858 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-12 02:49:56,874 - etl.load - INFO - SQLite database and tables created successfully: data\weather_data.db
+2025-08-12 02:49:56,878 - etl.load - INFO - Successfully processed 7 records to SQLite: data\weather_data.db
+2025-08-12 02:49:56,878 - etl.load - INFO -   - Inserted: 0 new records
+2025-08-12 02:49:56,878 - etl.load - INFO -   - Updated: 7 existing records
+2025-08-12 02:49:56,878 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-12 02:49:56,883 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat40.71_lon-73.99_20250812_024956.csv
+2025-08-12 02:49:56,884 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat40.71_lon-73.99_20250812_024956.csv
+2025-08-12 02:49:56,894 - etl.pipeline - INFO - Data loading completed in 0.03 seconds
+2025-08-12 02:49:56,894 - etl.pipeline - INFO - 
+============================================================
+2025-08-12 02:49:56,894 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.05 SECONDS
+2025-08-12 02:49:56,894 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:49:56,894 - __main__ - INFO - ETL pipeline success: True
+2025-08-12 02:49:56,894 - __main__ - INFO - Attempting to get latest record after ETL for 40.71, -74.01
+2025-08-12 02:49:56,895 - __main__ - INFO - Latest record after ETL: False
+2025-08-12 02:49:56,895 - __main__ - WARNING - No exact match found, trying with wider tolerance...
+2025-08-12 02:49:56,897 - __main__ - INFO - Found 5 records within 0.1 degrees
+2025-08-12 02:49:56,897 - __main__ - INFO - Record 1: lat=40.710335, lon=-73.99309, created=2025-08-11 20:37:35.456050
+2025-08-12 02:49:56,897 - __main__ - INFO - Record 2: lat=40.710335, lon=-73.99309, created=2025-08-11 20:37:35.456038
+2025-08-12 02:49:56,898 - __main__ - INFO - Record 3: lat=40.710335, lon=-73.99309, created=2025-08-11 20:37:35.456026
+2025-08-12 02:49:56,898 - __main__ - INFO - Record 4: lat=40.710335, lon=-73.99309, created=2025-08-11 20:37:35.456015
+2025-08-12 02:49:56,898 - __main__ - INFO - Record 5: lat=40.710335, lon=-73.99309, created=2025-08-11 20:37:35.456002
+2025-08-12 02:49:56,898 - __main__ - INFO - Using nearby record: lat=40.710335, lon=-73.99309
+2025-08-12 02:49:56,898 - __main__ - INFO - Weather record found: temp=N/A
+2025-08-12 02:49:56,898 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-12 02:49:56,898 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 40.71, -74.01
+2025-08-12 02:49:56,900 - __main__ - INFO - Rendering weather template for City of New York, New York
+2025-08-12 02:49:56,918 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:49:56] "GET /weather?lat=40.71&lon=-74.01 HTTP/1.1" 200 -
+2025-08-12 02:50:00,056 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:50:00] "POST /add-favorite HTTP/1.1" 200 -
+2025-08-12 02:50:03,398 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:50:03] "GET / HTTP/1.1" 200 -
+2025-08-12 02:50:04,797 - __main__ - INFO - Weather route called with lat=27.7, lon=85.3
+2025-08-12 02:50:05,649 - __main__ - INFO - Attempting to get latest record for 27.7, 85.3
+2025-08-12 02:50:05,651 - __main__ - INFO - Latest record found: False
+2025-08-12 02:50:05,651 - __main__ - INFO - Running ETL pipeline - latest_record: False, stale: N/A
+2025-08-12 02:50:05,653 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 02:50:05,653 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:50:05,653 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 02:50:05,653 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:50:05,653 - etl.pipeline - INFO - Location: 27.7, 85.3
+2025-08-12 02:50:05,653 - etl.pipeline - INFO - Timestamp: 2025-08-12T02:50:05.653946
+2025-08-12 02:50:05,654 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:50:05,654 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 02:50:05,654 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:50:05,654 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 27.7, 85.3
+2025-08-12 02:50:05,654 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 02:50:05,654 - etl.extract - INFO - Fetching weather forecast for 27.7, 85.3
+2025-08-12 02:50:06,769 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 02:50:06,769 - etl.extract - INFO - Fetching air quality data for 27.7, 85.3
+2025-08-12 02:50:07,583 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 02:50:07,583 - etl.extract - INFO - Data extraction completed in 1.93 seconds
+2025-08-12 02:50:07,584 - etl.extract - INFO - Data validation successful
+2025-08-12 02:50:07,584 - etl.pipeline - INFO - Extraction completed in 1.93 seconds
+2025-08-12 02:50:07,584 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 02:50:07,584 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 02:50:07,584 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:50:07,584 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 02:50:07,584 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:50:07,585 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 02:50:07,585 - etl.transform - INFO - Starting data transformation
+2025-08-12 02:50:07,585 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-12 02:50:07,585 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-12 02:50:07,586 - etl.pipeline - INFO - Records created: 7
+2025-08-12 02:50:07,586 - etl.pipeline - INFO - Date range: 2025-08-12 to 2025-08-18
+2025-08-12 02:50:07,586 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:50:07,586 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-12 02:50:07,586 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:50:07,588 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-12 02:50:07,597 - etl.load - INFO - SQLite database and tables created successfully: data\weather_data.db
+2025-08-12 02:50:07,601 - etl.load - INFO - Successfully processed 7 records to SQLite: data\weather_data.db
+2025-08-12 02:50:07,601 - etl.load - INFO -   - Inserted: 0 new records
+2025-08-12 02:50:07,602 - etl.load - INFO -   - Updated: 7 existing records
+2025-08-12 02:50:07,602 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-12 02:50:07,606 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat27.75_lon85.25_20250812_025007.csv
+2025-08-12 02:50:07,606 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat27.75_lon85.25_20250812_025007.csv
+2025-08-12 02:50:07,615 - etl.pipeline - INFO - Data loading completed in 0.02 seconds
+2025-08-12 02:50:07,616 - etl.pipeline - INFO - 
+============================================================
+2025-08-12 02:50:07,616 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 1.96 SECONDS
+2025-08-12 02:50:07,616 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:50:07,616 - __main__ - INFO - ETL pipeline success: True
+2025-08-12 02:50:07,616 - __main__ - INFO - Attempting to get latest record after ETL for 27.7, 85.3
+2025-08-12 02:50:07,618 - __main__ - INFO - Latest record after ETL: False
+2025-08-12 02:50:07,618 - __main__ - WARNING - No exact match found, trying with wider tolerance...
+2025-08-12 02:50:07,619 - __main__ - INFO - Found 5 records within 0.1 degrees
+2025-08-12 02:50:07,619 - __main__ - INFO - Record 1: lat=27.75, lon=85.25, created=2025-08-11 20:08:51.713000
+2025-08-12 02:50:07,619 - __main__ - INFO - Record 2: lat=27.75, lon=85.25, created=2025-08-11 20:08:51.712988
+2025-08-12 02:50:07,619 - __main__ - INFO - Record 3: lat=27.75, lon=85.25, created=2025-08-11 20:08:51.712976
+2025-08-12 02:50:07,620 - __main__ - INFO - Record 4: lat=27.75, lon=85.25, created=2025-08-11 20:08:51.712963
+2025-08-12 02:50:07,620 - __main__ - INFO - Record 5: lat=27.75, lon=85.25, created=2025-08-11 20:08:51.712951
+2025-08-12 02:50:07,620 - __main__ - INFO - Using nearby record: lat=27.75, lon=85.25
+2025-08-12 02:50:07,620 - __main__ - INFO - Weather record found: temp=N/A
+2025-08-12 02:50:07,620 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-12 02:50:07,621 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 27.7, 85.3
+2025-08-12 02:50:07,624 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:50:07] "GET /weather?lat=27.7&lon=85.3 HTTP/1.1" 200 -
+2025-08-12 02:50:09,444 - __main__ - ERROR - Stats error: stats.html
+2025-08-12 02:50:09,445 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:50:09] "[32mGET /stats HTTP/1.1[0m" 302 -
+2025-08-12 02:50:09,453 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:50:09] "GET / HTTP/1.1" 200 -
+2025-08-12 02:50:11,070 - __main__ - ERROR - Stats error: stats.html
+2025-08-12 02:50:11,071 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:50:11] "[32mGET /stats HTTP/1.1[0m" 302 -
+2025-08-12 02:50:11,076 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:50:11] "GET / HTTP/1.1" 200 -
+2025-08-12 02:50:12,290 - __main__ - ERROR - Stats error: stats.html
+2025-08-12 02:50:12,291 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:50:12] "[32mGET /stats HTTP/1.1[0m" 302 -
+2025-08-12 02:50:12,296 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:50:12] "GET / HTTP/1.1" 200 -
+2025-08-12 02:50:13,953 - __main__ - ERROR - Stats error: stats.html
+2025-08-12 02:50:13,954 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:50:13] "[32mGET /stats HTTP/1.1[0m" 302 -
+2025-08-12 02:50:13,958 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:50:13] "GET / HTTP/1.1" 200 -
+2025-08-12 02:52:31,462 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:52:31] "GET /stats HTTP/1.1" 200 -
+2025-08-12 02:52:35,254 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:52:35] "GET /dashboard HTTP/1.1" 200 -
+2025-08-12 02:52:38,833 - __main__ - INFO - Weather route called with lat=51.51, lon=-0.13
+2025-08-12 02:52:39,696 - __main__ - INFO - Location name: London, England
+2025-08-12 02:52:39,697 - __main__ - INFO - Attempting to get latest record for 51.51, -0.13
+2025-08-12 02:52:39,698 - __main__ - INFO - Latest record found: True
+2025-08-12 02:52:39,698 - __main__ - INFO - Weather record found: temp=N/A
+2025-08-12 02:52:39,698 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-12 02:52:39,698 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 51.51, -0.13
+2025-08-12 02:52:39,701 - __main__ - INFO - Rendering weather template for London, England
+2025-08-12 02:52:39,702 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:52:39] "GET /weather?lat=51.51&lon=-0.13 HTTP/1.1" 200 -
+2025-08-12 02:52:42,905 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:52:42] "GET / HTTP/1.1" 200 -
+2025-08-12 02:52:44,408 - __main__ - INFO - Weather route called with lat=-33.87, lon=151.21
+2025-08-12 02:52:45,312 - __main__ - INFO - Location name: Sydney, New South Wales
+2025-08-12 02:52:45,312 - __main__ - INFO - Attempting to get latest record for -33.87, 151.21
+2025-08-12 02:52:45,313 - __main__ - INFO - Latest record found: False
+2025-08-12 02:52:45,313 - __main__ - INFO - Running ETL pipeline - latest_record: False, stale: N/A
+2025-08-12 02:52:45,315 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 02:52:45,315 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:52:45,315 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 02:52:45,315 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:52:45,315 - etl.pipeline - INFO - Location: -33.87, 151.21
+2025-08-12 02:52:45,315 - etl.pipeline - INFO - Timestamp: 2025-08-12T02:52:45.315895
+2025-08-12 02:52:45,316 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:52:45,316 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 02:52:45,316 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:52:45,316 - etl.extract - INFO - WeatherExtractor initialized for coordinates: -33.87, 151.21
+2025-08-12 02:52:45,316 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 02:52:45,316 - etl.extract - INFO - Fetching weather forecast for -33.87, 151.21
+2025-08-12 02:52:46,414 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 02:52:46,414 - etl.extract - INFO - Fetching air quality data for -33.87, 151.21
+2025-08-12 02:52:47,233 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 02:52:47,233 - etl.extract - INFO - Data extraction completed in 1.92 seconds
+2025-08-12 02:52:47,233 - etl.extract - INFO - Data validation successful
+2025-08-12 02:52:47,234 - etl.pipeline - INFO - Extraction completed in 1.92 seconds
+2025-08-12 02:52:47,234 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 02:52:47,234 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 02:52:47,234 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:52:47,234 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 02:52:47,234 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:52:47,234 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 02:52:47,235 - etl.transform - ERROR - Input data validation failed
+2025-08-12 02:52:47,235 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-12 02:52:47,235 - etl.pipeline - INFO - Records created: 0
+2025-08-12 02:52:47,235 - etl.pipeline - INFO - Date range: None to None
+2025-08-12 02:52:47,235 - etl.pipeline - WARNING - Transformation completed with 1 errors
+2025-08-12 02:52:47,235 - etl.pipeline - WARNING -   - Weather and air quality coordinates don't match
+2025-08-12 02:52:47,236 - etl.pipeline - ERROR - Data transformation failed - pipeline terminated
+2025-08-12 02:52:47,236 - __main__ - INFO - ETL pipeline success: False
+2025-08-12 02:52:47,236 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:52:47] "[32mGET /weather?lat=-33.87&lon=151.21 HTTP/1.1[0m" 302 -
+2025-08-12 02:52:47,242 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:52:47] "GET / HTTP/1.1" 200 -
+2025-08-12 02:52:50,211 - __main__ - INFO - Weather route called with lat=35.69, lon=139.69
+2025-08-12 02:52:51,075 - __main__ - INFO - Attempting to get latest record for 35.69, 139.69
+2025-08-12 02:52:51,076 - __main__ - INFO - Latest record found: False
+2025-08-12 02:52:51,076 - __main__ - INFO - Running ETL pipeline - latest_record: False, stale: N/A
+2025-08-12 02:52:51,078 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 02:52:51,078 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:52:51,078 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 02:52:51,078 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:52:51,078 - etl.pipeline - INFO - Location: 35.69, 139.69
+2025-08-12 02:52:51,078 - etl.pipeline - INFO - Timestamp: 2025-08-12T02:52:51.078919
+2025-08-12 02:52:51,079 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:52:51,079 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 02:52:51,079 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:52:51,079 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 35.69, 139.69
+2025-08-12 02:52:51,079 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 02:52:51,079 - etl.extract - INFO - Fetching weather forecast for 35.69, 139.69
+2025-08-12 02:52:52,169 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 02:52:52,169 - etl.extract - INFO - Fetching air quality data for 35.69, 139.69
+2025-08-12 02:52:53,046 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 02:52:53,047 - etl.extract - INFO - Data extraction completed in 1.97 seconds
+2025-08-12 02:52:53,047 - etl.extract - INFO - Data validation successful
+2025-08-12 02:52:53,047 - etl.pipeline - INFO - Extraction completed in 1.97 seconds
+2025-08-12 02:52:53,047 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 02:52:53,047 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 02:52:53,048 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:52:53,048 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 02:52:53,048 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:52:53,048 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 02:52:53,048 - etl.transform - INFO - Starting data transformation
+2025-08-12 02:52:53,049 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-12 02:52:53,049 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-12 02:52:53,049 - etl.pipeline - INFO - Records created: 7
+2025-08-12 02:52:53,049 - etl.pipeline - INFO - Date range: 2025-08-12 to 2025-08-18
+2025-08-12 02:52:53,049 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:52:53,050 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-12 02:52:53,050 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:52:53,051 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-12 02:52:53,053 - etl.load - INFO - SQLite database and tables created successfully: data\weather_data.db
+2025-08-12 02:52:53,056 - etl.load - INFO - Successfully processed 7 records to SQLite: data\weather_data.db
+2025-08-12 02:52:53,056 - etl.load - INFO -   - Inserted: 0 new records
+2025-08-12 02:52:53,057 - etl.load - INFO -   - Updated: 7 existing records
+2025-08-12 02:52:53,057 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-12 02:52:53,059 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat35.70_lon139.69_20250812_025253.csv
+2025-08-12 02:52:53,059 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat35.70_lon139.69_20250812_025253.csv
+2025-08-12 02:52:53,070 - etl.pipeline - INFO - Data loading completed in 0.01 seconds
+2025-08-12 02:52:53,070 - etl.pipeline - INFO - 
+============================================================
+2025-08-12 02:52:53,070 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 1.99 SECONDS
+2025-08-12 02:52:53,070 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:52:53,071 - __main__ - INFO - ETL pipeline success: True
+2025-08-12 02:52:53,071 - __main__ - INFO - Attempting to get latest record after ETL for 35.69, 139.69
+2025-08-12 02:52:53,072 - __main__ - INFO - Latest record after ETL: False
+2025-08-12 02:52:53,072 - __main__ - WARNING - No exact match found, trying with wider tolerance...
+2025-08-12 02:52:53,073 - __main__ - INFO - Found 5 records within 0.1 degrees
+2025-08-12 02:52:53,073 - __main__ - INFO - Record 1: lat=35.7, lon=139.6875, created=2025-08-11 20:35:40.485611
+2025-08-12 02:52:53,074 - __main__ - INFO - Record 2: lat=35.7, lon=139.6875, created=2025-08-11 20:35:40.485591
+2025-08-12 02:52:53,074 - __main__ - INFO - Record 3: lat=35.7, lon=139.6875, created=2025-08-11 20:35:40.485570
+2025-08-12 02:52:53,074 - __main__ - INFO - Record 4: lat=35.7, lon=139.6875, created=2025-08-11 20:35:40.485549
+2025-08-12 02:52:53,074 - __main__ - INFO - Record 5: lat=35.7, lon=139.6875, created=2025-08-11 20:35:40.485537
+2025-08-12 02:52:53,074 - __main__ - INFO - Using nearby record: lat=35.7, lon=139.6875
+2025-08-12 02:52:53,074 - __main__ - INFO - Weather record found: temp=N/A
+2025-08-12 02:52:53,075 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-12 02:52:53,075 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 35.69, 139.69
+2025-08-12 02:52:53,077 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:52:53] "GET /weather?lat=35.69&lon=139.69 HTTP/1.1" 200 -
+2025-08-12 02:52:56,013 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:52:56] "GET / HTTP/1.1" 200 -
+2025-08-12 02:52:58,040 - __main__ - INFO - Weather route called with lat=27.7, lon=85.3
+2025-08-12 02:52:58,910 - __main__ - INFO - Attempting to get latest record for 27.7, 85.3
+2025-08-12 02:52:58,911 - __main__ - INFO - Latest record found: False
+2025-08-12 02:52:58,912 - __main__ - INFO - Running ETL pipeline - latest_record: False, stale: N/A
+2025-08-12 02:52:58,913 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 02:52:58,913 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:52:58,913 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 02:52:58,913 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:52:58,914 - etl.pipeline - INFO - Location: 27.7, 85.3
+2025-08-12 02:52:58,914 - etl.pipeline - INFO - Timestamp: 2025-08-12T02:52:58.914158
+2025-08-12 02:52:58,914 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:52:58,914 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 02:52:58,914 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:52:58,914 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 27.7, 85.3
+2025-08-12 02:52:58,914 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 02:52:58,915 - etl.extract - INFO - Fetching weather forecast for 27.7, 85.3
+2025-08-12 02:53:00,013 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 02:53:00,013 - etl.extract - INFO - Fetching air quality data for 27.7, 85.3
+2025-08-12 02:53:00,876 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 02:53:00,876 - etl.extract - INFO - Data extraction completed in 1.96 seconds
+2025-08-12 02:53:00,876 - etl.extract - INFO - Data validation successful
+2025-08-12 02:53:00,876 - etl.pipeline - INFO - Extraction completed in 1.96 seconds
+2025-08-12 02:53:00,876 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 02:53:00,876 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 02:53:00,877 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:53:00,877 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 02:53:00,877 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:53:00,877 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 02:53:00,877 - etl.transform - INFO - Starting data transformation
+2025-08-12 02:53:00,878 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-12 02:53:00,878 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-12 02:53:00,878 - etl.pipeline - INFO - Records created: 7
+2025-08-12 02:53:00,878 - etl.pipeline - INFO - Date range: 2025-08-12 to 2025-08-18
+2025-08-12 02:53:00,878 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:53:00,879 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-12 02:53:00,879 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:53:00,880 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-12 02:53:00,889 - etl.load - INFO - SQLite database and tables created successfully: data\weather_data.db
+2025-08-12 02:53:00,899 - etl.load - INFO - Successfully processed 7 records to SQLite: data\weather_data.db
+2025-08-12 02:53:00,899 - etl.load - INFO -   - Inserted: 0 new records
+2025-08-12 02:53:00,899 - etl.load - INFO -   - Updated: 7 existing records
+2025-08-12 02:53:00,899 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-12 02:53:00,902 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat27.75_lon85.25_20250812_025300.csv
+2025-08-12 02:53:00,902 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat27.75_lon85.25_20250812_025300.csv
+2025-08-12 02:53:00,911 - etl.pipeline - INFO - Data loading completed in 0.02 seconds
+2025-08-12 02:53:00,912 - etl.pipeline - INFO - 
+============================================================
+2025-08-12 02:53:00,912 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.00 SECONDS
+2025-08-12 02:53:00,912 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:53:00,912 - __main__ - INFO - ETL pipeline success: True
+2025-08-12 02:53:00,912 - __main__ - INFO - Attempting to get latest record after ETL for 27.7, 85.3
+2025-08-12 02:53:00,913 - __main__ - INFO - Latest record after ETL: False
+2025-08-12 02:53:00,914 - __main__ - WARNING - No exact match found, trying with wider tolerance...
+2025-08-12 02:53:00,914 - __main__ - INFO - Found 5 records within 0.1 degrees
+2025-08-12 02:53:00,915 - __main__ - INFO - Record 1: lat=27.75, lon=85.25, created=2025-08-11 20:08:51.713000
+2025-08-12 02:53:00,915 - __main__ - INFO - Record 2: lat=27.75, lon=85.25, created=2025-08-11 20:08:51.712988
+2025-08-12 02:53:00,915 - __main__ - INFO - Record 3: lat=27.75, lon=85.25, created=2025-08-11 20:08:51.712976
+2025-08-12 02:53:00,915 - __main__ - INFO - Record 4: lat=27.75, lon=85.25, created=2025-08-11 20:08:51.712963
+2025-08-12 02:53:00,915 - __main__ - INFO - Record 5: lat=27.75, lon=85.25, created=2025-08-11 20:08:51.712951
+2025-08-12 02:53:00,916 - __main__ - INFO - Using nearby record: lat=27.75, lon=85.25
+2025-08-12 02:53:00,916 - __main__ - INFO - Weather record found: temp=N/A
+2025-08-12 02:53:00,916 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-12 02:53:00,916 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 27.7, 85.3
+2025-08-12 02:53:00,919 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:53:00] "GET /weather?lat=27.7&lon=85.3 HTTP/1.1" 200 -
+2025-08-12 02:53:02,829 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:53:02] "GET / HTTP/1.1" 200 -
+2025-08-12 02:53:04,451 - __main__ - INFO - Weather route called with lat=40.71, lon=-74.01
+2025-08-12 02:53:05,304 - __main__ - INFO - Location name: City of New York, New York
+2025-08-12 02:53:05,304 - __main__ - INFO - Attempting to get latest record for 40.71, -74.01
+2025-08-12 02:53:05,305 - __main__ - INFO - Latest record found: False
+2025-08-12 02:53:05,305 - __main__ - INFO - Running ETL pipeline - latest_record: False, stale: N/A
+2025-08-12 02:53:05,307 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 02:53:05,307 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:53:05,307 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 02:53:05,307 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:53:05,307 - etl.pipeline - INFO - Location: 40.71, -74.01
+2025-08-12 02:53:05,308 - etl.pipeline - INFO - Timestamp: 2025-08-12T02:53:05.308142
+2025-08-12 02:53:05,308 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:53:05,308 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 02:53:05,308 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:53:05,308 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 40.71, -74.01
+2025-08-12 02:53:05,308 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 02:53:05,309 - etl.extract - INFO - Fetching weather forecast for 40.71, -74.01
+2025-08-12 02:53:06,415 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 02:53:06,415 - etl.extract - INFO - Fetching air quality data for 40.71, -74.01
+2025-08-12 02:53:07,250 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 02:53:07,250 - etl.extract - INFO - Data extraction completed in 1.94 seconds
+2025-08-12 02:53:07,250 - etl.extract - INFO - Data validation successful
+2025-08-12 02:53:07,251 - etl.pipeline - INFO - Extraction completed in 1.94 seconds
+2025-08-12 02:53:07,251 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 02:53:07,251 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 02:53:07,251 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:53:07,251 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 02:53:07,252 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:53:07,252 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 02:53:07,252 - etl.transform - INFO - Starting data transformation
+2025-08-12 02:53:07,252 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-12 02:53:07,252 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-12 02:53:07,253 - etl.pipeline - INFO - Records created: 7
+2025-08-12 02:53:07,253 - etl.pipeline - INFO - Date range: 2025-08-11 to 2025-08-17
+2025-08-12 02:53:07,253 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:53:07,253 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-12 02:53:07,253 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:53:07,255 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-12 02:53:07,264 - etl.load - INFO - SQLite database and tables created successfully: data\weather_data.db
+2025-08-12 02:53:07,274 - etl.load - INFO - Successfully processed 7 records to SQLite: data\weather_data.db
+2025-08-12 02:53:07,274 - etl.load - INFO -   - Inserted: 0 new records
+2025-08-12 02:53:07,274 - etl.load - INFO -   - Updated: 7 existing records
+2025-08-12 02:53:07,274 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-12 02:53:07,277 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat40.71_lon-73.99_20250812_025307.csv
+2025-08-12 02:53:07,278 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat40.71_lon-73.99_20250812_025307.csv
+2025-08-12 02:53:07,286 - etl.pipeline - INFO - Data loading completed in 0.02 seconds
+2025-08-12 02:53:07,286 - etl.pipeline - INFO - 
+============================================================
+2025-08-12 02:53:07,286 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 1.98 SECONDS
+2025-08-12 02:53:07,286 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:53:07,286 - __main__ - INFO - ETL pipeline success: True
+2025-08-12 02:53:07,287 - __main__ - INFO - Attempting to get latest record after ETL for 40.71, -74.01
+2025-08-12 02:53:07,288 - __main__ - INFO - Latest record after ETL: False
+2025-08-12 02:53:07,288 - __main__ - WARNING - No exact match found, trying with wider tolerance...
+2025-08-12 02:53:07,289 - __main__ - INFO - Found 5 records within 0.1 degrees
+2025-08-12 02:53:07,289 - __main__ - INFO - Record 1: lat=40.710335, lon=-73.99309, created=2025-08-11 20:37:35.456050
+2025-08-12 02:53:07,289 - __main__ - INFO - Record 2: lat=40.710335, lon=-73.99309, created=2025-08-11 20:37:35.456038
+2025-08-12 02:53:07,289 - __main__ - INFO - Record 3: lat=40.710335, lon=-73.99309, created=2025-08-11 20:37:35.456026
+2025-08-12 02:53:07,290 - __main__ - INFO - Record 4: lat=40.710335, lon=-73.99309, created=2025-08-11 20:37:35.456015
+2025-08-12 02:53:07,290 - __main__ - INFO - Record 5: lat=40.710335, lon=-73.99309, created=2025-08-11 20:37:35.456002
+2025-08-12 02:53:07,290 - __main__ - INFO - Using nearby record: lat=40.710335, lon=-73.99309
+2025-08-12 02:53:07,290 - __main__ - INFO - Weather record found: temp=N/A
+2025-08-12 02:53:07,290 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-12 02:53:07,290 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 40.71, -74.01
+2025-08-12 02:53:07,292 - __main__ - INFO - Rendering weather template for City of New York, New York
+2025-08-12 02:53:07,293 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:53:07] "GET /weather?lat=40.71&lon=-74.01 HTTP/1.1" 200 -
+2025-08-12 02:53:09,302 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:53:09] "GET / HTTP/1.1" 200 -
+2025-08-12 02:53:10,870 - __main__ - INFO - Weather route called with lat=51.51, lon=-0.13
+2025-08-12 02:53:12,734 - __main__ - INFO - Location name: London, England
+2025-08-12 02:53:12,734 - __main__ - INFO - Attempting to get latest record for 51.51, -0.13
+2025-08-12 02:53:12,735 - __main__ - INFO - Latest record found: True
+2025-08-12 02:53:12,735 - __main__ - INFO - Weather record found: temp=N/A
+2025-08-12 02:53:12,736 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-12 02:53:12,736 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 51.51, -0.13
+2025-08-12 02:53:12,738 - __main__ - INFO - Rendering weather template for London, England
+2025-08-12 02:53:12,739 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:53:12] "GET /weather?lat=51.51&lon=-0.13 HTTP/1.1" 200 -
+2025-08-12 02:53:16,405 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:53:16] "GET / HTTP/1.1" 200 -
+2025-08-12 02:53:18,260 - __main__ - INFO - Weather route called with lat=35.69, lon=139.69
+2025-08-12 02:53:19,119 - __main__ - INFO - Attempting to get latest record for 35.69, 139.69
+2025-08-12 02:53:19,120 - __main__ - INFO - Latest record found: False
+2025-08-12 02:53:19,120 - __main__ - INFO - Running ETL pipeline - latest_record: False, stale: N/A
+2025-08-12 02:53:19,122 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 02:53:19,122 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:53:19,122 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 02:53:19,122 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:53:19,122 - etl.pipeline - INFO - Location: 35.69, 139.69
+2025-08-12 02:53:19,122 - etl.pipeline - INFO - Timestamp: 2025-08-12T02:53:19.122956
+2025-08-12 02:53:19,123 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:53:19,123 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 02:53:19,123 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:53:19,123 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 35.69, 139.69
+2025-08-12 02:53:19,123 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 02:53:19,123 - etl.extract - INFO - Fetching weather forecast for 35.69, 139.69
+2025-08-12 02:53:20,235 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 02:53:20,235 - etl.extract - INFO - Fetching air quality data for 35.69, 139.69
+2025-08-12 02:53:21,074 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 02:53:21,074 - etl.extract - INFO - Data extraction completed in 1.95 seconds
+2025-08-12 02:53:21,075 - etl.extract - INFO - Data validation successful
+2025-08-12 02:53:21,075 - etl.pipeline - INFO - Extraction completed in 1.95 seconds
+2025-08-12 02:53:21,075 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 02:53:21,075 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 02:53:21,075 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:53:21,075 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 02:53:21,075 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:53:21,076 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 02:53:21,076 - etl.transform - INFO - Starting data transformation
+2025-08-12 02:53:21,076 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-12 02:53:21,076 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-12 02:53:21,076 - etl.pipeline - INFO - Records created: 7
+2025-08-12 02:53:21,077 - etl.pipeline - INFO - Date range: 2025-08-12 to 2025-08-18
+2025-08-12 02:53:21,077 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:53:21,077 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-12 02:53:21,077 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:53:21,079 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-12 02:53:21,087 - etl.load - INFO - SQLite database and tables created successfully: data\weather_data.db
+2025-08-12 02:53:21,096 - etl.load - INFO - Successfully processed 7 records to SQLite: data\weather_data.db
+2025-08-12 02:53:21,097 - etl.load - INFO -   - Inserted: 0 new records
+2025-08-12 02:53:21,097 - etl.load - INFO -   - Updated: 7 existing records
+2025-08-12 02:53:21,097 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-12 02:53:21,100 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat35.70_lon139.69_20250812_025321.csv
+2025-08-12 02:53:21,100 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat35.70_lon139.69_20250812_025321.csv
+2025-08-12 02:53:21,109 - etl.pipeline - INFO - Data loading completed in 0.02 seconds
+2025-08-12 02:53:21,110 - etl.pipeline - INFO - 
+============================================================
+2025-08-12 02:53:21,110 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 1.99 SECONDS
+2025-08-12 02:53:21,110 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:53:21,110 - __main__ - INFO - ETL pipeline success: True
+2025-08-12 02:53:21,111 - __main__ - INFO - Attempting to get latest record after ETL for 35.69, 139.69
+2025-08-12 02:53:21,112 - __main__ - INFO - Latest record after ETL: False
+2025-08-12 02:53:21,112 - __main__ - WARNING - No exact match found, trying with wider tolerance...
+2025-08-12 02:53:21,113 - __main__ - INFO - Found 5 records within 0.1 degrees
+2025-08-12 02:53:21,113 - __main__ - INFO - Record 1: lat=35.7, lon=139.6875, created=2025-08-11 20:35:40.485611
+2025-08-12 02:53:21,113 - __main__ - INFO - Record 2: lat=35.7, lon=139.6875, created=2025-08-11 20:35:40.485591
+2025-08-12 02:53:21,113 - __main__ - INFO - Record 3: lat=35.7, lon=139.6875, created=2025-08-11 20:35:40.485570
+2025-08-12 02:53:21,113 - __main__ - INFO - Record 4: lat=35.7, lon=139.6875, created=2025-08-11 20:35:40.485549
+2025-08-12 02:53:21,114 - __main__ - INFO - Record 5: lat=35.7, lon=139.6875, created=2025-08-11 20:35:40.485537
+2025-08-12 02:53:21,114 - __main__ - INFO - Using nearby record: lat=35.7, lon=139.6875
+2025-08-12 02:53:21,114 - __main__ - INFO - Weather record found: temp=N/A
+2025-08-12 02:53:21,114 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-12 02:53:21,114 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 35.69, 139.69
+2025-08-12 02:53:21,117 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:53:21] "GET /weather?lat=35.69&lon=139.69 HTTP/1.1" 200 -
+2025-08-12 02:53:22,943 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:53:22] "[31m[1mPOST /add-favorite HTTP/1.1[0m" 400 -
+2025-08-12 02:53:23,582 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:53:23] "GET / HTTP/1.1" 200 -
+2025-08-12 02:53:24,901 - __main__ - INFO - Weather route called with lat=-33.87, lon=151.21
+2025-08-12 02:53:25,773 - __main__ - INFO - Location name: Sydney, New South Wales
+2025-08-12 02:53:25,773 - __main__ - INFO - Attempting to get latest record for -33.87, 151.21
+2025-08-12 02:53:25,774 - __main__ - INFO - Latest record found: False
+2025-08-12 02:53:25,775 - __main__ - INFO - Running ETL pipeline - latest_record: False, stale: N/A
+2025-08-12 02:53:25,776 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 02:53:25,776 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:53:25,776 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 02:53:25,776 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:53:25,777 - etl.pipeline - INFO - Location: -33.87, 151.21
+2025-08-12 02:53:25,777 - etl.pipeline - INFO - Timestamp: 2025-08-12T02:53:25.777214
+2025-08-12 02:53:25,777 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:53:25,777 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 02:53:25,777 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:53:25,777 - etl.extract - INFO - WeatherExtractor initialized for coordinates: -33.87, 151.21
+2025-08-12 02:53:25,778 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 02:53:25,778 - etl.extract - INFO - Fetching weather forecast for -33.87, 151.21
+2025-08-12 02:53:27,147 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 02:53:27,147 - etl.extract - INFO - Fetching air quality data for -33.87, 151.21
+2025-08-12 02:53:28,050 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 02:53:28,050 - etl.extract - INFO - Data extraction completed in 2.27 seconds
+2025-08-12 02:53:28,051 - etl.extract - INFO - Data validation successful
+2025-08-12 02:53:28,051 - etl.pipeline - INFO - Extraction completed in 2.27 seconds
+2025-08-12 02:53:28,051 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 02:53:28,051 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 02:53:28,051 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:53:28,052 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 02:53:28,052 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:53:28,052 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 02:53:28,052 - etl.transform - ERROR - Input data validation failed
+2025-08-12 02:53:28,052 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-12 02:53:28,052 - etl.pipeline - INFO - Records created: 0
+2025-08-12 02:53:28,052 - etl.pipeline - INFO - Date range: None to None
+2025-08-12 02:53:28,053 - etl.pipeline - WARNING - Transformation completed with 1 errors
+2025-08-12 02:53:28,053 - etl.pipeline - WARNING -   - Weather and air quality coordinates don't match
+2025-08-12 02:53:28,053 - etl.pipeline - ERROR - Data transformation failed - pipeline terminated
+2025-08-12 02:53:28,053 - __main__ - INFO - ETL pipeline success: False
+2025-08-12 02:53:28,054 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:53:28] "[32mGET /weather?lat=-33.87&lon=151.21 HTTP/1.1[0m" 302 -
+2025-08-12 02:53:28,060 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 02:53:28] "GET / HTTP/1.1" 200 -
+2025-08-12 02:55:38,721 - __main__ - INFO - Weather route called with lat=35.69, lon=139.69
+2025-08-12 02:55:39,608 - __main__ - INFO - Attempting to get latest record for 35.69, 139.69
+2025-08-12 02:55:39,609 - __main__ - INFO - Latest record found: False
+2025-08-12 02:55:39,609 - __main__ - INFO - Running ETL pipeline - latest_record: False, stale: N/A
+2025-08-12 02:55:39,610 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 02:55:39,610 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:55:39,611 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 02:55:39,611 - etl.pipeline - INFO - ============================================================
+2025-08-12 02:55:39,611 - etl.pipeline - INFO - Location: 35.69, 139.69
+2025-08-12 02:55:39,611 - etl.pipeline - INFO - Timestamp: 2025-08-12T02:55:39.611431
+2025-08-12 02:55:39,611 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 02:55:39,611 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 02:55:39,611 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 02:55:39,612 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 35.69, 139.69
+2025-08-12 02:55:39,612 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 02:55:39,612 - etl.extract - INFO - Fetching weather forecast for 35.69, 139.69

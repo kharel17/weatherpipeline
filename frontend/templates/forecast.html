@@ -1,0 +1,613 @@
+{% extends "base.html" %} {% block title %}{{ forecast.location.name }} - ARIMA
+Forecast{% endblock %} {% block content %}
+<div class="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+  <!-- Forecast Header -->
+  <section class="bg-gradient-to-r from-purple-600 to-blue-700 text-white py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+        <!-- Location Info -->
+        <div class="mb-6 lg:mb-0">
+          <h1 class="text-3xl lg:text-4xl font-bold mb-2">
+            ARIMA Weather Forecast
+          </h1>
+          <h2 class="text-xl text-purple-100 mb-2">
+            {{ forecast.location.name }}
+          </h2>
+          <p class="text-purple-100">
+            📍 {{ "%.4f"|format(forecast.location.lat) }}, {{
+            "%.4f"|format(forecast.location.lon) }}
+          </p>
+          {% if forecast.forecast %}
+          <p class="text-purple-100 text-sm mt-2">
+            Model: {{ forecast.forecast.model_info.model_type }} | Confidence:
+            {{ (forecast.forecast.model_info.confidence_level * 100)|round }}%
+          </p>
+          {% endif %}
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="flex flex-wrap gap-3">
+          <a
+            href="{{ url_for('weather', lat=forecast.location.lat, lon=forecast.location.lon) }}"
+            class="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-4 py-2 rounded-lg hover:bg-white/30 transition-colors"
+          >
+            <svg
+              class="w-4 h-4 inline mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
+              ></path>
+            </svg>
+            Current Weather
+          </a>
+
+          <a
+            href="{{ url_for('history', lat=forecast.location.lat, lon=forecast.location.lon) }}"
+            class="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-4 py-2 rounded-lg hover:bg-white/30 transition-colors"
+          >
+            <svg
+              class="w-4 h-4 inline mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              ></path>
+            </svg>
+            View History
+          </a>
+
+          <button
+            onclick="refreshForecast()"
+            id="refreshButton"
+            class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-colors font-medium"
+          >
+            <svg
+              class="w-4 h-4 inline mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              ></path>
+            </svg>
+            Update Forecast
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% if forecast.forecast %}
+  <!-- ARIMA Model Information -->
+  <section class="py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Model Information</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Model Type -->
+          <div class="text-center p-4 bg-purple-50 rounded-lg">
+            <div class="text-lg font-bold text-purple-600">
+              {{ forecast.forecast.model_info.model_type if
+              forecast.forecast.model_info else 'ARIMA' }}
+            </div>
+            <div class="text-sm text-gray-600 mt-2">Model Type</div>
+          </div>
+
+          <!-- Confidence Level -->
+          <div class="text-center p-4 bg-blue-50 rounded-lg">
+            <div class="text-lg font-bold text-blue-600">
+              {{ (forecast.forecast.model_info.confidence_level * 100)|round if
+              forecast.forecast.model_info else 95 }}%
+            </div>
+            <div class="text-sm text-gray-600 mt-2">Confidence Level</div>
+          </div>
+
+          <!-- Data Points -->
+          <div class="text-center p-4 bg-green-50 rounded-lg">
+            <div class="text-lg font-bold text-green-600">
+              {{ forecast.forecast.model_info.data_points if
+              forecast.forecast.model_info else 'N/A' }}
+            </div>
+            <div class="text-sm text-gray-600 mt-2">Historical Data Points</div>
+          </div>
+
+          <!-- Model Accuracy -->
+          <div class="text-center p-4 bg-orange-50 rounded-lg">
+            <div class="text-lg font-bold text-orange-600">
+              {% if forecast.forecast.model_info and
+              forecast.forecast.model_info.accuracy %} {{
+              "%.1f"|format(forecast.forecast.model_info.accuracy) }}% {% else
+              %} N/A {% endif %}
+            </div>
+            <div class="text-sm text-gray-600 mt-2">Model Accuracy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Forecast Chart -->
+  <section class="py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">
+          Temperature Forecast with Confidence Intervals
+        </h2>
+        <div class="h-96">
+          <canvas id="forecastChart"></canvas>
+        </div>
+        <div class="mt-4 text-center text-sm text-gray-600">
+          <p>
+            The shaded area represents the {{
+            (forecast.forecast.model_info.confidence_level * 100)|round if
+            forecast.forecast.model_info else 95 }}% confidence interval
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Daily Forecast Cards -->
+  <section class="py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Daily Forecast</h2>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-4"
+        >
+          {% for day in forecast.forecast.forecast_data %}
+          <div
+            class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-6 text-center border border-blue-100 hover:shadow-lg transition-shadow"
+          >
+            <!-- Date -->
+            <div class="text-sm font-medium text-gray-600 mb-2">
+              {{ day.date if day.date else 'Day ' + loop.index|string }}
+            </div>
+
+            <!-- Weather Icon -->
+            <div class="text-3xl mb-3">
+              {% set temp = day.forecast_temp if day.forecast_temp else 20 %} {%
+              if temp > 30 %}🌞 {% elif temp > 20 %}☀️ {% elif temp > 10 %}⛅ {%
+              elif temp > 0 %}☁️ {% else %}❄️{% endif %}
+            </div>
+
+            <!-- Forecast Temperature -->
+            <div class="text-2xl font-bold text-blue-600 mb-2">
+              {{ "%.1f"|format(day.forecast_temp) if day.forecast_temp else
+              'N/A' }}°C
+            </div>
+
+            <!-- Confidence Range -->
+            <div class="text-xs text-gray-500 mb-3">
+              Range: {{ "%.1f"|format(day.lower_bound) if day.lower_bound else
+              'N/A' }}° - {{ "%.1f"|format(day.upper_bound) if day.upper_bound
+              else 'N/A' }}°
+            </div>
+
+            <!-- Confidence Indicator -->
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div
+                class="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full"
+                style="width: {{ (forecast.forecast.model_info.confidence_level * 100)|round if forecast.forecast.model_info else 95 }}%"
+              ></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Model Performance Metrics -->
+  {% if forecast.forecast.model_info %}
+  <section class="py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white rounded-2xl shadow-xl p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Model Performance</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Model Parameters -->
+          <div class="bg-gray-50 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              ARIMA Parameters
+            </h3>
+            <div class="space-y-2">
+              {% if forecast.forecast.model_info.arima_order %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">Order (p,d,q):</span>
+                <span class="font-medium"
+                  >{{ forecast.forecast.model_info.arima_order }}</span
+                >
+              </div>
+              {% endif %} {% if forecast.forecast.model_info.seasonal_order %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">Seasonal:</span>
+                <span class="font-medium"
+                  >{{ forecast.forecast.model_info.seasonal_order }}</span
+                >
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Accuracy Metrics -->
+          <div class="bg-gray-50 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              Accuracy Metrics
+            </h3>
+            <div class="space-y-2">
+              {% if forecast.forecast.model_info.mse %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">MSE:</span>
+                <span class="font-medium"
+                  >{{ "%.3f"|format(forecast.forecast.model_info.mse) }}</span
+                >
+              </div>
+              {% endif %} {% if forecast.forecast.model_info.rmse %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">RMSE:</span>
+                <span class="font-medium"
+                  >{{ "%.3f"|format(forecast.forecast.model_info.rmse) }}</span
+                >
+              </div>
+              {% endif %} {% if forecast.forecast.model_info.mae %}
+              <div class="flex justify-between">
+                <span class="text-gray-600">MAE:</span>
+                <span class="font-medium"
+                  >{{ "%.3f"|format(forecast.forecast.model_info.mae) }}</span
+                >
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Model Info -->
+          <div class="bg-gray-50 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              Model Details
+            </h3>
+            <div class="space-y-2">
+              <div class="flex justify-between">
+                <span class="text-gray-600">Training Data:</span>
+                <span class="font-medium"
+                  >{{ forecast.forecast.model_info.data_points or 'N/A' }}
+                  points</span
+                >
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Generated:</span>
+                <span class="font-medium"
+                  >{{ forecast.forecast.model_info.generated_at[:10] if
+                  forecast.forecast.model_info.generated_at else 'Now' }}</span
+                >
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Status:</span>
+                <span
+                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+                >
+                  Active
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %} {% else %}
+  <!-- No Forecast Available -->
+  <section class="py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="bg-white rounded-2xl shadow-xl p-12">
+        {% if forecast.forecast_error %}
+        <!-- Error State -->
+        <div
+          class="w-24 h-24 bg-red-100 rounded-full mx-auto mb-6 flex items-center justify-center"
+        >
+          <svg
+            class="w-12 h-12 text-red-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+            ></path>
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">
+          ARIMA Forecast Not Available
+        </h2>
+        <p class="text-gray-600 mb-4">{{ forecast.forecast_error }}</p>
+        <p class="text-sm text-gray-500 mb-8">
+          This could be due to insufficient historical data, model training
+          issues, or missing dependencies.
+        </p>
+        {% else %}
+        <!-- No Data State -->
+        <div
+          class="w-24 h-24 bg-yellow-100 rounded-full mx-auto mb-6 flex items-center justify-center"
+        >
+          <svg
+            class="w-12 h-12 text-yellow-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 10V3L4 14h7v7l9-11h-7z"
+            ></path>
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">
+          ARIMA Forecasting Unavailable
+        </h2>
+        <p class="text-gray-600 mb-8">
+          Statistical forecasting requires more historical data or the
+          statsmodels library may not be installed.
+        </p>
+        {% endif %}
+
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <a
+            href="{{ url_for('weather', lat=forecast.location.lat, lon=forecast.location.lon) }}"
+            class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          >
+            View Current Weather
+          </a>
+
+          {% if not forecasting_available %}
+          <div class="bg-gray-100 text-gray-600 px-8 py-3 rounded-lg">
+            <span class="text-sm">Install: pip install statsmodels</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+</div>
+
+<!-- Forecast data as JSON for JavaScript -->
+<script type="application/json" id="forecastData">
+  {
+      "location": {
+          "lat": {{ forecast.location.lat }},
+          "lon": {{ forecast.location.lon }},
+          "name": "{{ forecast.location.name }}"
+      },
+      "forecast": {% if forecast.forecast %}{{ forecast.forecast | tojson }}{% else %}null{% endif %},
+      "error": "{{ forecast.forecast_error or '' }}"
+  }
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const forecastData = JSON.parse(
+      document.getElementById("forecastData").textContent
+    );
+
+    // Create forecast chart if we have data
+    if (forecastData.forecast && forecastData.forecast.forecast_data) {
+      createForecastChart(forecastData.forecast);
+    }
+
+    function createForecastChart(forecast) {
+      const ctx = document.getElementById("forecastChart");
+      if (!ctx) return;
+
+      const forecastPoints = forecast.forecast_data;
+
+      if (!forecastPoints || forecastPoints.length === 0) return;
+
+      // Prepare data for Chart.js
+      const labels = forecastPoints.map((point) => {
+        if (point.date) {
+          const date = new Date(point.date);
+          return date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+          });
+        }
+        return `Day ${forecastPoints.indexOf(point) + 1}`;
+      });
+
+      const forecastTemps = forecastPoints.map((point) => point.forecast_temp);
+      const lowerBounds = forecastPoints.map((point) => point.lower_bound);
+      const upperBounds = forecastPoints.map((point) => point.upper_bound);
+
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Forecast Temperature",
+              data: forecastTemps,
+              borderColor: "rgb(139, 69, 199)",
+              backgroundColor: "rgba(139, 69, 199, 0.1)",
+              tension: 0.4,
+              pointRadius: 5,
+              pointHoverRadius: 8,
+            },
+            {
+              label: "Upper Bound",
+              data: upperBounds,
+              borderColor: "rgba(59, 130, 246, 0.5)",
+              backgroundColor: "rgba(59, 130, 246, 0.1)",
+              fill: "+1",
+              tension: 0.4,
+              pointRadius: 0,
+            },
+            {
+              label: "Lower Bound",
+              data: lowerBounds,
+              borderColor: "rgba(59, 130, 246, 0.5)",
+              backgroundColor: "rgba(59, 130, 246, 0.1)",
+              tension: 0.4,
+              pointRadius: 0,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: "index",
+            intersect: false,
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              title: {
+                display: true,
+                text: "Temperature (°C)",
+              },
+            },
+            x: {
+              title: {
+                display: true,
+                text: "Forecast Period",
+              },
+            },
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: `ARIMA Temperature Forecast - ${forecastData.location.name}`,
+            },
+            legend: {
+              display: true,
+              labels: {
+                filter: function (legendItem, chartData) {
+                  // Only show the main forecast line in legend
+                  return legendItem.datasetIndex === 0;
+                },
+              },
+            },
+            tooltip: {
+              callbacks: {
+                afterLabel: function (context) {
+                  const dataIndex = context.dataIndex;
+                  const lower = lowerBounds[dataIndex];
+                  const upper = upperBounds[dataIndex];
+                  return [
+                    `Confidence Interval: ${lower?.toFixed(
+                      1
+                    )}°C - ${upper?.toFixed(1)}°C`,
+                  ];
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+
+    // Refresh forecast functionality
+    window.refreshForecast = function () {
+      const button = document.getElementById("refreshButton");
+      const originalHTML = button.innerHTML;
+
+      button.disabled = true;
+      button.innerHTML = `
+            <svg class="w-4 h-4 inline mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            Updating...
+        `;
+
+      // First update weather data, then refresh forecast
+      fetch("/api/update-weather", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          lat: forecastData.location.lat,
+          lon: forecastData.location.lon,
+        }),
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.success) {
+            showMessage(
+              "Weather data updated! Refreshing forecast...",
+              "success"
+            );
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          } else {
+            showMessage("Failed to update forecast", "error");
+            button.disabled = false;
+            button.innerHTML = originalHTML;
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          showMessage("Failed to update forecast", "error");
+          button.disabled = false;
+          button.innerHTML = originalHTML;
+        });
+    };
+
+    // Message display function
+    function showMessage(message, type) {
+      const messageDiv = document.createElement("div");
+      messageDiv.className = `fixed top-24 right-4 z-50 px-4 py-3 rounded-lg shadow-lg text-white max-w-sm transform translate-x-full transition-transform duration-300 ${
+        type === "success"
+          ? "bg-green-500"
+          : type === "info"
+          ? "bg-blue-500"
+          : "bg-red-500"
+      }`;
+      messageDiv.innerHTML = `
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                ${message}
+            </div>
+        `;
+
+      document.body.appendChild(messageDiv);
+
+      // Animate in
+      setTimeout(() => {
+        messageDiv.style.transform = "translateX(0)";
+      }, 100);
+
+      // Remove after 3 seconds
+      setTimeout(() => {
+        messageDiv.style.transform = "translateX(100%)";
+        setTimeout(() => messageDiv.remove(), 300);
+      }, 3000);
+    }
+  });
+</script>
+{% endblock %}
