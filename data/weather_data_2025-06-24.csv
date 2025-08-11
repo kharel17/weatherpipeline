@@ -1,8 +1,0 @@
-date,latitude,longitude,timezone,last_updated,current_temp_c,current_condition,wind_kph,wind_dir,pm2_5,pm10,us_aqi,aqi_category,forecast_max_temp,forecast_min_temp,precipitation_mm,uv_index
-2025-06-24,27.75,85.25,Asia/Kathmandu,2025-06-24T09:15,24.1,Overcast,4.3,NW,0,0,,Unknown,26.9,21.0,9.8,8.95
-2025-06-25,27.75,85.25,Asia/Kathmandu,2025-06-24T09:15,24.1,Overcast,4.3,NW,0,0,,Unknown,25.6,21.4,8.9,9.2
-2025-06-26,27.75,85.25,Asia/Kathmandu,2025-06-24T09:15,24.1,Overcast,4.3,NW,0,0,,Unknown,25.8,21.4,8.1,9.1
-2025-06-27,27.75,85.25,Asia/Kathmandu,2025-06-24T09:15,24.1,Overcast,4.3,NW,0,0,,Unknown,24.7,21.2,36.2,7.7
-2025-06-28,27.75,85.25,Asia/Kathmandu,2025-06-24T09:15,24.1,Overcast,4.3,NW,0,0,,Unknown,25.2,21.0,25.8,8.55
-2025-06-29,27.75,85.25,Asia/Kathmandu,2025-06-24T09:15,24.1,Overcast,4.3,NW,0,0,,Unknown,24.6,20.6,42.9,8.45
-2025-06-30,27.75,85.25,Asia/Kathmandu,2025-06-24T09:15,24.1,Overcast,4.3,NW,0,0,,Unknown,24.5,20.6,24.3,1.2

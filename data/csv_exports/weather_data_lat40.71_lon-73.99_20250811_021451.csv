@@ -1,0 +1,16 @@
+# generated_at: 2025-08-11T02:14:51.436508
+# total_records: 7
+# date_range: 2025-08-10 to 2025-08-16
+# locations: 1 unique location(s)
+# data_source: open-meteo
+# format_version: 1.0
+# columns: ['date', 'last_updated', 'measurement_time', 'latitude', 'longitude', 'timezone', 'elevation', 'current_temp_c', 'current_condition', 'wind_kph', 'wind_dir', 'forecast_max_temp', 'forecast_min_temp', 'precipitation_mm', 'uv_index', 'weather_code', 'forecast_condition', 'pm2_5', 'pm10', 'us_aqi', 'european_aqi', 'aqi_category', 'data_source', 'created_at']
+#
+date,last_updated,measurement_time,latitude,longitude,timezone,elevation,current_temp_c,current_condition,wind_kph,wind_dir,forecast_max_temp,forecast_min_temp,precipitation_mm,uv_index,weather_code,forecast_condition,pm2_5,pm10,us_aqi,european_aqi,aqi_category,data_source,created_at
+2025-08-10,2025-08-10T20:29:51.276491,2025-08-14T23:00,40.710335,-73.99309,America/New_York,27.0,30.9,Clear sky,12.4,S,31.1,17.2,0.0,7.35,3,Overcast,0.0,0.0,0,0,Good,open-meteo,2025-08-10T20:29:51.276491
+2025-08-11,2025-08-10T20:29:51.276491,2025-08-14T23:00,40.710335,-73.99309,America/New_York,27.0,30.9,Clear sky,12.4,S,31.3,19.2,0.0,7.4,3,Overcast,0.0,0.0,0,0,Good,open-meteo,2025-08-10T20:29:51.276491
+2025-08-12,2025-08-10T20:29:51.276491,2025-08-14T23:00,40.710335,-73.99309,America/New_York,27.0,30.9,Clear sky,12.4,S,31.8,19.5,0.0,7.35,0,Clear sky,0.0,0.0,0,0,Good,open-meteo,2025-08-10T20:29:51.276491
+2025-08-13,2025-08-10T20:29:51.276491,2025-08-14T23:00,40.710335,-73.99309,America/New_York,27.0,30.9,Clear sky,12.4,S,31.2,24.3,0.9,7.35,53,Moderate drizzle,0.0,0.0,0,0,Good,open-meteo,2025-08-10T20:29:51.276491
+2025-08-14,2025-08-10T20:29:51.276491,2025-08-14T23:00,40.710335,-73.99309,America/New_York,27.0,30.9,Clear sky,12.4,S,33.6,25.1,0.0,7.3,3,Overcast,0.0,0.0,0,0,Good,open-meteo,2025-08-10T20:29:51.276491
+2025-08-15,2025-08-10T20:29:51.276491,2025-08-14T23:00,40.710335,-73.99309,America/New_York,27.0,30.9,Clear sky,12.4,S,28.9,23.4,0.0,7.05,3,Overcast,0.0,0.0,0,0,Good,open-meteo,2025-08-10T20:29:51.276491
+2025-08-16,2025-08-10T20:29:51.276491,2025-08-14T23:00,40.710335,-73.99309,America/New_York,27.0,30.9,Clear sky,12.4,S,26.5,22.7,0.0,7.05,0,Clear sky,0.0,0.0,0,0,Good,open-meteo,2025-08-10T20:29:51.276491
