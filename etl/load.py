@@ -1,8 +1,3 @@
-"""
-Enhanced Weather Data Loader
-Improved version with better error handling, multiple export formats, and database operations
-"""
-
 import os
 import csv
 import sqlite3
@@ -12,10 +7,11 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Union
-from models.database import db_session, WeatherRecord, Base, engine, init_database
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from models.database import WeatherRecord, Base
 
 logger = logging.getLogger(__name__)
-
 
 class WeatherLoader:
     """
@@ -119,13 +115,14 @@ class WeatherLoader:
             logger.error(f"Failed to save data to JSON: {e}")
             return None
 
-    def save_to_sqlite(self, db_name: str = 'weather_data.db', table_name: str = 'weather_records') -> bool:
+    def save_to_sqlite(self, db_url: str, table_name: str = 'weather_records', replace: bool = False) -> bool:
         """
         Save data to SQLite database using SQLAlchemy session
         
         Args:
-            db_name: Database filename
+            db_url: Database connection URL (e.g., sqlite:///path/to/db)
             table_name: Table name for weather data (should be 'weather_records')
+            replace: If True, replace existing records with matching date, latitude, longitude
             
         Returns:
             bool: True if successful, False otherwise
@@ -135,27 +132,43 @@ class WeatherLoader:
                 logger.warning("No data to save to SQLite")
                 return False
             
-            # Initialize database if session is not set
-            if not db_session:
-                init_database(f"sqlite:///{self.data_dir / db_name}")
-                if not db_session:
-                    raise RuntimeError("Failed to initialize database session")
+            # Create a new engine and session for this operation
+            engine = create_engine(db_url)
+            Session = sessionmaker(bind=engine)
+            session = Session()
+            
+            Base.metadata.create_all(engine)  # Ensure tables exist
             
             for record in self.data.to_dict('records'):
-                # Check for existing record to avoid duplicates
-                existing = db_session.query(WeatherRecord).filter_by(
+                # Convert string DateTime fields to datetime objects
+                for field in ['last_updated', 'measurement_time', 'created_at']:
+                    if field in record and isinstance(record[field], str):
+                        try:
+                            record[field] = datetime.fromisoformat(record[field].replace('Z', '+00:00'))
+                        except (ValueError, TypeError):
+                            record[field] = datetime.utcnow() if field == 'created_at' else None
+                
+                existing = session.query(WeatherRecord).filter_by(
                     date=record['date'],
                     latitude=record['latitude'],
                     longitude=record['longitude']
                 ).first()
-                if not existing:
-                    db_session.add(WeatherRecord.from_dict(record))
-            db_session.commit()
+                if existing and replace:
+                    # Update existing record
+                    for key, value in record.items():
+                        setattr(existing, key, value)
+                elif not existing:
+                    # Add new record
+                    session.add(WeatherRecord.from_dict(record))
+            
+            session.commit()
             logger.info(f"Successfully saved {len(self.data)} records to {table_name}")
+            session.close()
             return True
         except Exception as e:
             logger.error(f"Failed to save data to {table_name}: {e}")
-            db_session.rollback()
+            session.rollback()
+            session.close()
             return False
 
     def save_all_formats(self, base_filename: Optional[str] = None) -> Dict[str, Optional[str]]:
@@ -178,7 +191,7 @@ class WeatherLoader:
         # Save in each format
         results['csv'] = self.save_to_csv(f"{base_filename}.csv")
         results['json'] = self.save_to_json(f"{base_filename}.json")
-        results['sqlite'] = self.save_to_sqlite()
+        results['sqlite'] = self.save_to_sqlite(f"sqlite:///{self.data_dir / 'weather_data.db'}")
         
         # Summary
         successful = sum(1 for v in results.values() if v is not None and v is not False)
@@ -204,6 +217,7 @@ class WeatherLoader:
             db_path = data_path / db_name
             
             # Use SQLAlchemy to create tables based on models
+            engine = create_engine(f"sqlite:///{db_path}")
             Base.metadata.create_all(engine)
             logger.info(f"SQLite database and tables created successfully: {db_path}")
             return True

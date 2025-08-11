@@ -288,3 +288,913 @@
 2025-08-08 02:07:03,955 - etl.pipeline - INFO - ============================================================
 2025-08-08 02:07:03,956 - werkzeug - INFO - 127.0.0.1 - - [08/Aug/2025 02:07:03] "[32mGET /weather?lat=51.51&lon=-0.13 HTTP/1.1[0m" 302 -
 2025-08-08 02:07:03,968 - werkzeug - INFO - 127.0.0.1 - - [08/Aug/2025 02:07:03] "GET / HTTP/1.1" 200 -
+2025-08-11 01:09:20,154 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 01:09:20,283 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:09:20,284 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 01:09:20,285 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:09:20,285 - etl.pipeline - INFO - Location: 35.69, 139.69
+2025-08-11 01:09:20,286 - etl.pipeline - INFO - Timestamp: 2025-08-10T19:24:20.286363+00:00
+2025-08-11 01:09:20,286 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:09:20,287 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 01:09:20,287 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:09:20,287 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 35.69, 139.69
+2025-08-11 01:09:20,287 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 01:09:20,288 - etl.extract - INFO - Fetching weather forecast for 35.69, 139.69
+2025-08-11 01:09:21,388 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-11 01:09:21,388 - etl.extract - INFO - Fetching air quality data for 35.69, 139.69
+2025-08-11 01:09:22,216 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-11 01:09:22,223 - etl.extract - INFO - Data extraction completed in 1.93 seconds
+2025-08-11 01:09:22,232 - etl.extract - INFO - Data validation successful
+2025-08-11 01:09:22,237 - etl.pipeline - INFO - Extraction completed in 1.95 seconds
+2025-08-11 01:09:22,237 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-11 01:09:22,237 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-11 01:09:22,237 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:09:22,237 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-11 01:09:22,237 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:09:22,237 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-11 01:09:22,237 - etl.transform - INFO - Starting data transformation
+2025-08-11 01:09:22,237 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-11 01:09:22,253 - etl.pipeline - INFO - Transformation completed in 0.02 seconds
+2025-08-11 01:09:22,265 - etl.pipeline - INFO - Records created: 7
+2025-08-11 01:09:22,266 - etl.pipeline - INFO - Date range: 2025-08-11 to 2025-08-17
+2025-08-11 01:09:22,269 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:09:22,270 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-11 01:09:22,271 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:09:22,281 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-11 01:09:22,291 - models.database - INFO - Database initialized successfully: sqlite:///data\weather_data.db
+2025-08-11 01:09:22,296 - etl.pipeline - ERROR - Data loading failed: Failed to initialize database session
+2025-08-11 01:09:22,296 - etl.pipeline - INFO - 
+============================================================
+2025-08-11 01:09:22,297 - etl.pipeline - INFO - PIPELINE COMPLETED WITH ERRORS IN 2.01 SECONDS
+2025-08-11 01:09:22,297 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:09:22,299 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:09:22] "[32mGET /weather?lat=35.69&lon=139.69 HTTP/1.1[0m" 302 -
+2025-08-11 01:09:22,321 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:09:22] "GET / HTTP/1.1" 200 -
+2025-08-11 01:32:25,864 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 01:32:25,865 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:32:25,865 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 01:32:25,865 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:32:25,865 - etl.pipeline - INFO - Location: 51.51, -0.13
+2025-08-11 01:32:25,867 - etl.pipeline - INFO - Timestamp: 2025-08-10T19:47:25.867037+00:00
+2025-08-11 01:32:25,867 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:32:25,867 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 01:32:25,867 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:32:25,868 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 51.51, -0.13
+2025-08-11 01:32:25,868 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 01:32:25,868 - etl.extract - INFO - Fetching weather forecast for 51.51, -0.13
+2025-08-11 01:32:25,868 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-11 01:32:25,870 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 01:32:26,999 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=51.51&longitude=-0.13&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/11" 200 None
+2025-08-11 01:32:27,006 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:32:27,006 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-11 01:32:27,006 - etl.extract - INFO - Fetching air quality data for 51.51, -0.13
+2025-08-11 01:32:27,006 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-11 01:32:27,011 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 01:32:27,841 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=51.51&longitude=-0.13&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/11" 200 None
+2025-08-11 01:32:27,841 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:32:27,844 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-11 01:32:27,844 - etl.extract - INFO - Data extraction completed in 1.98 seconds
+2025-08-11 01:32:27,844 - etl.extract - INFO - Data validation successful
+2025-08-11 01:32:27,844 - etl.pipeline - INFO - Extraction completed in 1.98 seconds
+2025-08-11 01:32:27,845 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-11 01:32:27,845 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-11 01:32:27,845 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:32:27,845 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-11 01:32:27,845 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:32:27,845 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-11 01:32:27,845 - etl.transform - INFO - Starting data transformation
+2025-08-11 01:32:27,845 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-11 01:32:27,845 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-11 01:32:27,845 - etl.pipeline - INFO - Records created: 7
+2025-08-11 01:32:27,845 - etl.pipeline - INFO - Date range: 2025-08-10 to 2025-08-16
+2025-08-11 01:32:27,845 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:32:27,845 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-11 01:32:27,845 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:32:27,864 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-11 01:32:27,881 - etl.load - ERROR - Failed to save data to weather_records: (raised as a result of Query-invoked autoflush; consider using a session.no_autoflush block if this flush is occurring prematurely)
+(builtins.TypeError) SQLite DateTime type only accepts Python datetime and date objects as input.
+[SQL: INSERT INTO weather_records (date, last_updated, measurement_time, created_at, latitude, longitude, timezone, elevation, current_temp_c, current_condition, wind_kph, wind_dir, forecast_max_temp, forecast_min_temp, precipitation_mm, uv_index, weather_code, forecast_condition, pm2_5, pm10, us_aqi, european_aqi, aqi_category, data_source) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: [{'current_condition': 'Mainly clear', 'timezone': 'Europe/London', 'current_temp_c': 24.2, 'pm2_5': 9.3, 'weather_code': 2, 'measurement_time': dateti ... (351 characters truncated) ... ime(2025, 8, 10, 19, 47, 27, 845138), 'forecast_max_temp': 26.2, 'created_at': '2025-08-10T19:47:27.845138', 'uv_index': 6.25, 'aqi_category': 'Good'}]]
+2025-08-11 01:32:27,970 - etl.pipeline - ERROR - [FAILURE] Failed to save to database
+2025-08-11 01:32:27,970 - etl.pipeline - INFO - 
+============================================================
+2025-08-11 01:32:27,970 - etl.pipeline - INFO - PIPELINE COMPLETED WITH ERRORS IN 2.10 SECONDS
+2025-08-11 01:32:27,970 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:32:27,986 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:32:27] "[32mGET /weather?lat=51.51&lon=-0.13 HTTP/1.1[0m" 302 -
+2025-08-11 01:32:27,995 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:32:27] "GET / HTTP/1.1" 200 -
+2025-08-11 01:36:35,026 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 01:36:35,026 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:36:35,026 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 01:36:35,026 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:36:35,026 - etl.pipeline - INFO - Location: 51.51, -0.13
+2025-08-11 01:36:35,026 - etl.pipeline - INFO - Timestamp: 2025-08-10T19:51:35.026747+00:00
+2025-08-11 01:36:35,026 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:36:35,026 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 01:36:35,026 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:36:35,026 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 51.51, -0.13
+2025-08-11 01:36:35,026 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 01:36:35,026 - etl.extract - INFO - Fetching weather forecast for 51.51, -0.13
+2025-08-11 01:36:35,026 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-11 01:36:35,026 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 01:36:36,136 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=51.51&longitude=-0.13&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/11" 200 None
+2025-08-11 01:36:36,138 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:36:36,138 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-11 01:36:36,139 - etl.extract - INFO - Fetching air quality data for 51.51, -0.13
+2025-08-11 01:36:36,139 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-11 01:36:36,140 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 01:36:36,950 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=51.51&longitude=-0.13&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/11" 200 None
+2025-08-11 01:36:36,951 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:36:36,952 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-11 01:36:36,953 - etl.extract - INFO - Data extraction completed in 1.93 seconds
+2025-08-11 01:36:36,953 - etl.extract - INFO - Data validation successful
+2025-08-11 01:36:36,953 - etl.pipeline - INFO - Extraction completed in 1.93 seconds
+2025-08-11 01:36:36,953 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-11 01:36:36,953 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-11 01:36:36,953 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:36:36,953 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-11 01:36:36,953 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:36:36,953 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-11 01:36:36,953 - etl.transform - INFO - Starting data transformation
+2025-08-11 01:36:36,953 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-11 01:36:36,953 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-11 01:36:36,953 - etl.pipeline - INFO - Records created: 7
+2025-08-11 01:36:36,953 - etl.pipeline - INFO - Date range: 2025-08-10 to 2025-08-16
+2025-08-11 01:36:36,953 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:36:36,953 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-11 01:36:36,953 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:36:36,959 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-11 01:36:37,141 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-11 01:36:37,141 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-11 01:36:37,167 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat51.50_lon-0.12_20250811_013637.csv
+2025-08-11 01:36:37,168 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat51.50_lon-0.12_20250811_013637.csv
+2025-08-11 01:36:37,209 - etl.pipeline - INFO - Data loading completed in 0.22 seconds
+2025-08-11 01:36:37,210 - etl.pipeline - INFO - 
+============================================================
+2025-08-11 01:36:37,210 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.18 SECONDS
+2025-08-11 01:36:37,210 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:36:37,212 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-11 01:36:37,213 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 51.51, -0.13
+2025-08-11 01:36:37,366 - __main__ - ERROR - Error in weather route: Could not build url for endpoint 'history' with values ['lat', 'lon']. Did you mean 'dashboard' instead?
+2025-08-11 01:36:37,367 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:36:37] "[32mGET /weather?lat=51.51&lon=-0.13 HTTP/1.1[0m" 302 -
+2025-08-11 01:36:37,376 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:36:37] "GET / HTTP/1.1" 200 -
+2025-08-11 01:44:43,386 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:44:43] "GET / HTTP/1.1" 200 -
+2025-08-11 01:44:46,015 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 01:44:46,919 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=51.51&lon=-0.13&format=json&zoom=10&addressdetails=1 HTTP/11" 200 659
+2025-08-11 01:44:46,985 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-11 01:44:46,987 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 51.51, -0.13
+2025-08-11 01:44:47,037 - __main__ - ERROR - Error in weather route: Could not build url for endpoint 'history' with values ['lat', 'lon']. Did you mean 'dashboard' instead?
+2025-08-11 01:44:47,039 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:44:47] "[32mGET /weather?lat=51.51&lon=-0.13 HTTP/1.1[0m" 302 -
+2025-08-11 01:44:47,050 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:44:47] "GET / HTTP/1.1" 200 -
+2025-08-11 01:46:25,221 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:46:25] "GET / HTTP/1.1" 200 -
+2025-08-11 01:46:25,547 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:46:25] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-11 01:47:16,159 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 01:47:16,274 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:47:16,274 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 01:47:16,274 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:47:16,274 - etl.pipeline - INFO - Location: 27.7, 85.3
+2025-08-11 01:47:16,274 - etl.pipeline - INFO - Timestamp: 2025-08-10T20:02:16.274272+00:00
+2025-08-11 01:47:16,274 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:47:16,274 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 01:47:16,274 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:47:16,274 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 27.7, 85.3
+2025-08-11 01:47:16,274 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 01:47:16,274 - etl.extract - INFO - Fetching weather forecast for 27.7, 85.3
+2025-08-11 01:47:16,274 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-11 01:47:16,285 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 01:47:17,393 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=27.7&longitude=85.3&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/11" 200 None
+2025-08-11 01:47:17,395 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:47:17,397 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-11 01:47:17,397 - etl.extract - INFO - Fetching air quality data for 27.7, 85.3
+2025-08-11 01:47:17,397 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-11 01:47:17,399 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 01:47:18,289 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=27.7&longitude=85.3&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/11" 200 None
+2025-08-11 01:47:18,291 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:47:18,291 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-11 01:47:18,292 - etl.extract - INFO - Data extraction completed in 2.02 seconds
+2025-08-11 01:47:18,292 - etl.extract - INFO - Data validation successful
+2025-08-11 01:47:18,293 - etl.pipeline - INFO - Extraction completed in 2.02 seconds
+2025-08-11 01:47:18,293 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-11 01:47:18,293 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-11 01:47:18,293 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:47:18,294 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-11 01:47:18,294 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:47:18,294 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-11 01:47:18,295 - etl.transform - INFO - Starting data transformation
+2025-08-11 01:47:18,295 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-11 01:47:18,295 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-11 01:47:18,296 - etl.pipeline - INFO - Records created: 7
+2025-08-11 01:47:18,296 - etl.pipeline - INFO - Date range: 2025-08-11 to 2025-08-17
+2025-08-11 01:47:18,296 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:47:18,296 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-11 01:47:18,296 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:47:18,307 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-11 01:47:18,469 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-11 01:47:18,469 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-11 01:47:18,482 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat27.75_lon85.25_20250811_014718.csv
+2025-08-11 01:47:18,483 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat27.75_lon85.25_20250811_014718.csv
+2025-08-11 01:47:18,527 - etl.pipeline - INFO - Data loading completed in 0.19 seconds
+2025-08-11 01:47:18,527 - etl.pipeline - INFO - 
+============================================================
+2025-08-11 01:47:18,527 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.25 SECONDS
+2025-08-11 01:47:18,527 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:47:18,527 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:47:18] "[32mGET /weather?lat=27.7&lon=85.3 HTTP/1.1[0m" 302 -
+2025-08-11 01:47:18,527 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:47:18] "GET / HTTP/1.1" 200 -
+2025-08-11 01:47:20,844 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 01:47:21,669 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=27.7&lon=85.3&format=json&zoom=10&addressdetails=1 HTTP/11" 200 835
+2025-08-11 01:47:21,671 - __main__ - INFO - Fetching fresh weather data for 27.7, 85.3
+2025-08-11 01:47:21,672 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 01:47:21,672 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:47:21,673 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 01:47:21,673 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:47:21,673 - etl.pipeline - INFO - Location: 27.7, 85.3
+2025-08-11 01:47:21,673 - etl.pipeline - INFO - Timestamp: 2025-08-10T20:02:21.673693+00:00
+2025-08-11 01:47:21,673 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:47:21,673 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 01:47:21,673 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:47:21,673 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 27.7, 85.3
+2025-08-11 01:47:21,674 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 01:47:21,674 - etl.extract - INFO - Fetching weather forecast for 27.7, 85.3
+2025-08-11 01:47:21,674 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-11 01:47:21,675 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 01:47:22,770 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=27.7&longitude=85.3&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/11" 200 None
+2025-08-11 01:47:22,770 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:47:22,770 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-11 01:47:22,783 - etl.extract - INFO - Fetching air quality data for 27.7, 85.3
+2025-08-11 01:47:22,784 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-11 01:47:22,785 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 01:47:23,639 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=27.7&longitude=85.3&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/11" 200 None
+2025-08-11 01:47:23,639 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:47:23,639 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-11 01:47:23,639 - etl.extract - INFO - Data extraction completed in 1.96 seconds
+2025-08-11 01:47:23,639 - etl.extract - INFO - Data validation successful
+2025-08-11 01:47:23,639 - etl.pipeline - INFO - Extraction completed in 1.97 seconds
+2025-08-11 01:47:23,639 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-11 01:47:23,639 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-11 01:47:23,639 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:47:23,639 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-11 01:47:23,639 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:47:23,639 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-11 01:47:23,651 - etl.transform - INFO - Starting data transformation
+2025-08-11 01:47:23,651 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-11 01:47:23,651 - etl.pipeline - INFO - Transformation completed in 0.01 seconds
+2025-08-11 01:47:23,651 - etl.pipeline - INFO - Records created: 7
+2025-08-11 01:47:23,652 - etl.pipeline - INFO - Date range: 2025-08-11 to 2025-08-17
+2025-08-11 01:47:23,652 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:47:23,652 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-11 01:47:23,652 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:47:23,654 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-11 01:47:23,803 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-11 01:47:23,803 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-11 01:47:23,825 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat27.75_lon85.25_20250811_014723.csv
+2025-08-11 01:47:23,825 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat27.75_lon85.25_20250811_014723.csv
+2025-08-11 01:47:23,868 - etl.pipeline - INFO - Data loading completed in 0.17 seconds
+2025-08-11 01:47:23,869 - etl.pipeline - INFO - 
+============================================================
+2025-08-11 01:47:23,869 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.20 SECONDS
+2025-08-11 01:47:23,869 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:47:23,871 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:47:23] "[32mGET /weather?lat=27.7&lon=85.3 HTTP/1.1[0m" 302 -
+2025-08-11 01:47:23,871 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:47:23] "GET / HTTP/1.1" 200 -
+2025-08-11 01:47:25,577 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 01:47:26,426 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=40.71&lon=-74.01&format=json&zoom=10&addressdetails=1 HTTP/11" 200 649
+2025-08-11 01:47:26,427 - __main__ - INFO - Fetching fresh weather data for 40.71, -74.01
+2025-08-11 01:47:26,429 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 01:47:26,429 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:47:26,429 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 01:47:26,429 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:47:26,430 - etl.pipeline - INFO - Location: 40.71, -74.01
+2025-08-11 01:47:26,430 - etl.pipeline - INFO - Timestamp: 2025-08-10T20:02:26.430536+00:00
+2025-08-11 01:47:26,431 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:47:26,431 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 01:47:26,431 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:47:26,431 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 40.71, -74.01
+2025-08-11 01:47:26,432 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 01:47:26,432 - etl.extract - INFO - Fetching weather forecast for 40.71, -74.01
+2025-08-11 01:47:26,432 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-11 01:47:26,433 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 01:47:27,518 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=40.71&longitude=-74.01&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/11" 200 None
+2025-08-11 01:47:27,519 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:47:27,521 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-11 01:47:27,521 - etl.extract - INFO - Fetching air quality data for 40.71, -74.01
+2025-08-11 01:47:27,522 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-11 01:47:27,523 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 01:47:28,372 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=40.71&longitude=-74.01&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/11" 200 None
+2025-08-11 01:47:28,372 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:47:28,372 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-11 01:47:28,372 - etl.extract - INFO - Data extraction completed in 1.94 seconds
+2025-08-11 01:47:28,372 - etl.extract - INFO - Data validation successful
+2025-08-11 01:47:28,372 - etl.pipeline - INFO - Extraction completed in 1.94 seconds
+2025-08-11 01:47:28,372 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-11 01:47:28,372 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-11 01:47:28,372 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:47:28,372 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-11 01:47:28,372 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:47:28,372 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-11 01:47:28,372 - etl.transform - INFO - Starting data transformation
+2025-08-11 01:47:28,372 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-11 01:47:28,372 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-11 01:47:28,372 - etl.pipeline - INFO - Records created: 7
+2025-08-11 01:47:28,372 - etl.pipeline - INFO - Date range: 2025-08-10 to 2025-08-16
+2025-08-11 01:47:28,372 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:47:28,372 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-11 01:47:28,372 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:47:28,372 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-11 01:47:28,637 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-11 01:47:28,638 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-11 01:47:28,642 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat40.71_lon-73.99_20250811_014728.csv
+2025-08-11 01:47:28,643 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat40.71_lon-73.99_20250811_014728.csv
+2025-08-11 01:47:28,763 - etl.pipeline - INFO - Data loading completed in 0.27 seconds
+2025-08-11 01:47:28,764 - etl.pipeline - INFO - 
+============================================================
+2025-08-11 01:47:28,764 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.33 SECONDS
+2025-08-11 01:47:28,765 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:47:28,767 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:47:28] "[32mGET /weather?lat=40.71&lon=-74.01 HTTP/1.1[0m" 302 -
+2025-08-11 01:47:28,773 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:47:28] "GET / HTTP/1.1" 200 -
+2025-08-11 01:47:30,573 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 01:47:31,401 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=51.51&lon=-0.13&format=json&zoom=10&addressdetails=1 HTTP/11" 200 659
+2025-08-11 01:47:31,404 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-11 01:47:31,405 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 51.51, -0.13
+2025-08-11 01:47:31,407 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:47:31] "GET /weather?lat=51.51&lon=-0.13 HTTP/1.1" 200 -
+2025-08-11 01:47:50,447 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 01:47:50,447 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:47:50,447 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 01:47:50,447 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:47:50,447 - etl.pipeline - INFO - Location: 51.51, -0.13
+2025-08-11 01:47:50,448 - etl.pipeline - INFO - Timestamp: 2025-08-10T20:02:50.448963+00:00
+2025-08-11 01:47:50,448 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:47:50,448 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 01:47:50,448 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:47:50,448 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 51.51, -0.13
+2025-08-11 01:47:50,449 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 01:47:50,449 - etl.extract - INFO - Fetching weather forecast for 51.51, -0.13
+2025-08-11 01:47:50,449 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-11 01:47:50,451 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 01:47:51,573 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=51.51&longitude=-0.13&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/11" 200 None
+2025-08-11 01:47:51,573 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:47:51,573 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-11 01:47:51,573 - etl.extract - INFO - Fetching air quality data for 51.51, -0.13
+2025-08-11 01:47:51,573 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-11 01:47:51,573 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 01:47:52,453 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=51.51&longitude=-0.13&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/11" 200 None
+2025-08-11 01:47:52,453 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:47:52,453 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-11 01:47:52,453 - etl.extract - INFO - Data extraction completed in 2.00 seconds
+2025-08-11 01:47:52,453 - etl.extract - INFO - Data validation successful
+2025-08-11 01:47:52,453 - etl.pipeline - INFO - Extraction completed in 2.00 seconds
+2025-08-11 01:47:52,453 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-11 01:47:52,453 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-11 01:47:52,453 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:47:52,453 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-11 01:47:52,453 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:47:52,453 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-11 01:47:52,453 - etl.transform - INFO - Starting data transformation
+2025-08-11 01:47:52,453 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-11 01:47:52,453 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-11 01:47:52,465 - etl.pipeline - INFO - Records created: 7
+2025-08-11 01:47:52,465 - etl.pipeline - INFO - Date range: 2025-08-10 to 2025-08-16
+2025-08-11 01:47:52,465 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:47:52,465 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-11 01:47:52,465 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:47:52,469 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-11 01:47:52,688 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-11 01:47:52,688 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-11 01:47:52,693 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat51.50_lon-0.12_20250811_014752.csv
+2025-08-11 01:47:52,693 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat51.50_lon-0.12_20250811_014752.csv
+2025-08-11 01:47:52,924 - etl.pipeline - INFO - Data loading completed in 0.23 seconds
+2025-08-11 01:47:52,924 - etl.pipeline - INFO - 
+============================================================
+2025-08-11 01:47:52,925 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.48 SECONDS
+2025-08-11 01:47:52,925 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:47:52,926 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:47:52] "POST /api/update-weather HTTP/1.1" 200 -
+2025-08-11 01:47:54,460 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 01:47:55,290 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=51.51&lon=-0.13&format=json&zoom=10&addressdetails=1 HTTP/11" 200 659
+2025-08-11 01:47:55,290 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-11 01:47:55,290 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 51.51, -0.13
+2025-08-11 01:47:55,290 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:47:55] "GET /weather?lat=51.51&lon=-0.13 HTTP/1.1" 200 -
+2025-08-11 01:47:58,203 - models.database - ERROR - Error getting database stats: (sqlite3.OperationalError) no such column: data_quality_log.pipeline_version
+[SQL: SELECT count(*) AS count_1 
+FROM (SELECT data_quality_log.id AS data_quality_log_id, data_quality_log.timestamp AS data_quality_log_timestamp, data_quality_log.records_processed AS data_quality_log_records_processed, data_quality_log.records_saved AS data_quality_log_records_saved, data_quality_log.errors_count AS data_quality_log_errors_count, data_quality_log.processing_time_seconds AS data_quality_log_processing_time_seconds, data_quality_log.location_lat AS data_quality_log_location_lat, data_quality_log.location_lon AS data_quality_log_location_lon, data_quality_log.notes AS data_quality_log_notes, data_quality_log.pipeline_version AS data_quality_log_pipeline_version 
+FROM data_quality_log) AS anon_1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-08-11 01:47:58,204 - __main__ - ERROR - Stats error: stats.html
+2025-08-11 01:47:58,204 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:47:58] "[32mGET /stats HTTP/1.1[0m" 302 -
+2025-08-11 01:47:58,204 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:47:58] "GET / HTTP/1.1" 200 -
+2025-08-11 01:49:53,092 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 01:49:53,920 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=40.71&lon=-74.01&format=json&zoom=10&addressdetails=1 HTTP/11" 200 649
+2025-08-11 01:49:53,920 - __main__ - INFO - Fetching fresh weather data for 40.71, -74.01
+2025-08-11 01:49:53,920 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 01:49:53,920 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:49:53,920 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 01:49:53,920 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:49:53,920 - etl.pipeline - INFO - Location: 40.71, -74.01
+2025-08-11 01:49:53,920 - etl.pipeline - INFO - Timestamp: 2025-08-10T20:04:53.920756+00:00
+2025-08-11 01:49:53,920 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:49:53,920 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 01:49:53,920 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:49:53,920 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 40.71, -74.01
+2025-08-11 01:49:53,920 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 01:49:53,920 - etl.extract - INFO - Fetching weather forecast for 40.71, -74.01
+2025-08-11 01:49:53,920 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-11 01:49:53,930 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 01:49:55,059 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=40.71&longitude=-74.01&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/11" 200 None
+2025-08-11 01:49:55,059 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:49:55,059 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-11 01:49:55,059 - etl.extract - INFO - Fetching air quality data for 40.71, -74.01
+2025-08-11 01:49:55,059 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-11 01:49:55,059 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 01:49:55,882 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=40.71&longitude=-74.01&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/11" 200 None
+2025-08-11 01:49:55,885 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:49:55,885 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-11 01:49:55,886 - etl.extract - INFO - Data extraction completed in 1.97 seconds
+2025-08-11 01:49:55,887 - etl.extract - INFO - Data validation successful
+2025-08-11 01:49:55,887 - etl.pipeline - INFO - Extraction completed in 1.97 seconds
+2025-08-11 01:49:55,887 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-11 01:49:55,887 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-11 01:49:55,887 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:49:55,887 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-11 01:49:55,887 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:49:55,887 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-11 01:49:55,887 - etl.transform - INFO - Starting data transformation
+2025-08-11 01:49:55,887 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-11 01:49:55,890 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-11 01:49:55,890 - etl.pipeline - INFO - Records created: 7
+2025-08-11 01:49:55,890 - etl.pipeline - INFO - Date range: 2025-08-10 to 2025-08-16
+2025-08-11 01:49:55,891 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:49:55,891 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-11 01:49:55,891 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:49:55,893 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-11 01:49:56,476 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-11 01:49:56,477 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-11 01:49:56,481 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat40.71_lon-73.99_20250811_014956.csv
+2025-08-11 01:49:56,481 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat40.71_lon-73.99_20250811_014956.csv
+2025-08-11 01:49:56,644 - etl.pipeline - INFO - Data loading completed in 0.59 seconds
+2025-08-11 01:49:56,644 - etl.pipeline - INFO - 
+============================================================
+2025-08-11 01:49:56,645 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.72 SECONDS
+2025-08-11 01:49:56,645 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:49:56,646 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:49:56] "[32mGET /weather?lat=40.71&lon=-74.01 HTTP/1.1[0m" 302 -
+2025-08-11 01:49:56,653 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:49:56] "GET / HTTP/1.1" 200 -
+2025-08-11 01:49:58,226 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 01:49:59,116 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=-33.87&lon=151.21&format=json&zoom=10&addressdetails=1 HTTP/11" 200 636
+2025-08-11 01:49:59,118 - __main__ - INFO - Fetching fresh weather data for -33.87, 151.21
+2025-08-11 01:49:59,120 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 01:49:59,121 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:49:59,121 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 01:49:59,121 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:49:59,122 - etl.pipeline - INFO - Location: -33.87, 151.21
+2025-08-11 01:49:59,122 - etl.pipeline - INFO - Timestamp: 2025-08-10T20:04:59.122376+00:00
+2025-08-11 01:49:59,122 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:49:59,123 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 01:49:59,123 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:49:59,124 - etl.extract - INFO - WeatherExtractor initialized for coordinates: -33.87, 151.21
+2025-08-11 01:49:59,124 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 01:49:59,124 - etl.extract - INFO - Fetching weather forecast for -33.87, 151.21
+2025-08-11 01:49:59,125 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-11 01:49:59,126 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 01:50:00,406 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=-33.87&longitude=151.21&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/11" 200 None
+2025-08-11 01:50:00,407 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:50:00,409 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-11 01:50:00,409 - etl.extract - INFO - Fetching air quality data for -33.87, 151.21
+2025-08-11 01:50:00,409 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-11 01:50:00,411 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 01:50:01,255 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=-33.87&longitude=151.21&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/11" 200 None
+2025-08-11 01:50:01,255 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:50:01,255 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-11 01:50:01,255 - etl.extract - INFO - Data extraction completed in 2.13 seconds
+2025-08-11 01:50:01,255 - etl.extract - INFO - Data validation successful
+2025-08-11 01:50:01,255 - etl.pipeline - INFO - Extraction completed in 2.13 seconds
+2025-08-11 01:50:01,255 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-11 01:50:01,255 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-11 01:50:01,255 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:50:01,255 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-11 01:50:01,255 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:50:01,255 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-11 01:50:01,255 - etl.transform - ERROR - Input data validation failed
+2025-08-11 01:50:01,255 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-11 01:50:01,255 - etl.pipeline - INFO - Records created: 0
+2025-08-11 01:50:01,255 - etl.pipeline - INFO - Date range: None to None
+2025-08-11 01:50:01,266 - etl.pipeline - WARNING - Transformation completed with 1 errors
+2025-08-11 01:50:01,266 - etl.pipeline - WARNING -   - Weather and air quality coordinates don't match
+2025-08-11 01:50:01,266 - etl.pipeline - ERROR - Data transformation failed - pipeline terminated
+2025-08-11 01:50:01,266 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:50:01] "[32mGET /weather?lat=-33.87&lon=151.21 HTTP/1.1[0m" 302 -
+2025-08-11 01:50:01,274 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:50:01] "GET / HTTP/1.1" 200 -
+2025-08-11 01:50:06,005 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 01:50:06,870 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=27.7&lon=85.3&format=json&zoom=10&addressdetails=1 HTTP/11" 200 835
+2025-08-11 01:50:06,872 - __main__ - INFO - Fetching fresh weather data for 27.7, 85.3
+2025-08-11 01:50:06,873 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 01:50:06,873 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:50:06,874 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 01:50:06,874 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:50:06,874 - etl.pipeline - INFO - Location: 27.7, 85.3
+2025-08-11 01:50:06,874 - etl.pipeline - INFO - Timestamp: 2025-08-10T20:05:06.874624+00:00
+2025-08-11 01:50:06,875 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:50:06,875 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 01:50:06,875 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:50:06,875 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 27.7, 85.3
+2025-08-11 01:50:06,875 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 01:50:06,876 - etl.extract - INFO - Fetching weather forecast for 27.7, 85.3
+2025-08-11 01:50:06,876 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-11 01:50:06,877 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 01:50:07,975 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=27.7&longitude=85.3&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/11" 200 None
+2025-08-11 01:50:07,975 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:50:07,975 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-11 01:50:07,975 - etl.extract - INFO - Fetching air quality data for 27.7, 85.3
+2025-08-11 01:50:07,975 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-11 01:50:07,975 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 01:50:08,796 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=27.7&longitude=85.3&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/11" 200 None
+2025-08-11 01:50:08,797 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 01:50:08,797 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-11 01:50:08,798 - etl.extract - INFO - Data extraction completed in 1.92 seconds
+2025-08-11 01:50:08,798 - etl.extract - INFO - Data validation successful
+2025-08-11 01:50:08,798 - etl.pipeline - INFO - Extraction completed in 1.92 seconds
+2025-08-11 01:50:08,798 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-11 01:50:08,799 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-11 01:50:08,799 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:50:08,799 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-11 01:50:08,799 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:50:08,800 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-11 01:50:08,800 - etl.transform - INFO - Starting data transformation
+2025-08-11 01:50:08,800 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-11 01:50:08,800 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-11 01:50:08,801 - etl.pipeline - INFO - Records created: 7
+2025-08-11 01:50:08,801 - etl.pipeline - INFO - Date range: 2025-08-11 to 2025-08-17
+2025-08-11 01:50:08,801 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 01:50:08,801 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-11 01:50:08,802 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 01:50:08,803 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-11 01:50:08,946 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-11 01:50:08,947 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-11 01:50:08,994 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat27.75_lon85.25_20250811_015008.csv
+2025-08-11 01:50:08,995 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat27.75_lon85.25_20250811_015008.csv
+2025-08-11 01:50:09,138 - etl.pipeline - INFO - Data loading completed in 0.19 seconds
+2025-08-11 01:50:09,138 - etl.pipeline - INFO - 
+============================================================
+2025-08-11 01:50:09,139 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.26 SECONDS
+2025-08-11 01:50:09,139 - etl.pipeline - INFO - ============================================================
+2025-08-11 01:50:09,141 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:50:09] "[32mGET /weather?lat=27.7&lon=85.3 HTTP/1.1[0m" 302 -
+2025-08-11 01:50:09,148 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:50:09] "GET / HTTP/1.1" 200 -
+2025-08-11 01:50:11,276 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 01:50:12,098 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=51.51&lon=-0.13&format=json&zoom=10&addressdetails=1 HTTP/11" 200 659
+2025-08-11 01:50:12,100 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-11 01:50:12,100 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 51.51, -0.13
+2025-08-11 01:50:12,105 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:50:12] "GET /weather?lat=51.51&lon=-0.13 HTTP/1.1" 200 -
+2025-08-11 01:50:36,301 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 01:50:37,152 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=51.51&lon=-0.13&format=json&zoom=10&addressdetails=1 HTTP/11" 200 659
+2025-08-11 01:50:37,152 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:50:37] "POST /add-favorite HTTP/1.1" 200 -
+2025-08-11 01:50:39,183 - app - ERROR - Exception on /dashboard [GET]
+Traceback (most recent call last):
+  File "C:\Users\DELL.DESKTOP-9SPGAH9\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL.DESKTOP-9SPGAH9\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL.DESKTOP-9SPGAH9\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL.DESKTOP-9SPGAH9\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Python Project\frontend\app.py", line 170, in dashboard
+    return render_template('dashboard.html', dashboard_data=dashboard_data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL.DESKTOP-9SPGAH9\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 149, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL.DESKTOP-9SPGAH9\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1084, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL.DESKTOP-9SPGAH9\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1013, in get_template
+    return self._load_template(name, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL.DESKTOP-9SPGAH9\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 972, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL.DESKTOP-9SPGAH9\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\DELL.DESKTOP-9SPGAH9\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 768, in compile
+    self.handle_exception(source=source_hint)
+  File "C:\Users\DELL.DESKTOP-9SPGAH9\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "D:\Python Project\frontend\templates\dashboard.html", line 44, in template
+    {% block title %}Statistics - Weather Insight Engine{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.TemplateAssertionError: block 'title' defined twice
+2025-08-11 01:50:39,262 - __main__ - ERROR - Internal server error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
+2025-08-11 01:50:39,263 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:50:39] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+2025-08-11 01:50:40,830 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:50:40] "GET / HTTP/1.1" 200 -
+2025-08-11 01:50:58,925 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 01:50:59,754 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=51.51&lon=-0.13&format=json&zoom=10&addressdetails=1 HTTP/11" 200 659
+2025-08-11 01:50:59,754 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-11 01:50:59,754 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 51.51, -0.13
+2025-08-11 01:50:59,754 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 01:50:59] "GET /weather?lat=51.51&lon=-0.13 HTTP/1.1" 200 -
+2025-08-11 02:00:22,186 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 02:00:23,070 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=51.51&lon=-0.13&format=json&zoom=10&addressdetails=1 HTTP/11" 200 659
+2025-08-11 02:00:23,088 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-11 02:00:23,088 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 51.51, -0.13
+2025-08-11 02:00:23,094 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 02:00:23] "GET /weather?lat=51.51&lon=-0.13 HTTP/1.1" 200 -
+2025-08-11 02:13:43,428 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 02:13:43,428 - etl.pipeline - INFO - ============================================================
+2025-08-11 02:13:43,434 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 02:13:43,434 - etl.pipeline - INFO - ============================================================
+2025-08-11 02:13:43,434 - etl.pipeline - INFO - Location: 40.71, -74.01
+2025-08-11 02:13:43,434 - etl.pipeline - INFO - Timestamp: 2025-08-10T20:28:43.434316+00:00
+2025-08-11 02:13:43,434 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 02:13:43,434 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 02:13:43,434 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 02:13:43,434 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 40.71, -74.01
+2025-08-11 02:13:43,434 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 02:13:43,434 - etl.extract - INFO - Fetching weather forecast for 40.71, -74.01
+2025-08-11 02:13:43,438 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-11 02:13:43,438 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 02:13:43,442 - etl.extract - WARNING - Connection error on attempt 1: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Max retries exceeded with url: /v1/forecast?latitude=40.71&longitude=-74.01&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001EDF92CDD30>: Failed to resolve 'api.open-meteo.com' ([Errno 11001] getaddrinfo failed)"))
+2025-08-11 02:13:45,445 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 2
+2025-08-11 02:13:45,445 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 02:13:45,451 - etl.extract - WARNING - Connection error on attempt 2: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Max retries exceeded with url: /v1/forecast?latitude=40.71&longitude=-74.01&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001EDF92CE300>: Failed to resolve 'api.open-meteo.com' ([Errno 11001] getaddrinfo failed)"))
+2025-08-11 02:13:47,453 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 3
+2025-08-11 02:13:47,453 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 02:13:47,458 - etl.extract - WARNING - Connection error on attempt 3: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Max retries exceeded with url: /v1/forecast?latitude=40.71&longitude=-74.01&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001EDF92CEAB0>: Failed to resolve 'api.open-meteo.com' ([Errno 11001] getaddrinfo failed)"))
+2025-08-11 02:13:49,460 - etl.extract - ERROR - All 3 attempts failed for https://api.open-meteo.com/v1/forecast
+2025-08-11 02:13:49,460 - etl.extract - ERROR - Failed to fetch weather forecast
+2025-08-11 02:13:49,460 - etl.extract - INFO - Fetching air quality data for 40.71, -74.01
+2025-08-11 02:13:49,460 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-11 02:13:49,465 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 02:13:49,465 - etl.extract - WARNING - Connection error on attempt 1: HTTPSConnectionPool(host='air-quality-api.open-meteo.com', port=443): Max retries exceeded with url: /v1/air-quality?latitude=40.71&longitude=-74.01&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001EDF92CF290>: Failed to resolve 'air-quality-api.open-meteo.com' ([Errno 11001] getaddrinfo failed)"))
+2025-08-11 02:13:51,471 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 2
+2025-08-11 02:13:51,473 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 02:13:51,473 - etl.extract - WARNING - Connection error on attempt 2: HTTPSConnectionPool(host='air-quality-api.open-meteo.com', port=443): Max retries exceeded with url: /v1/air-quality?latitude=40.71&longitude=-74.01&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001EDF92CF890>: Failed to resolve 'air-quality-api.open-meteo.com' ([Errno 11001] getaddrinfo failed)"))
+2025-08-11 02:13:53,479 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 3
+2025-08-11 02:13:53,479 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 02:13:53,479 - etl.extract - WARNING - Connection error on attempt 3: HTTPSConnectionPool(host='air-quality-api.open-meteo.com', port=443): Max retries exceeded with url: /v1/air-quality?latitude=40.71&longitude=-74.01&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x000001EDF931C140>: Failed to resolve 'air-quality-api.open-meteo.com' ([Errno 11001] getaddrinfo failed)"))
+2025-08-11 02:13:55,485 - etl.extract - ERROR - All 3 attempts failed for https://air-quality-api.open-meteo.com/v1/air-quality
+2025-08-11 02:13:55,487 - etl.extract - ERROR - Failed to fetch air quality data
+2025-08-11 02:13:55,487 - etl.extract - INFO - Data extraction completed in 12.05 seconds
+2025-08-11 02:13:55,487 - etl.extract - ERROR - Missing weather or air quality data
+2025-08-11 02:13:55,490 - etl.pipeline - ERROR - Data validation failed after extraction
+2025-08-11 02:13:55,491 - etl.pipeline - ERROR - Data extraction failed - pipeline terminated
+2025-08-11 02:13:55,504 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 02:13:55] "[32mGET /weather?lat=40.71&lon=-74.01 HTTP/1.1[0m" 302 -
+2025-08-11 02:13:55,527 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 02:13:55] "GET / HTTP/1.1" 200 -
+2025-08-11 02:14:33,570 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 02:14:34,611 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=40.71&lon=-74.01&format=json&zoom=10&addressdetails=1 HTTP/11" 200 649
+2025-08-11 02:14:34,689 - __main__ - INFO - Fetching fresh weather data for 40.71, -74.01
+2025-08-11 02:14:34,692 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 02:14:34,692 - etl.pipeline - INFO - ============================================================
+2025-08-11 02:14:34,692 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 02:14:34,692 - etl.pipeline - INFO - ============================================================
+2025-08-11 02:14:34,692 - etl.pipeline - INFO - Location: 40.71, -74.01
+2025-08-11 02:14:34,700 - etl.pipeline - INFO - Timestamp: 2025-08-10T20:29:34.700310+00:00
+2025-08-11 02:14:34,701 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 02:14:34,701 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 02:14:34,701 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 02:14:34,703 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 40.71, -74.01
+2025-08-11 02:14:34,704 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 02:14:34,705 - etl.extract - INFO - Fetching weather forecast for 40.71, -74.01
+2025-08-11 02:14:34,705 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-11 02:14:34,705 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 02:14:35,787 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=40.71&longitude=-74.01&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/11" 200 None
+2025-08-11 02:14:35,787 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 02:14:35,795 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-11 02:14:35,795 - etl.extract - INFO - Fetching air quality data for 40.71, -74.01
+2025-08-11 02:14:35,795 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-11 02:14:35,795 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 02:14:36,913 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=40.71&longitude=-74.01&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/11" 200 None
+2025-08-11 02:14:36,919 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 02:14:36,921 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-11 02:14:36,921 - etl.extract - INFO - Data extraction completed in 2.22 seconds
+2025-08-11 02:14:36,921 - etl.extract - INFO - Data validation successful
+2025-08-11 02:14:36,921 - etl.pipeline - INFO - Extraction completed in 2.22 seconds
+2025-08-11 02:14:36,921 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-11 02:14:36,921 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-11 02:14:36,921 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 02:14:36,921 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-11 02:14:36,921 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 02:14:36,921 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-11 02:14:36,921 - etl.transform - INFO - Starting data transformation
+2025-08-11 02:14:36,930 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-11 02:14:36,930 - etl.pipeline - INFO - Transformation completed in 0.01 seconds
+2025-08-11 02:14:36,933 - etl.pipeline - INFO - Records created: 7
+2025-08-11 02:14:36,934 - etl.pipeline - INFO - Date range: 2025-08-10 to 2025-08-16
+2025-08-11 02:14:36,934 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 02:14:36,936 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-11 02:14:36,936 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 02:14:36,951 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-11 02:14:37,086 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-11 02:14:37,086 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-11 02:14:37,136 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat40.71_lon-73.99_20250811_021437.csv
+2025-08-11 02:14:37,136 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat40.71_lon-73.99_20250811_021437.csv
+2025-08-11 02:14:37,190 - etl.pipeline - INFO - Data loading completed in 0.20 seconds
+2025-08-11 02:14:37,190 - etl.pipeline - INFO - 
+============================================================
+2025-08-11 02:14:37,190 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.50 SECONDS
+2025-08-11 02:14:37,190 - etl.pipeline - INFO - ============================================================
+2025-08-11 02:14:37,202 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 02:14:37] "[32mGET /weather?lat=40.71&lon=-74.01 HTTP/1.1[0m" 302 -
+2025-08-11 02:14:37,216 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 02:14:37] "GET / HTTP/1.1" 200 -
+2025-08-11 02:14:39,592 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 02:14:40,384 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=51.51&lon=-0.13&format=json&zoom=10&addressdetails=1 HTTP/11" 200 580
+2025-08-11 02:14:40,398 - __main__ - ERROR - Error in weather route: can't compare offset-naive and offset-aware datetimes
+2025-08-11 02:14:40,398 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 02:14:40] "[32mGET /weather?lat=51.51&lon=-0.13 HTTP/1.1[0m" 302 -
+2025-08-11 02:14:40,429 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 02:14:40] "GET / HTTP/1.1" 200 -
+2025-08-11 02:14:42,917 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 02:14:43,880 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=35.69&lon=139.69&format=json&zoom=10&addressdetails=1 HTTP/11" 200 557
+2025-08-11 02:14:43,885 - __main__ - INFO - Fetching fresh weather data for 35.69, 139.69
+2025-08-11 02:14:43,885 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 02:14:43,885 - etl.pipeline - INFO - ============================================================
+2025-08-11 02:14:43,893 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 02:14:43,893 - etl.pipeline - INFO - ============================================================
+2025-08-11 02:14:43,894 - etl.pipeline - INFO - Location: 35.69, 139.69
+2025-08-11 02:14:43,895 - etl.pipeline - INFO - Timestamp: 2025-08-10T20:29:43.895836+00:00
+2025-08-11 02:14:43,896 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 02:14:43,897 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 02:14:43,897 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 02:14:43,897 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 35.69, 139.69
+2025-08-11 02:14:43,897 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 02:14:43,897 - etl.extract - INFO - Fetching weather forecast for 35.69, 139.69
+2025-08-11 02:14:43,901 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-11 02:14:43,901 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 02:14:44,900 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=35.69&longitude=139.69&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/11" 200 None
+2025-08-11 02:14:44,900 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 02:14:44,900 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-11 02:14:44,900 - etl.extract - INFO - Fetching air quality data for 35.69, 139.69
+2025-08-11 02:14:44,905 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-11 02:14:44,905 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 02:14:45,924 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=35.69&longitude=139.69&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/11" 200 None
+2025-08-11 02:14:45,927 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 02:14:45,929 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-11 02:14:45,929 - etl.extract - INFO - Data extraction completed in 2.03 seconds
+2025-08-11 02:14:45,929 - etl.extract - INFO - Data validation successful
+2025-08-11 02:14:45,929 - etl.pipeline - INFO - Extraction completed in 2.03 seconds
+2025-08-11 02:14:45,929 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-11 02:14:45,929 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-11 02:14:45,929 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 02:14:45,929 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-11 02:14:45,929 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 02:14:45,929 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-11 02:14:45,929 - etl.transform - INFO - Starting data transformation
+2025-08-11 02:14:45,939 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-11 02:14:45,939 - etl.pipeline - INFO - Transformation completed in 0.01 seconds
+2025-08-11 02:14:45,939 - etl.pipeline - INFO - Records created: 7
+2025-08-11 02:14:45,939 - etl.pipeline - INFO - Date range: 2025-08-11 to 2025-08-17
+2025-08-11 02:14:45,939 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 02:14:45,939 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-11 02:14:45,944 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 02:14:45,947 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-11 02:14:46,125 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-11 02:14:46,125 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-11 02:14:46,130 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat35.70_lon139.69_20250811_021446.csv
+2025-08-11 02:14:46,130 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat35.70_lon139.69_20250811_021446.csv
+2025-08-11 02:14:46,194 - etl.pipeline - INFO - Data loading completed in 0.19 seconds
+2025-08-11 02:14:46,194 - etl.pipeline - INFO - 
+============================================================
+2025-08-11 02:14:46,196 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.31 SECONDS
+2025-08-11 02:14:46,196 - etl.pipeline - INFO - ============================================================
+2025-08-11 02:14:46,196 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 02:14:46] "[32mGET /weather?lat=35.69&lon=139.69 HTTP/1.1[0m" 302 -
+2025-08-11 02:14:46,216 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 02:14:46] "GET / HTTP/1.1" 200 -
+2025-08-11 02:14:48,132 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 02:14:48,866 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-11 02:14:49,098 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=40.71&lon=-74.01&format=json&zoom=10&addressdetails=1 HTTP/11" 200 649
+2025-08-11 02:14:49,104 - __main__ - INFO - Fetching fresh weather data for 40.71, -74.01
+2025-08-11 02:14:49,109 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 02:14:49,109 - etl.pipeline - INFO - ============================================================
+2025-08-11 02:14:49,111 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 02:14:49,111 - etl.pipeline - INFO - ============================================================
+2025-08-11 02:14:49,111 - etl.pipeline - INFO - Location: 40.71, -74.01
+2025-08-11 02:14:49,111 - etl.pipeline - INFO - Timestamp: 2025-08-10T20:29:49.111359+00:00
+2025-08-11 02:14:49,111 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 02:14:49,111 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 02:14:49,115 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 02:14:49,115 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 40.71, -74.01
+2025-08-11 02:14:49,115 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 02:14:49,115 - etl.extract - INFO - Fetching weather forecast for 40.71, -74.01
+2025-08-11 02:14:49,115 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-11 02:14:49,120 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 02:14:50,118 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=27.7&lon=85.3&format=json&zoom=10&addressdetails=1 HTTP/11" 200 835
+2025-08-11 02:14:50,123 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=40.71&longitude=-74.01&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/11" 200 None
+2025-08-11 02:14:50,123 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 02:14:50,131 - __main__ - INFO - Fetching fresh weather data for 27.7, 85.3
+2025-08-11 02:14:50,134 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-11 02:14:50,136 - etl.extract - INFO - Fetching air quality data for 40.71, -74.01
+2025-08-11 02:14:50,137 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-11 02:14:50,139 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 02:14:50,139 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-11 02:14:50,147 - etl.pipeline - INFO - ============================================================
+2025-08-11 02:14:50,147 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-11 02:14:50,147 - etl.pipeline - INFO - ============================================================
+2025-08-11 02:14:50,147 - etl.pipeline - INFO - Location: 27.7, 85.3
+2025-08-11 02:14:50,147 - etl.pipeline - INFO - Timestamp: 2025-08-10T20:29:50.147294+00:00
+2025-08-11 02:14:50,147 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 02:14:50,147 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-11 02:14:50,147 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 02:14:50,153 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 27.7, 85.3
+2025-08-11 02:14:50,153 - etl.extract - INFO - Starting complete data extraction
+2025-08-11 02:14:50,153 - etl.extract - INFO - Fetching weather forecast for 27.7, 85.3
+2025-08-11 02:14:50,155 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-11 02:14:50,155 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-11 02:14:51,259 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=40.71&longitude=-74.01&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/11" 200 None
+2025-08-11 02:14:51,261 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=27.7&longitude=85.3&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/11" 200 None
+2025-08-11 02:14:51,261 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 02:14:51,261 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 02:14:51,265 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-11 02:14:51,265 - etl.extract - INFO - Data extraction completed in 2.15 seconds
+2025-08-11 02:14:51,265 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-11 02:14:51,265 - etl.extract - INFO - Data validation successful
+2025-08-11 02:14:51,268 - etl.extract - INFO - Fetching air quality data for 27.7, 85.3
+2025-08-11 02:14:51,268 - etl.pipeline - INFO - Extraction completed in 2.15 seconds
+2025-08-11 02:14:51,269 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-11 02:14:51,269 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-11 02:14:51,269 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-11 02:14:51,273 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-11 02:14:51,273 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 02:14:51,275 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-11 02:14:51,276 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 02:14:51,276 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-11 02:14:51,276 - etl.transform - INFO - Starting data transformation
+2025-08-11 02:14:51,276 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-11 02:14:51,276 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-11 02:14:51,276 - etl.pipeline - INFO - Records created: 7
+2025-08-11 02:14:51,276 - etl.pipeline - INFO - Date range: 2025-08-10 to 2025-08-16
+2025-08-11 02:14:51,276 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 02:14:51,276 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-11 02:14:51,276 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 02:14:51,281 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-11 02:14:51,428 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-11 02:14:51,428 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-11 02:14:51,436 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat40.71_lon-73.99_20250811_021451.csv
+2025-08-11 02:14:51,444 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat40.71_lon-73.99_20250811_021451.csv
+2025-08-11 02:14:51,488 - etl.pipeline - INFO - Data loading completed in 0.17 seconds
+2025-08-11 02:14:51,491 - etl.pipeline - INFO - 
+============================================================
+2025-08-11 02:14:51,492 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.38 SECONDS
+2025-08-11 02:14:51,492 - etl.pipeline - INFO - ============================================================
+2025-08-11 02:14:51,492 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 02:14:51] "[32mGET /weather?lat=40.71&lon=-74.01 HTTP/1.1[0m" 302 -
+2025-08-11 02:14:52,374 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=27.7&longitude=85.3&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/11" 200 None
+2025-08-11 02:14:52,374 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-11 02:14:52,374 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-11 02:14:52,374 - etl.extract - INFO - Data extraction completed in 2.22 seconds
+2025-08-11 02:14:52,374 - etl.extract - INFO - Data validation successful
+2025-08-11 02:14:52,374 - etl.pipeline - INFO - Extraction completed in 2.22 seconds
+2025-08-11 02:14:52,374 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-11 02:14:52,374 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-11 02:14:52,374 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 02:14:52,385 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-11 02:14:52,385 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 02:14:52,385 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-11 02:14:52,385 - etl.transform - INFO - Starting data transformation
+2025-08-11 02:14:52,389 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-11 02:14:52,389 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-11 02:14:52,389 - etl.pipeline - INFO - Records created: 7
+2025-08-11 02:14:52,389 - etl.pipeline - INFO - Date range: 2025-08-11 to 2025-08-17
+2025-08-11 02:14:52,389 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-11 02:14:52,393 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-11 02:14:52,393 - etl.pipeline - INFO - ----------------------------------------
+2025-08-11 02:14:52,400 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-11 02:14:52,474 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-11 02:14:52,474 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-11 02:14:52,495 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat27.75_lon85.25_20250811_021452.csv
+2025-08-11 02:14:52,503 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat27.75_lon85.25_20250811_021452.csv
+2025-08-11 02:14:52,559 - etl.pipeline - INFO - Data loading completed in 0.11 seconds
+2025-08-11 02:14:52,565 - etl.pipeline - INFO - 
+============================================================
+2025-08-11 02:14:52,565 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.43 SECONDS
+2025-08-11 02:14:52,565 - etl.pipeline - INFO - ============================================================
+2025-08-11 02:14:52,572 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 02:14:52] "[32mGET /weather?lat=27.7&lon=85.3 HTTP/1.1[0m" 302 -

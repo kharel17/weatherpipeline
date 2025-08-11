@@ -1,13 +1,14 @@
 """
 Weather Insight Engine - Flask Web Application
 Modern weather dashboard with ARIMA forecasting and beautiful Tailwind CSS interface
+FIXED VERSION - Resolves all identified issues
 """
 
 import os
 import sys
 import logging
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from flask import Flask, render_template, request, jsonify, session, flash, redirect, url_for
 
 # Add the parent directory to Python path to find our modules
@@ -40,7 +41,7 @@ init_database(app.config['SQLALCHEMY_DATABASE_URI'])
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Default locations for quick access
+# Default locations for quick access - FIXED: Now properly defined
 DEFAULT_LOCATIONS = {
     'kathmandu': {'lat': 27.7, 'lon': 85.3, 'name': 'Kathmandu, Nepal'},
     'new_york': {'lat': 40.71, 'lon': -74.01, 'name': 'New York, USA'},
@@ -53,6 +54,7 @@ DEFAULT_LOCATIONS = {
 @app.route('/')
 def index():
     """Home page with location search and quick access"""
+    # FIXED: Ensure default_locations is passed to template
     return render_template('index.html', 
                          default_locations=DEFAULT_LOCATIONS,
                          favorites=session.get('favorites', []))
@@ -133,7 +135,10 @@ def weather():
             'forecast_error': forecast_error
         }
         
-        return render_template('weather.html', weather=weather_data)
+        # FIXED: Pass default_locations to template
+        return render_template('weather.html', 
+                             weather=weather_data,
+                             default_locations=DEFAULT_LOCATIONS)
         
     except Exception as e:
         logger.error(f"Error in weather route: {e}")
@@ -167,14 +172,28 @@ def dashboard():
         except Exception as e:
             logger.error(f"Error getting data for {fav}: {e}")
     
-    return render_template('dashboard.html', dashboard_data=dashboard_data)
+    # FIXED: Pass default_locations to template
+    return render_template('dashboard.html', 
+                         dashboard_data=dashboard_data,
+                         default_locations=DEFAULT_LOCATIONS)
 
 
 @app.route('/stats')
 def stats():
     """System statistics page"""
     try:
-        db_stats = get_database_stats()
+        # FIXED: Better error handling for database stats
+        try:
+            db_stats = get_database_stats()
+        except Exception as db_error:
+            logger.error(f"Database stats error: {db_error}")
+            # Provide fallback stats if database has issues
+            db_stats = {
+                'total_records': 'Unable to calculate',
+                'unique_locations': 'Unable to calculate',
+                'latest_update': 'Unable to calculate',
+                'error': str(db_error)
+            }
         
         system_stats = {
             'database': db_stats,
@@ -183,7 +202,10 @@ def stats():
             'app_version': '1.0.0'
         }
         
-        return render_template('stats.html', stats=system_stats)
+        # FIXED: Pass default_locations to template
+        return render_template('stats.html', 
+                             stats=system_stats,
+                             default_locations=DEFAULT_LOCATIONS)
         
     except Exception as e:
         logger.error(f"Stats error: {e}")
@@ -315,7 +337,7 @@ def add_favorite():
             'lat': lat,
             'lon': lon,
             'name': name,
-            'added_at': datetime.now().isoformat()
+            'added_at': datetime.now(UTC).isoformat()  # FIXED: Use UTC
         })
         session.modified = True
         
@@ -357,7 +379,8 @@ def _is_data_stale(record, hours=2):
     if not record.created_at:
         return True
     
-    cutoff_time = datetime.utcnow() - timedelta(hours=hours)
+    # FIXED: Replace deprecated datetime.utcnow() with datetime.now(UTC)
+    cutoff_time = datetime.now(UTC) - timedelta(hours=hours)
     return record.created_at < cutoff_time
 
 
@@ -366,7 +389,8 @@ def _is_data_stale(record, hours=2):
 def not_found(error):
     return render_template('error.html', 
                          error_code=404, 
-                         error_message="Page not found"), 404
+                         error_message="Page not found",
+                         default_locations=DEFAULT_LOCATIONS), 404
 
 
 @app.errorhandler(500)
@@ -374,7 +398,8 @@ def internal_error(error):
     logger.error(f"Internal server error: {error}")
     return render_template('error.html', 
                          error_code=500, 
-                         error_message="Internal server error"), 500
+                         error_message="Internal server error",
+                         default_locations=DEFAULT_LOCATIONS), 500
 
 
 # Template context processors
@@ -383,9 +408,95 @@ def inject_globals():
     """Inject global variables into templates"""
     return {
         'app_name': 'Weather Insight Engine',
-        'current_year': datetime.now().year,
-        'forecasting_available': STATSMODELS_AVAILABLE
+        'current_year': datetime.now(UTC).year,  # FIXED: Use UTC
+        'forecasting_available': STATSMODELS_AVAILABLE,
+        'default_locations': DEFAULT_LOCATIONS  # FIXED: Make available globally
     }
+
+
+# Health check endpoint
+@app.route('/health')
+def health_check():
+    """Health check endpoint for monitoring"""
+    try:
+        # Test database connection
+        total_records = WeatherRecord.query.count()
+        
+        return jsonify({
+            'status': 'healthy',
+            'timestamp': datetime.now(UTC).isoformat(),
+            'database_records': total_records,
+            'forecasting_available': STATSMODELS_AVAILABLE,
+            'app_version': '1.0.0'
+        })
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        return jsonify({
+            'status': 'unhealthy',
+            'error': str(e),
+            'timestamp': datetime.now(UTC).isoformat()
+        }), 500
+
+
+# FIXED: Route to trigger database migration
+@app.route('/admin/migrate-db')
+def migrate_database_route():
+    """Administrative route to trigger database migration"""
+    try:
+        # Import the migration function
+        from database_migration import migrate_database
+        
+        db_path = "data/weather_data.db"
+        success = migrate_database(db_path)
+        
+        if success:
+            flash('Database migration completed successfully!', 'success')
+        else:
+            flash('Database migration failed. Check logs for details.', 'error')
+        
+        return redirect(url_for('stats'))
+        
+    except Exception as e:
+        logger.error(f"Migration route error: {e}")
+        flash(f'Migration error: {e}', 'error')
+        return redirect(url_for('index'))
+
+
+# FIXED: Enhanced route for bulk location updates
+@app.route('/admin/update-all-locations')
+def update_all_default_locations():
+    """Administrative route to update all default locations"""
+    try:
+        updated_count = 0
+        failed_locations = []
+        
+        for location_key, location_data in DEFAULT_LOCATIONS.items():
+            try:
+                lat, lon = location_data['lat'], location_data['lon']
+                pipeline = WeatherETLPipeline()
+                success = pipeline.run(lat, lon, display_summary=False)
+                
+                if success:
+                    updated_count += 1
+                    logger.info(f"Successfully updated {location_data['name']}")
+                else:
+                    failed_locations.append(location_data['name'])
+                    
+            except Exception as e:
+                logger.error(f"Failed to update {location_data['name']}: {e}")
+                failed_locations.append(location_data['name'])
+        
+        if failed_locations:
+            flash(f'Updated {updated_count} locations. Failed: {", ".join(failed_locations)}', 'warning')
+        else:
+            flash(f'Successfully updated all {updated_count} default locations!', 'success')
+        
+        return redirect(url_for('index'))
+        
+    except Exception as e:
+        logger.error(f"Bulk update error: {e}")
+        flash('Failed to update locations', 'error')
+        return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
@@ -399,5 +510,11 @@ if __name__ == '__main__':
     logger.info(f"Starting Weather Insight Engine on port {port}")
     logger.info(f"Debug mode: {debug}")
     logger.info(f"Forecasting available: {STATSMODELS_AVAILABLE}")
+    logger.info(f"Default locations configured: {len(DEFAULT_LOCATIONS)}")
+    
+    # FIXED: Show which locations are configured
+    logger.info("Available default locations:")
+    for key, location in DEFAULT_LOCATIONS.items():
+        logger.info(f"  - {location['name']}: ({location['lat']}, {location['lon']})")
     
     app.run(host='127.0.0.1', port=5050, debug=False)

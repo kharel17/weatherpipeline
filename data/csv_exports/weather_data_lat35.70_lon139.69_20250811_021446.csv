@@ -1,0 +1,16 @@
+# generated_at: 2025-08-11T02:14:46.130536
+# total_records: 7
+# date_range: 2025-08-11 to 2025-08-17
+# locations: 1 unique location(s)
+# data_source: open-meteo
+# format_version: 1.0
+# columns: ['date', 'last_updated', 'measurement_time', 'latitude', 'longitude', 'timezone', 'elevation', 'current_temp_c', 'current_condition', 'wind_kph', 'wind_dir', 'forecast_max_temp', 'forecast_min_temp', 'precipitation_mm', 'uv_index', 'weather_code', 'forecast_condition', 'pm2_5', 'pm10', 'us_aqi', 'european_aqi', 'aqi_category', 'data_source', 'created_at']
+#
+date,last_updated,measurement_time,latitude,longitude,timezone,elevation,current_temp_c,current_condition,wind_kph,wind_dir,forecast_max_temp,forecast_min_temp,precipitation_mm,uv_index,weather_code,forecast_condition,pm2_5,pm10,us_aqi,european_aqi,aqi_category,data_source,created_at
+2025-08-11,2025-08-10T20:29:45.939501,2025-08-15T23:00,35.7,139.6875,Asia/Tokyo,43.0,26.0,Slight rain,9.3,SSW,26.9,25.9,21.8,2.75,63,Moderate rain,0.0,0.0,0,0,Good,open-meteo,2025-08-10T20:29:45.939501
+2025-08-12,2025-08-10T20:29:45.939501,2025-08-15T23:00,35.7,139.6875,Asia/Tokyo,43.0,26.0,Slight rain,9.3,SSW,30.6,26.1,3.3,2.15,55,Dense drizzle,0.0,0.0,0,0,Good,open-meteo,2025-08-10T20:29:45.939501
+2025-08-13,2025-08-10T20:29:45.939501,2025-08-15T23:00,35.7,139.6875,Asia/Tokyo,43.0,26.0,Slight rain,9.3,SSW,34.8,24.5,0.7,5.7,51,Light drizzle,0.0,0.0,0,0,Good,open-meteo,2025-08-10T20:29:45.939501
+2025-08-14,2025-08-10T20:29:45.939501,2025-08-15T23:00,35.7,139.6875,Asia/Tokyo,43.0,26.0,Slight rain,9.3,SSW,31.2,23.9,0.4,7.55,51,Light drizzle,0.0,0.0,0,0,Good,open-meteo,2025-08-10T20:29:45.939501
+2025-08-15,2025-08-10T20:29:45.939501,2025-08-15T23:00,35.7,139.6875,Asia/Tokyo,43.0,26.0,Slight rain,9.3,SSW,31.9,24.4,0.0,6.9,3,Overcast,0.0,0.0,0,0,Good,open-meteo,2025-08-10T20:29:45.939501
+2025-08-16,2025-08-10T20:29:45.939501,2025-08-15T23:00,35.7,139.6875,Asia/Tokyo,43.0,26.0,Slight rain,9.3,SSW,30.2,26.1,6.0,7.25,95,Thunderstorm,0.0,0.0,0,0,Good,open-meteo,2025-08-10T20:29:45.939501
+2025-08-17,2025-08-10T20:29:45.939501,2025-08-15T23:00,35.7,139.6875,Asia/Tokyo,43.0,26.0,Slight rain,9.3,SSW,33.1,25.7,0.0,6.95,3,Overcast,0.0,0.0,0,0,Good,open-meteo,2025-08-10T20:29:45.939501

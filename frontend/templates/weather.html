@@ -38,21 +38,21 @@
                         Refresh Data
                     </button>
                     
-                    <a href="{{ url_for('history', lat=weather.location.lat, lon=weather.location.lon) }}" 
+                    <a href="{{ url_for('dashboard') }}" 
                        class="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-4 py-2 rounded-lg hover:bg-white/30 transition-colors">
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
-                        History
+                        Dashboard
                     </a>
                     
                     {% if forecasting_available %}
-                    <a href="{{ url_for('forecast', lat=weather.location.lat, lon=weather.location.lon) }}" 
+                    <a href="{{ url_for('stats') }}" 
                        class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-colors font-medium">
                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>
-                        ARIMA Forecast
+                        View Statistics
                     </a>
                     {% endif %}
                 </div>
@@ -238,9 +238,9 @@
                 </div>
                 
                 <div class="mt-6 text-center">
-                    <a href="{{ url_for('forecast', lat=weather.location.lat, lon=weather.location.lon) }}" 
+                    <a href="{{ url_for('stats') }}" 
                        class="bg-white text-purple-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                        View Detailed Forecast
+                        View Detailed Statistics
                     </a>
                 </div>
             </div>
