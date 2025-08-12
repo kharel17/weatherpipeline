@@ -25,7 +25,4 @@ firebase-admin==6.3.0
 pyrebase4==4.7.1
 
 
-
-
-
 #python frontend/app.py
