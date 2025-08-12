@@ -1,0 +1,7 @@
+Flask
+Flask-Cors
+Flask-SQLAlchemy
+Flask-Login
+oauthlib
+requests
+google-auth-oauthlib
