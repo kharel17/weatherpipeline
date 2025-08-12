@@ -1,0 +1,16 @@
+# generated_at: 2025-08-12T07:47:01.604951
+# total_records: 7
+# date_range: 2025-08-11 to 2025-08-17
+# locations: 1 unique location(s)
+# data_source: open-meteo
+# format_version: 1.0
+# columns: ['date', 'last_updated', 'measurement_time', 'latitude', 'longitude', 'timezone', 'elevation', 'current_temp_c', 'current_condition', 'wind_kph', 'wind_dir', 'forecast_max_temp', 'forecast_min_temp', 'precipitation_mm', 'uv_index', 'weather_code', 'forecast_condition', 'pm2_5', 'pm10', 'us_aqi', 'european_aqi', 'aqi_category', 'data_source', 'created_at']
+#
+date,last_updated,measurement_time,latitude,longitude,timezone,elevation,current_temp_c,current_condition,wind_kph,wind_dir,forecast_max_temp,forecast_min_temp,precipitation_mm,uv_index,weather_code,forecast_condition,pm2_5,pm10,us_aqi,european_aqi,aqi_category,data_source,created_at
+2025-08-11,2025-08-12T02:02:01.540163,2025-08-15T23:00,40.710335,-73.99309,America/New_York,27.0,23.7,Clear sky,9.7,S,31.2,20.1,0.0,7.35,0,Clear sky,10.4,10.9,107,42,Unhealthy for Sensitive Groups,open-meteo,2025-08-12T02:02:01.540205
+2025-08-12,2025-08-12T02:02:01.540223,2025-08-15T23:00,40.710335,-73.99309,America/New_York,27.0,23.7,Clear sky,9.7,S,32.3,20.6,0.0,7.35,3,Overcast,10.4,10.9,107,42,Unhealthy for Sensitive Groups,open-meteo,2025-08-12T02:02:01.540245
+2025-08-13,2025-08-12T02:02:01.540255,2025-08-15T23:00,40.710335,-73.99309,America/New_York,27.0,23.7,Clear sky,9.7,S,32.2,22.1,1.3,7.35,51,Light drizzle,10.4,10.9,107,42,Unhealthy for Sensitive Groups,open-meteo,2025-08-12T02:02:01.540271
+2025-08-14,2025-08-12T02:02:01.540279,2025-08-15T23:00,40.710335,-73.99309,America/New_York,27.0,23.7,Clear sky,9.7,S,30.6,25.0,1.2,6.65,53,Moderate drizzle,10.4,10.9,107,42,Unhealthy for Sensitive Groups,open-meteo,2025-08-12T02:02:01.540293
+2025-08-15,2025-08-12T02:02:01.540300,2025-08-15T23:00,40.710335,-73.99309,America/New_York,27.0,23.7,Clear sky,9.7,S,32.0,25.0,0.0,7.25,3,Overcast,10.4,10.9,107,42,Unhealthy for Sensitive Groups,open-meteo,2025-08-12T02:02:01.540314
+2025-08-16,2025-08-12T02:02:01.540321,2025-08-15T23:00,40.710335,-73.99309,America/New_York,27.0,23.7,Clear sky,9.7,S,27.7,23.5,0.0,7.25,2,Partly cloudy,10.4,10.9,107,42,Unhealthy for Sensitive Groups,open-meteo,2025-08-12T02:02:01.540334
+2025-08-17,2025-08-12T02:02:01.540341,2025-08-15T23:00,40.710335,-73.99309,America/New_York,27.0,23.7,Clear sky,9.7,S,30.5,24.1,0.3,7.05,51,Light drizzle,10.4,10.9,107,42,Unhealthy for Sensitive Groups,open-meteo,2025-08-12T02:02:01.540353
