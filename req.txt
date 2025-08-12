@@ -23,3 +23,7 @@ python-dateutil==2.8.2
 # Firebase Integration
 firebase-admin==6.3.0
 pyrebase4==4.7.1
+
+# Google OAuth login
+Flask-Dance==7.0.0
+Authlib==1.2.1
