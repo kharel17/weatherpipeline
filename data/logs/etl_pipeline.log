@@ -1198,3 +1198,535 @@ jinja2.exceptions.TemplateAssertionError: block 'title' defined twice
 2025-08-11 02:14:52,565 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.43 SECONDS
 2025-08-11 02:14:52,565 - etl.pipeline - INFO - ============================================================
 2025-08-11 02:14:52,572 - werkzeug - INFO - 127.0.0.1 - - [11/Aug/2025 02:14:52] "[32mGET /weather?lat=27.7&lon=85.3 HTTP/1.1[0m" 302 -
+2025-08-12 22:23:11,306 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 22:23:11,307 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:23:11,308 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 22:23:11,318 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:23:11,321 - etl.pipeline - INFO - Location: 35.9263502, 136.6068127
+2025-08-12 22:23:11,323 - etl.pipeline - INFO - Timestamp: 2025-08-12T16:38:11.323714+00:00
+2025-08-12 22:23:11,328 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:23:11,332 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 22:23:11,335 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:23:11,336 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 35.9263502, 136.6068127
+2025-08-12 22:23:11,338 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 22:23:11,339 - etl.extract - INFO - Fetching weather forecast for 35.9263502, 136.6068127
+2025-08-12 22:23:11,351 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-12 22:23:11,370 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-12 22:23:12,268 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=35.9263502&lon=136.6068127&format=json&zoom=10&addressdetails=1 HTTP/1.1" 200 549
+2025-08-12 22:23:12,279 - __main__ - INFO - Fetching fresh weather data for 35.9263502, 136.6068127
+2025-08-12 22:23:12,281 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=35.9263502&longitude=136.6068127&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/1.1" 200 None
+2025-08-12 22:23:12,288 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 22:23:12,314 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-12 22:23:12,315 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:23:12,318 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 22:23:12,319 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 22:23:12,319 - etl.extract - INFO - Fetching air quality data for 35.9263502, 136.6068127
+2025-08-12 22:23:12,320 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:23:12,321 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-12 22:23:12,327 - etl.pipeline - INFO - Location: 35.9263502, 136.6068127
+2025-08-12 22:23:12,329 - etl.pipeline - INFO - Timestamp: 2025-08-12T16:38:12.329737+00:00
+2025-08-12 22:23:12,331 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:23:12,335 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-12 22:23:12,337 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 22:23:12,338 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:23:12,340 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 35.9263502, 136.6068127
+2025-08-12 22:23:12,341 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 22:23:12,341 - etl.extract - INFO - Fetching weather forecast for 35.9263502, 136.6068127
+2025-08-12 22:23:12,341 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-12 22:23:12,358 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-12 22:23:13,349 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=35.9263502&longitude=136.6068127&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/1.1" 200 None
+2025-08-12 22:23:13,355 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-12 22:23:13,357 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 22:23:13,357 - etl.extract - INFO - Data extraction completed in 2.02 seconds
+2025-08-12 22:23:13,357 - etl.extract - INFO - Data validation successful
+2025-08-12 22:23:13,358 - etl.pipeline - INFO - Extraction completed in 2.02 seconds
+2025-08-12 22:23:13,358 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 22:23:13,358 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 22:23:13,360 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:23:13,361 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 22:23:13,365 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:23:13,366 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 22:23:13,368 - etl.transform - INFO - Starting data transformation
+2025-08-12 22:23:13,370 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-12 22:23:13,371 - etl.pipeline - INFO - Transformation completed in 0.01 seconds
+2025-08-12 22:23:13,373 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=35.9263502&longitude=136.6068127&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/1.1" 200 None
+2025-08-12 22:23:13,380 - etl.pipeline - INFO - Records created: 7
+2025-08-12 22:23:13,385 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-12 22:23:13,385 - etl.pipeline - INFO - Date range: 2025-08-13 to 2025-08-19
+2025-08-12 22:23:13,387 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 22:23:13,388 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:23:13,390 - etl.extract - INFO - Fetching air quality data for 35.9263502, 136.6068127
+2025-08-12 22:23:13,391 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-12 22:23:13,391 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-12 22:23:13,391 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:23:13,413 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-12 22:23:13,495 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-12 22:23:13,739 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-12 22:23:13,740 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-12 22:23:13,848 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat35.95_lon136.62_20250812_222313.csv
+2025-08-12 22:23:13,853 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat35.95_lon136.62_20250812_222313.csv
+2025-08-12 22:23:13,943 - etl.pipeline - INFO - Data loading completed in 0.46 seconds
+2025-08-12 22:23:13,948 - etl.pipeline - INFO - 
+============================================================
+2025-08-12 22:23:13,950 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.64 SECONDS
+2025-08-12 22:23:13,951 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:23:13,962 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:23:13] "[32mGET /weather?lat=35.9263502&lon=136.6068127 HTTP/1.1[0m" 302 -
+2025-08-12 22:23:32,915 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=35.9263502&longitude=136.6068127&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/1.1" 200 None
+2025-08-12 22:23:32,917 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-12 22:23:32,919 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 22:23:32,921 - etl.extract - INFO - Data extraction completed in 20.58 seconds
+2025-08-12 22:23:32,922 - etl.extract - INFO - Data validation successful
+2025-08-12 22:23:32,923 - etl.pipeline - INFO - Extraction completed in 20.58 seconds
+2025-08-12 22:23:32,923 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 22:23:32,924 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 22:23:32,925 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:23:32,926 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 22:23:32,927 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:23:32,927 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 22:23:32,927 - etl.transform - INFO - Starting data transformation
+2025-08-12 22:23:32,930 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-12 22:23:32,933 - etl.pipeline - INFO - Transformation completed in 0.01 seconds
+2025-08-12 22:23:32,936 - etl.pipeline - INFO - Records created: 7
+2025-08-12 22:23:32,943 - etl.pipeline - INFO - Date range: 2025-08-13 to 2025-08-19
+2025-08-12 22:23:32,946 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:23:32,948 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-12 22:23:32,949 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:23:32,959 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-12 22:23:33,205 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-12 22:23:33,214 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-12 22:23:33,250 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat35.95_lon136.62_20250812_222333.csv
+2025-08-12 22:23:33,253 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat35.95_lon136.62_20250812_222333.csv
+2025-08-12 22:23:33,363 - etl.pipeline - INFO - Data loading completed in 0.30 seconds
+2025-08-12 22:23:33,367 - etl.pipeline - INFO - 
+============================================================
+2025-08-12 22:23:33,371 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 21.05 SECONDS
+2025-08-12 22:23:33,376 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:23:33,384 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:23:33] "[32mGET /weather?lat=35.9263502&lon=136.6068127 HTTP/1.1[0m" 302 -
+2025-08-12 22:23:33,447 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:23:33] "GET / HTTP/1.1" 200 -
+2025-08-12 22:23:59,172 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-12 22:24:00,406 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=52.4796992&lon=-1.9026911&format=json&zoom=10&addressdetails=1 HTTP/1.1" 200 630
+2025-08-12 22:24:00,413 - __main__ - INFO - Fetching fresh weather data for 52.4796992, -1.9026911
+2025-08-12 22:24:00,420 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 22:24:00,422 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:24:00,425 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 22:24:00,428 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:24:00,428 - etl.pipeline - INFO - Location: 52.4796992, -1.9026911
+2025-08-12 22:24:00,429 - etl.pipeline - INFO - Timestamp: 2025-08-12T16:39:00.429953+00:00
+2025-08-12 22:24:00,429 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:24:00,432 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 22:24:00,435 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:24:00,437 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 52.4796992, -1.9026911
+2025-08-12 22:24:00,440 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 22:24:00,444 - etl.extract - INFO - Fetching weather forecast for 52.4796992, -1.9026911
+2025-08-12 22:24:00,452 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-12 22:24:00,462 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-12 22:24:01,684 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=52.4796992&longitude=-1.9026911&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/1.1" 200 None
+2025-08-12 22:24:01,687 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-12 22:24:01,689 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 22:24:01,689 - etl.extract - INFO - Fetching air quality data for 52.4796992, -1.9026911
+2025-08-12 22:24:01,690 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-12 22:24:01,693 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-12 22:24:02,722 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=52.4796992&longitude=-1.9026911&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/1.1" 200 None
+2025-08-12 22:24:02,726 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-12 22:24:02,729 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 22:24:02,730 - etl.extract - INFO - Data extraction completed in 2.29 seconds
+2025-08-12 22:24:02,730 - etl.extract - INFO - Data validation successful
+2025-08-12 22:24:02,731 - etl.pipeline - INFO - Extraction completed in 2.30 seconds
+2025-08-12 22:24:02,732 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 22:24:02,732 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 22:24:02,732 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:24:02,733 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 22:24:02,735 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:24:02,735 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 22:24:02,736 - etl.transform - INFO - Starting data transformation
+2025-08-12 22:24:02,737 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-12 22:24:02,740 - etl.pipeline - INFO - Transformation completed in 0.01 seconds
+2025-08-12 22:24:02,742 - etl.pipeline - INFO - Records created: 7
+2025-08-12 22:24:02,745 - etl.pipeline - INFO - Date range: 2025-08-12 to 2025-08-18
+2025-08-12 22:24:02,745 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:24:02,746 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-12 22:24:02,747 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:24:02,760 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-12 22:24:02,926 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-12 22:24:02,927 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-12 22:24:02,943 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat52.48_lon-1.90_20250812_222402.csv
+2025-08-12 22:24:02,947 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat52.48_lon-1.90_20250812_222402.csv
+2025-08-12 22:24:03,065 - etl.pipeline - INFO - Data loading completed in 0.20 seconds
+2025-08-12 22:24:03,066 - etl.pipeline - INFO - 
+============================================================
+2025-08-12 22:24:03,071 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.64 SECONDS
+2025-08-12 22:24:03,071 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:24:03,079 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-12 22:24:03,080 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 52.4796992, -1.9026911
+2025-08-12 22:24:03,499 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:24:03] "GET /weather?lat=52.4796992&lon=-1.9026911 HTTP/1.1" 200 -
+2025-08-12 22:24:57,880 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-12 22:24:59,119 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=52.4796992&lon=-1.9026911&format=json&zoom=10&addressdetails=1 HTTP/1.1" 200 630
+2025-08-12 22:24:59,123 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:24:59] "POST /add-favorite HTTP/1.1" 200 -
+2025-08-12 22:25:39,042 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-12 22:25:40,257 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=52.4796992&lon=-1.9026911&format=json&zoom=10&addressdetails=1 HTTP/1.1" 200 630
+2025-08-12 22:25:40,259 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:25:40] "[31m[1mPOST /add-favorite HTTP/1.1[0m" 400 -
+2025-08-12 22:25:56,780 - app - ERROR - Exception on /dashboard [GET]
+Traceback (most recent call last):
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\Dropbox\PC\Desktop\ASSIGNMENTS\PRG400 Advance python\final project\weatherpipeline\frontend\app.py", line 176, in dashboard
+    return render_template('dashboard.html',
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 149, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1084, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1013, in get_template
+    return self._load_template(name, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 972, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 768, in compile
+    self.handle_exception(source=source_hint)
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\Aayush.R\Dropbox\PC\Desktop\ASSIGNMENTS\PRG400 Advance python\final project\weatherpipeline\frontend\templates\dashboard.html", line 213, in template
+    <button onclick="addDefaultLocation('{{ location.name|escapejs }}', {{ location.lat }}, {{ location.lon }})"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.TemplateAssertionError: No filter named 'escapejs'.
+2025-08-12 22:25:56,795 - __main__ - ERROR - Internal server error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
+2025-08-12 22:25:56,797 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:25:56] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+2025-08-12 22:39:38,435 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:39:38] "GET / HTTP/1.1" 200 -
+2025-08-12 22:39:40,354 - app - ERROR - Exception on /dashboard [GET]
+Traceback (most recent call last):
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\Dropbox\PC\Desktop\ASSIGNMENTS\PRG400 Advance python\final project\weatherpipeline\frontend\app.py", line 176, in dashboard
+    return render_template('dashboard.html',
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 149, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1084, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1013, in get_template
+    return self._load_template(name, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 972, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 768, in compile
+    self.handle_exception(source=source_hint)
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\Aayush.R\Dropbox\PC\Desktop\ASSIGNMENTS\PRG400 Advance python\final project\weatherpipeline\frontend\templates\dashboard.html", line 213, in template
+    <button onclick="addDefaultLocation('{{ location.name|escapejs }}', {{ location.lat }}, {{ location.lon }})"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.TemplateAssertionError: No filter named 'escapejs'.
+2025-08-12 22:39:40,360 - __main__ - ERROR - Internal server error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
+2025-08-12 22:39:40,364 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:39:40] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+2025-08-12 22:39:42,134 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:39:42] "GET / HTTP/1.1" 200 -
+2025-08-12 22:39:43,585 - __main__ - ERROR - Stats error: stats.html
+2025-08-12 22:39:43,588 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:39:43] "[32mGET /stats HTTP/1.1[0m" 302 -
+2025-08-12 22:39:43,605 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:39:43] "GET / HTTP/1.1" 200 -
+2025-08-12 22:39:53,970 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-12 22:39:55,203 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=26.6622505&lon=87.2748964&format=json&zoom=10&addressdetails=1 HTTP/1.1" 200 673
+2025-08-12 22:39:55,208 - __main__ - INFO - Fetching fresh weather data for 26.6622505, 87.2748964
+2025-08-12 22:39:55,215 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 22:39:55,215 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:39:55,215 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 22:39:55,217 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:39:55,218 - etl.pipeline - INFO - Location: 26.6622505, 87.2748964
+2025-08-12 22:39:55,219 - etl.pipeline - INFO - Timestamp: 2025-08-12T16:54:55.219818+00:00
+2025-08-12 22:39:55,223 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:39:55,224 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 22:39:55,225 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:39:55,226 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 26.6622505, 87.2748964
+2025-08-12 22:39:55,227 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 22:39:55,228 - etl.extract - INFO - Fetching weather forecast for 26.6622505, 87.2748964
+2025-08-12 22:39:55,230 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-12 22:39:55,235 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-12 22:39:56,235 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=26.6622505&longitude=87.2748964&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/1.1" 200 None
+2025-08-12 22:39:56,238 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-12 22:39:56,240 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 22:39:56,241 - etl.extract - INFO - Fetching air quality data for 26.6622505, 87.2748964
+2025-08-12 22:39:56,241 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-12 22:39:56,245 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-12 22:39:57,256 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=26.6622505&longitude=87.2748964&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/1.1" 200 None
+2025-08-12 22:39:57,272 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-12 22:39:57,274 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 22:39:57,275 - etl.extract - INFO - Data extraction completed in 2.05 seconds
+2025-08-12 22:39:57,276 - etl.extract - INFO - Data validation successful
+2025-08-12 22:39:57,277 - etl.pipeline - INFO - Extraction completed in 2.05 seconds
+2025-08-12 22:39:57,277 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 22:39:57,278 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 22:39:57,279 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:39:57,280 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 22:39:57,281 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:39:57,282 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 22:39:57,283 - etl.transform - INFO - Starting data transformation
+2025-08-12 22:39:57,284 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-12 22:39:57,285 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-12 22:39:57,287 - etl.pipeline - INFO - Records created: 7
+2025-08-12 22:39:57,288 - etl.pipeline - INFO - Date range: 2025-08-12 to 2025-08-18
+2025-08-12 22:39:57,289 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:39:57,289 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-12 22:39:57,290 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:39:57,304 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-12 22:39:57,415 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-12 22:39:57,417 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-12 22:39:57,434 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat26.62_lon87.25_20250812_223957.csv
+2025-08-12 22:39:57,436 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat26.62_lon87.25_20250812_223957.csv
+2025-08-12 22:39:57,472 - etl.pipeline - INFO - Data loading completed in 0.14 seconds
+2025-08-12 22:39:57,473 - etl.pipeline - INFO - 
+============================================================
+2025-08-12 22:39:57,475 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.26 SECONDS
+2025-08-12 22:39:57,476 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:39:57,482 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:39:57] "[32mGET /weather?lat=26.6622505&lon=87.2748964 HTTP/1.1[0m" 302 -
+2025-08-12 22:39:57,503 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:39:57] "GET / HTTP/1.1" 200 -
+2025-08-12 22:40:03,179 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-12 22:40:04,334 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=26.8128974&lon=87.2839978&format=json&zoom=10&addressdetails=1 HTTP/1.1" 200 691
+2025-08-12 22:40:04,339 - __main__ - INFO - Fetching fresh weather data for 26.8128974, 87.2839978
+2025-08-12 22:40:04,345 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 22:40:04,346 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:40:04,346 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 22:40:04,348 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:40:04,348 - etl.pipeline - INFO - Location: 26.8128974, 87.2839978
+2025-08-12 22:40:04,350 - etl.pipeline - INFO - Timestamp: 2025-08-12T16:55:04.349132+00:00
+2025-08-12 22:40:04,351 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:40:04,352 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 22:40:04,352 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:40:04,353 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 26.8128974, 87.2839978
+2025-08-12 22:40:04,354 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 22:40:04,355 - etl.extract - INFO - Fetching weather forecast for 26.8128974, 87.2839978
+2025-08-12 22:40:04,355 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-12 22:40:04,359 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-12 22:40:05,388 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=26.8128974&longitude=87.2839978&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/1.1" 200 None
+2025-08-12 22:40:05,390 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-12 22:40:05,391 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 22:40:05,392 - etl.extract - INFO - Fetching air quality data for 26.8128974, 87.2839978
+2025-08-12 22:40:05,393 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-12 22:40:05,396 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-12 22:40:06,312 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=26.8128974&longitude=87.2839978&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/1.1" 200 None
+2025-08-12 22:40:06,314 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-12 22:40:06,316 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 22:40:06,317 - etl.extract - INFO - Data extraction completed in 1.96 seconds
+2025-08-12 22:40:06,319 - etl.extract - INFO - Data validation successful
+2025-08-12 22:40:06,321 - etl.pipeline - INFO - Extraction completed in 1.97 seconds
+2025-08-12 22:40:06,322 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 22:40:06,323 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 22:40:06,324 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:40:06,325 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 22:40:06,326 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:40:06,328 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 22:40:06,330 - etl.transform - INFO - Starting data transformation
+2025-08-12 22:40:06,333 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-12 22:40:06,335 - etl.pipeline - INFO - Transformation completed in 0.01 seconds
+2025-08-12 22:40:06,336 - etl.pipeline - INFO - Records created: 7
+2025-08-12 22:40:06,337 - etl.pipeline - INFO - Date range: 2025-08-12 to 2025-08-18
+2025-08-12 22:40:06,338 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:40:06,339 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-12 22:40:06,340 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:40:06,352 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-12 22:40:06,435 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-12 22:40:06,436 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-12 22:40:06,444 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat26.75_lon87.38_20250812_224006.csv
+2025-08-12 22:40:06,445 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat26.75_lon87.38_20250812_224006.csv
+2025-08-12 22:40:06,506 - etl.pipeline - INFO - Data loading completed in 0.11 seconds
+2025-08-12 22:40:06,508 - etl.pipeline - INFO - 
+============================================================
+2025-08-12 22:40:06,509 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 2.16 SECONDS
+2025-08-12 22:40:06,509 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:40:06,514 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:40:06] "[32mGET /weather?lat=26.8128974&lon=87.2839978 HTTP/1.1[0m" 302 -
+2025-08-12 22:40:06,536 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:40:06] "GET / HTTP/1.1" 200 -
+2025-08-12 22:40:11,225 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-12 22:40:12,442 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=28.3780464&lon=83.9999901&format=json&zoom=10&addressdetails=1 HTTP/1.1" 200 701
+2025-08-12 22:40:12,447 - __main__ - INFO - Fetching fresh weather data for 28.3780464, 83.9999901
+2025-08-12 22:40:12,453 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 22:40:12,454 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:40:12,455 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 22:40:12,456 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:40:12,456 - etl.pipeline - INFO - Location: 28.3780464, 83.9999901
+2025-08-12 22:40:12,457 - etl.pipeline - INFO - Timestamp: 2025-08-12T16:55:12.457453+00:00
+2025-08-12 22:40:12,458 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:40:12,458 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 22:40:12,459 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:40:12,459 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 28.3780464, 83.9999901
+2025-08-12 22:40:12,461 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 22:40:12,462 - etl.extract - INFO - Fetching weather forecast for 28.3780464, 83.9999901
+2025-08-12 22:40:12,463 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-12 22:40:12,468 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-12 22:40:28,432 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=28.3780464&longitude=83.9999901&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/1.1" 200 None
+2025-08-12 22:40:28,434 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-12 22:40:28,435 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 22:40:28,436 - etl.extract - INFO - Fetching air quality data for 28.3780464, 83.9999901
+2025-08-12 22:40:28,437 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-12 22:40:28,439 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-12 22:40:29,490 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=28.3780464&longitude=83.9999901&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/1.1" 200 None
+2025-08-12 22:40:29,492 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-12 22:40:29,493 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 22:40:29,494 - etl.extract - INFO - Data extraction completed in 17.03 seconds
+2025-08-12 22:40:29,494 - etl.extract - INFO - Data validation successful
+2025-08-12 22:40:29,495 - etl.pipeline - INFO - Extraction completed in 17.04 seconds
+2025-08-12 22:40:29,496 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 22:40:29,497 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 22:40:29,497 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:40:29,498 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 22:40:29,499 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:40:29,500 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 22:40:29,501 - etl.transform - INFO - Starting data transformation
+2025-08-12 22:40:29,502 - etl.transform - INFO - Transformation completed. 7 records created
+2025-08-12 22:40:29,503 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-12 22:40:29,503 - etl.pipeline - INFO - Records created: 7
+2025-08-12 22:40:29,504 - etl.pipeline - INFO - Date range: 2025-08-12 to 2025-08-18
+2025-08-12 22:40:29,504 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:40:29,505 - etl.pipeline - INFO - STEP 3: DATA LOADING
+2025-08-12 22:40:29,505 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:40:29,508 - etl.load - INFO - WeatherLoader initialized with 7 records
+2025-08-12 22:40:29,563 - etl.load - INFO - Successfully saved 7 records to weather_records
+2025-08-12 22:40:29,564 - etl.pipeline - INFO - [SUCCESS] Data saved to SQLite database
+2025-08-12 22:40:29,575 - etl.load - INFO - Data successfully saved to CSV: data\csv_exports\weather_data_lat28.38_lon84.00_20250812_224029.csv
+2025-08-12 22:40:29,575 - etl.pipeline - INFO - [SUCCESS] Data saved to CSV: data\csv_exports\weather_data_lat28.38_lon84.00_20250812_224029.csv
+2025-08-12 22:40:29,607 - etl.pipeline - INFO - Data loading completed in 0.07 seconds
+2025-08-12 22:40:29,608 - etl.pipeline - INFO - 
+============================================================
+2025-08-12 22:40:29,609 - etl.pipeline - INFO - PIPELINE COMPLETED SUCCESSFULLY IN 17.15 SECONDS
+2025-08-12 22:40:29,610 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:40:29,614 - models.forecast.manager - INFO - ForecastManager initialized
+2025-08-12 22:40:29,616 - models.forecast.manager - INFO - Creating 3-day avg temperature forecast for 28.3780464, 83.9999901
+2025-08-12 22:40:29,627 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:40:29] "GET /weather?lat=28.3780464&lon=83.9999901 HTTP/1.1" 200 -
+2025-08-12 22:41:12,502 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-12 22:41:13,711 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=28.3780464&lon=83.9999901&format=json&zoom=10&addressdetails=1 HTTP/1.1" 200 701
+2025-08-12 22:41:13,714 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:41:13] "POST /add-favorite HTTP/1.1" 200 -
+2025-08-12 22:41:16,928 - app - ERROR - Exception on /dashboard [GET]
+Traceback (most recent call last):
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\Dropbox\PC\Desktop\ASSIGNMENTS\PRG400 Advance python\final project\weatherpipeline\frontend\app.py", line 176, in dashboard
+    return render_template('dashboard.html',
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 149, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1084, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1013, in get_template
+    return self._load_template(name, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 972, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 768, in compile
+    self.handle_exception(source=source_hint)
+  File "C:\Users\Aayush.R\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\Aayush.R\Dropbox\PC\Desktop\ASSIGNMENTS\PRG400 Advance python\final project\weatherpipeline\frontend\templates\dashboard.html", line 213, in template
+    <button onclick="addDefaultLocation('{{ location.name|escapejs }}', {{ location.lat }}, {{ location.lon }})"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.TemplateAssertionError: No filter named 'escapejs'.
+2025-08-12 22:41:16,933 - __main__ - ERROR - Internal server error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
+2025-08-12 22:41:16,935 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:41:16] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+2025-08-12 22:41:19,138 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:41:19] "GET / HTTP/1.1" 200 -
+2025-08-12 22:41:51,489 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): nominatim.openstreetmap.org:443
+2025-08-12 22:41:52,687 - urllib3.connectionpool - DEBUG - https://nominatim.openstreetmap.org:443 "GET /reverse?lat=27.708317&lon=85.3205817&format=json&zoom=10&addressdetails=1 HTTP/1.1" 200 835
+2025-08-12 22:41:52,692 - __main__ - INFO - Fetching fresh weather data for 27.708317, 85.3205817
+2025-08-12 22:41:52,697 - etl.pipeline - INFO - WeatherETLPipeline initialized
+2025-08-12 22:41:52,697 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:41:52,698 - etl.pipeline - INFO - WEATHER DATA ETL PIPELINE STARTED
+2025-08-12 22:41:52,698 - etl.pipeline - INFO - ============================================================
+2025-08-12 22:41:52,699 - etl.pipeline - INFO - Location: 27.708317, 85.3205817
+2025-08-12 22:41:52,699 - etl.pipeline - INFO - Timestamp: 2025-08-12T16:56:52.699996+00:00
+2025-08-12 22:41:52,701 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:41:52,702 - etl.pipeline - INFO - STEP 1: DATA EXTRACTION
+2025-08-12 22:41:52,702 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:41:52,703 - etl.extract - INFO - WeatherExtractor initialized for coordinates: 27.708317, 85.3205817
+2025-08-12 22:41:52,704 - etl.extract - INFO - Starting complete data extraction
+2025-08-12 22:41:52,705 - etl.extract - INFO - Fetching weather forecast for 27.708317, 85.3205817
+2025-08-12 22:41:52,706 - etl.extract - DEBUG - Making request to https://api.open-meteo.com/v1/forecast, attempt 1
+2025-08-12 22:41:52,711 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): api.open-meteo.com:443
+2025-08-12 22:41:53,710 - urllib3.connectionpool - DEBUG - https://api.open-meteo.com:443 "GET /v1/forecast?latitude=27.708317&longitude=85.3205817&daily=temperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cuv_index_max%2Cweathercode&current_weather=true&timezone=auto&forecast_days=7 HTTP/1.1" 200 None
+2025-08-12 22:41:53,712 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-12 22:41:53,713 - etl.extract - INFO - Weather forecast fetched successfully
+2025-08-12 22:41:53,714 - etl.extract - INFO - Fetching air quality data for 27.708317, 85.3205817
+2025-08-12 22:41:53,716 - etl.extract - DEBUG - Making request to https://air-quality-api.open-meteo.com/v1/air-quality, attempt 1
+2025-08-12 22:41:53,720 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): air-quality-api.open-meteo.com:443
+2025-08-12 22:41:54,739 - urllib3.connectionpool - DEBUG - https://air-quality-api.open-meteo.com:443 "GET /v1/air-quality?latitude=27.708317&longitude=85.3205817&hourly=pm2_5%2Cpm10%2Cus_aqi%2Ceuropean_aqi&timezone=auto HTTP/1.1" 200 None
+2025-08-12 22:41:54,741 - etl.extract - DEBUG - Request successful on attempt 1
+2025-08-12 22:41:54,743 - etl.extract - INFO - Air quality data fetched successfully
+2025-08-12 22:41:54,744 - etl.extract - INFO - Data extraction completed in 2.04 seconds
+2025-08-12 22:41:54,744 - etl.extract - INFO - Data validation successful
+2025-08-12 22:41:54,745 - etl.pipeline - INFO - Extraction completed in 2.04 seconds
+2025-08-12 22:41:54,745 - etl.pipeline - INFO - Weather forecast days: 7
+2025-08-12 22:41:54,747 - etl.pipeline - INFO - Air quality data points: 120
+2025-08-12 22:41:54,748 - etl.pipeline - INFO - 
+----------------------------------------
+2025-08-12 22:41:54,749 - etl.pipeline - INFO - STEP 2: DATA TRANSFORMATION
+2025-08-12 22:41:54,751 - etl.pipeline - INFO - ----------------------------------------
+2025-08-12 22:41:54,753 - etl.transform - INFO - WeatherTransformer initialized
+2025-08-12 22:41:54,755 - etl.transform - ERROR - Input data validation failed
+2025-08-12 22:41:54,757 - etl.pipeline - INFO - Transformation completed in 0.00 seconds
+2025-08-12 22:41:54,758 - etl.pipeline - INFO - Records created: 0
+2025-08-12 22:41:54,759 - etl.pipeline - INFO - Date range: None to None
+2025-08-12 22:41:54,760 - etl.pipeline - WARNING - Transformation completed with 1 errors
+2025-08-12 22:41:54,761 - etl.pipeline - WARNING -   - Weather and air quality coordinates don't match
+2025-08-12 22:41:54,762 - etl.pipeline - ERROR - Data transformation failed - pipeline terminated
+2025-08-12 22:41:54,765 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:41:54] "[32mGET /weather?lat=27.708317&lon=85.3205817 HTTP/1.1[0m" 302 -
+2025-08-12 22:41:54,791 - werkzeug - INFO - 127.0.0.1 - - [12/Aug/2025 22:41:54] "GET / HTTP/1.1" 200 -
