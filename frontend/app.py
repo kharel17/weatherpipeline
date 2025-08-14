@@ -11,6 +11,9 @@ import logging
 import requests
 from datetime import datetime, timedelta, UTC
 from flask import Flask, render_template, request, jsonify, session, flash, redirect, url_for
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_bcrypt import Bcrypt
+from authlib.integrations.flask_client import OAuth
 
 if sys.platform == "win32":
     if hasattr(sys.stdout, 'detach'):
@@ -23,7 +26,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
     # Local imports - now Python can find them
-    from models.database import init_database, WeatherRecord, get_database_stats
+    from models.database import init_database, WeatherRecord, get_database_stats, User, db_session
     from etl.pipeline import WeatherETLPipeline
     from models.forecast import ForecastManager, quick_forecast, STATSMODELS_AVAILABLE
     from utils.helpers import validate_coordinates, get_location_name, categorize_air_quality
@@ -40,9 +43,50 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'weather-insight-dev-key-2025')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data/weather_data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'jwt-secret-key-2025')
+
+# Initialize extensions
+flask_bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
+# Verify database session
+from models.database import get_session
+print(f"Database session: {get_session()}")
 
 # Initialize database
-init_database(app.config['SQLALCHEMY_DATABASE_URI'])
+db_url = app.config['SQLALCHEMY_DATABASE_URI']
+from models.database import get_session, User
+
+# Initialize database and create session
+if init_database(db_url):
+    session = get_session()
+    
+    if session is not None:
+        try:
+            existing_user = session.query(User).filter_by(username='testuser').first()
+            if not existing_user:
+                dummy_user = User(
+                    username='testuser',
+                    email='testuser@example.com',
+                    password_hash=flask_bcrypt.generate_password_hash('password123').decode('utf-8'),
+                    is_active=True
+                )
+                session.add(dummy_user)
+                session.commit()
+                print("Created dummy user: testuser")
+        except Exception as e:
+            print(f"Error creating dummy user: {e}")
+    else:
+        print("Failed to get database session")
+
+# OAuth configuration
+oauth = OAuth(app)
+google = oauth.register(
+    name='google',
+    client_id=os.environ.get('GOOGLE_CLIENT_ID', ''),
+    client_secret=os.environ.get('GOOGLE_CLIENT_SECRET', ''),
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={'scope': 'openid email profile'}
+)
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -59,14 +103,25 @@ DEFAULT_LOCATIONS = {
 
 
 @app.route('/')
+@jwt_required(optional=True)
 def index():
     """Home page with location search and quick access"""
+    # If not authenticated, render standard index
+    current_user_id = get_jwt_identity()
+    
+    # If user is logged in, fetch their favorites
+    favorites = []
+    if current_user_id:
+        user = db_session.query(User).get(current_user_id)
+        favorites = session.get('favorites', [])
+    
     return render_template('index.html', 
                          default_locations=DEFAULT_LOCATIONS,
-                         favorites=session.get('favorites', []))
+                         favorites=favorites)
 
 
 @app.route('/weather')
+@jwt_required()
 def weather():
     """Weather display page for a specific location - DEBUG VERSION"""
     try:
@@ -199,6 +254,7 @@ def weather():
 
 
 @app.route('/history')
+@jwt_required()
 def history():
     """Historical weather data page"""
     try:
@@ -264,6 +320,7 @@ def history():
 
 
 @app.route('/dashboard')
+@jwt_required()
 def dashboard():
     """Multi-location dashboard"""
     favorites = session.get('favorites', [])
@@ -293,6 +350,7 @@ def dashboard():
 
 
 @app.route('/forecast')
+@jwt_required()
 def forecast():
     """ARIMA forecast page for a specific location"""
     try:
@@ -350,6 +408,7 @@ def forecast():
 
 
 @app.route('/stats')
+@jwt_required()
 def stats():
     """System statistics page"""
     try:
@@ -605,6 +664,196 @@ def inject_globals():
         'forecasting_available': STATSMODELS_AVAILABLE
     }
 
+
+# Authentication Routes
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    # Additional logging context
+    app.logger.info('Register route accessed')
+    if request.method == 'POST':
+        data = request.get_json()
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
+        
+        # Validate input
+        if not username or not email or not password:
+            return jsonify({'error': 'Missing required fields'}), 400
+        
+        # Validate email format
+        import re
+        email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_regex, email):
+            return jsonify({'error': 'Invalid email format'}), 400
+        
+        # Validate username: 3-20 characters, alphanumeric
+        if not 3 <= len(username) <= 20 or not username.replace('_', '').isalnum():
+            return jsonify({'error': 'Username must be 3-20 alphanumeric characters'}), 400
+        
+        # Validate password strength
+        if len(password) < 8:
+            return jsonify({'error': 'Password must be at least 8 characters long'}), 400
+        
+        # Check if user exists
+        user = db_session.query(User).filter(
+            (User.username == username) | (User.email == email)
+        ).first()
+        
+        if user:
+            if user.username == username:
+                return jsonify({'error': 'Username already exists'}), 409
+            else:
+                return jsonify({'error': 'Email already exists'}), 409
+        
+        # Create new user
+        hashed_password = flask_bcrypt.generate_password_hash(password).decode('utf-8')
+        new_user = User(
+            username=username,
+            email=email,
+            password_hash=hashed_password,
+            is_active=True  # Activate user by default
+        )
+        
+        try:
+            db_session.add(new_user)
+            db_session.commit()
+            return jsonify({'message': 'User registered successfully'}), 201
+        except Exception as e:
+            db_session.rollback()
+            logger.error(f'Registration error: {e}')
+            return jsonify({'error': 'Registration failed'}), 500
+    
+    # GET request renders registration page
+    return render_template('auth/register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # Comprehensive error logging
+        try:
+            data = request.get_json(force=True)  # Parse JSON even if content-type is incorrect
+        except Exception as e:
+            print(f"JSON parsing error: {e}")
+            return jsonify({'error': 'Invalid request format'}), 400
+        
+        username = data.get('username', '').strip()
+        password = data.get('password', '')
+        
+        # Validate input
+        if not username or not password:
+            return jsonify({'error': 'Missing username or password'}), 400
+        
+        # Extra validation for long input
+        if len(username) > 50 or len(password) > 128:
+            return jsonify({'error': 'Username or password too long'}), 400
+        
+        # Get fresh database session
+        from models.database import get_session
+        db_session = get_session()
+        
+        if db_session is None:
+            print("Login failed: Database session unavailable")
+            return jsonify({'error': 'Database session unavailable'}), 500
+        
+        # Find user by username or email
+        try:
+            user = db_session.query(User).filter(
+                (User.username == username) | (User.email == username)
+            ).first()
+        except Exception as e:
+            print(f"Database query error: {e}")
+            return jsonify({'error': 'Database query failed'}), 500
+        
+        if user:
+            # Verify password
+            try:
+                if flask_bcrypt.check_password_hash(user.password_hash, password):
+                    # Check if user is active
+                    if not user.is_active:
+                        return jsonify({'error': 'Account is not active'}), 403
+                    
+                    # Create access token
+                    access_token = create_access_token(identity=user.id)
+                    
+                    # Update last login
+                    from datetime import datetime, timezone
+                    user.last_login = datetime.now(timezone.utc)
+                    db_session.commit()
+                    
+                    return jsonify({
+                        'access_token': access_token,
+                        'user': user.to_dict(),
+                        'redirect': '/dashboard'
+                    }), 200
+                else:
+                    print(f"Failed login attempt for user: {username}")
+                    return jsonify({'error': 'Invalid credentials'}), 401
+            except Exception as e:
+                print(f"Password verification error: {e}")
+                return jsonify({'error': 'Authentication error'}), 500
+        
+        print(f"User not found: {username}")
+        return jsonify({'error': 'Invalid credentials'}), 401
+    
+    # GET request renders login page
+    return render_template('auth/login.html')
+
+@app.route('/logout', methods=['POST'])
+@jwt_required()
+def logout():
+    # Currently, JWT tokens are handled client-side
+    # In a more robust implementation, you'd blacklist tokens
+    return jsonify({'message': 'Logged out successfully'}), 200
+
+@app.route('/profile')
+@jwt_required()
+def profile():
+    current_user_id = get_jwt_identity()
+    user = db_session.query(User).get(current_user_id)
+    
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+    
+    return jsonify(user.to_dict()), 200
+
+@app.route('/login/google')
+def google_login():
+    redirect_uri = url_for('google_authorize', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+@app.route('/login/google/authorize')
+def google_authorize():
+    token = google.authorize_access_token()
+    resp = google.get('https://openidconnect.googleapis.com/v1/userinfo')
+    user_info = resp.json()
+    
+    # Find or create user
+    user = db_session.query(User).filter_by(email=user_info['email']).first()
+    
+    if not user:
+        # Create new user
+        user = User(
+            username=user_info.get('name', user_info['email'].split('@')[0]),
+            email=user_info['email'],
+            password_hash=flask_bcrypt.generate_password_hash(os.urandom(24)).decode('utf-8'),
+            is_active=True
+        )
+        db_session.add(user)
+        db_session.commit()
+    
+    # Create JWT token
+    access_token = create_access_token(identity=user.id)
+    
+    # Update last login
+    user.last_login = datetime.utcnow()
+    db_session.commit()
+    
+    # Redirect with token (client-side handling)
+    response = jsonify({
+        'access_token': access_token,
+        'user': user.to_dict()
+    })
+    return response
 
 if __name__ == '__main__':
     # Ensure data directory exists

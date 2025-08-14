@@ -6,7 +6,7 @@ SQLAlchemy models for weather data management
 from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional, Tuple
 import pandas as pd
-from sqlalchemy import create_engine, Column, Integer, Float, String, DateTime, Text, Index, UniqueConstraint
+from sqlalchemy import create_engine, Column, Integer, Float, String, DateTime, Text, Index, UniqueConstraint, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.orm.query import Query
@@ -524,6 +524,35 @@ def get_database_stats() -> Dict[str, Any]:
     except Exception as e:
         logger.error(f"Error getting database stats: {e}")
         return {"error": str(e)}
+
+
+class User(Base):
+    """
+    User model for authentication and profile management
+    """
+    __tablename__ = 'users'
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String(50), unique=True, nullable=False)
+    email = Column(String(120), unique=True, nullable=False)
+    password_hash = Column(String(255), nullable=False)
+    is_active = Column(Boolean, default=True)
+    is_admin = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    last_login = Column(DateTime)
+    
+    def __repr__(self):
+        return f'<User {self.username}>'
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'is_admin': self.is_admin,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'last_login': self.last_login.isoformat() if self.last_login else None
+        }
 
 
 # Flask-SQLAlchemy compatibility
