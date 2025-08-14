@@ -108,7 +108,7 @@ class WeatherExtractor:
             "daily": "temperature_2m_max,temperature_2m_min,precipitation_sum,uv_index_max,weathercode",
             "current_weather": "true",
             "timezone": "auto",
-            "forecast_days": 7  # Get 7 days of forecast
+            "past_days": 7  # Get 7 days of forecast
         }
         
         logger.info(f"Fetching weather forecast for {self.latitude}, {self.longitude}")

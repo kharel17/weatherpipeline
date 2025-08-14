@@ -1,0 +1,16 @@
+# generated_at: 2025-08-14T23:57:58.126897
+# total_records: 7
+# date_range: 2025-08-14 to 2025-08-20
+# locations: 1 unique location(s)
+# data_source: open-meteo
+# format_version: 1.0
+# columns: ['date', 'last_updated', 'measurement_time', 'latitude', 'longitude', 'timezone', 'elevation', 'current_temp_c', 'current_condition', 'wind_kph', 'wind_dir', 'forecast_max_temp', 'forecast_min_temp', 'precipitation_mm', 'uv_index', 'weather_code', 'forecast_condition', 'pm2_5', 'pm10', 'us_aqi', 'european_aqi', 'aqi_category', 'data_source', 'created_at']
+#
+date,last_updated,measurement_time,latitude,longitude,timezone,elevation,current_temp_c,current_condition,wind_kph,wind_dir,forecast_max_temp,forecast_min_temp,precipitation_mm,uv_index,weather_code,forecast_condition,pm2_5,pm10,us_aqi,european_aqi,aqi_category,data_source,created_at
+2025-08-14,2025-08-14T18:12:58.051397,2025-08-18T23:00,53.8,-1.5400002,Europe/London,51.0,23.9,Mainly clear,13.0,WNW,25.2,17.9,0.0,5.9,3,Overcast,7.2,8.6,34,25,Good,open-meteo,2025-08-14T18:12:58.051397
+2025-08-15,2025-08-14T18:12:58.051397,2025-08-18T23:00,53.8,-1.5400002,Europe/London,51.0,23.9,Mainly clear,13.0,WNW,27.0,17.2,0.0,5.9,3,Overcast,7.2,8.6,34,25,Good,open-meteo,2025-08-14T18:12:58.051397
+2025-08-16,2025-08-14T18:12:58.051397,2025-08-18T23:00,53.8,-1.5400002,Europe/London,51.0,23.9,Mainly clear,13.0,WNW,23.3,15.9,0.0,5.85,3,Overcast,7.2,8.6,34,25,Good,open-meteo,2025-08-14T18:12:58.051397
+2025-08-17,2025-08-14T18:12:58.051397,2025-08-18T23:00,53.8,-1.5400002,Europe/London,51.0,23.9,Mainly clear,13.0,WNW,22.4,12.7,0.0,5.6,3,Overcast,7.2,8.6,34,25,Good,open-meteo,2025-08-14T18:12:58.051397
+2025-08-18,2025-08-14T18:12:58.051397,2025-08-18T23:00,53.8,-1.5400002,Europe/London,51.0,23.9,Mainly clear,13.0,WNW,23.6,14.5,0.0,5.8,3,Overcast,7.2,8.6,34,25,Good,open-meteo,2025-08-14T18:12:58.051397
+2025-08-19,2025-08-14T18:12:58.051397,2025-08-18T23:00,53.8,-1.5400002,Europe/London,51.0,23.9,Mainly clear,13.0,WNW,19.2,14.6,0.0,5.45,3,Overcast,7.2,8.6,34,25,Good,open-meteo,2025-08-14T18:12:58.051397
+2025-08-20,2025-08-14T18:12:58.051397,2025-08-18T23:00,53.8,-1.5400002,Europe/London,51.0,23.9,Mainly clear,13.0,WNW,18.0,12.3,0.0,5.4,3,Overcast,7.2,8.6,34,25,Good,open-meteo,2025-08-14T18:12:58.052403

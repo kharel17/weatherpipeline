@@ -96,6 +96,38 @@ class WeatherRecord(Base):
         """Convert record to dictionary"""
         return {
             'id': self.id,
+        'date': self.date,
+        # Keep datetime objects as datetime objects, not strings
+        'last_updated': self.last_updated.isoformat() if self.last_updated else None,  # Don't convert to string
+        'measurement_time': self.measurement_time,  # Don't convert to string
+        'created_at': self.created_at.isoformat() if self.created_at else None,  # Don't convert to string - THIS IS THE KEY FIX
+        'latitude': self.latitude,
+        'longitude': self.longitude,
+        'timezone': self.timezone,
+        'elevation': self.elevation,
+        'current_temp_c': self.current_temp_c,
+        'current_condition': self.current_condition,
+        'wind_kph': self.wind_kph,
+        'wind_dir': self.wind_dir,
+        'forecast_max_temp': self.forecast_max_temp,
+        'forecast_min_temp': self.forecast_min_temp,
+        'precipitation_mm': self.precipitation_mm,
+        'uv_index': self.uv_index,
+        'weather_code': self.weather_code,
+        'forecast_condition': self.forecast_condition,
+        'pm2_5': self.pm2_5,
+        'pm10': self.pm10,
+        'us_aqi': self.us_aqi,
+        'european_aqi': self.european_aqi,
+        'aqi_category': self.aqi_category,
+        'data_source': self.data_source
+        }
+
+    def to_json_dict(self) -> Dict[str, Any]:
+        """Convert record to JSON-compatible dictionary"""
+        # Convert datetime objects to ISO format strings
+        return {
+            'id': self.id,
             'date': self.date,
             'last_updated': self.last_updated.isoformat() if self.last_updated else None,
             'measurement_time': self.measurement_time.isoformat() if self.measurement_time else None,
