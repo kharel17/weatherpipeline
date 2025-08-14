@@ -1,0 +1,16 @@
+# generated_at: 2025-08-14T23:32:14.021809
+# total_records: 7
+# date_range: 2025-08-14 to 2025-08-20
+# locations: 1 unique location(s)
+# data_source: open-meteo
+# format_version: 1.0
+# columns: ['date', 'last_updated', 'measurement_time', 'latitude', 'longitude', 'timezone', 'elevation', 'current_temp_c', 'current_condition', 'wind_kph', 'wind_dir', 'forecast_max_temp', 'forecast_min_temp', 'precipitation_mm', 'uv_index', 'weather_code', 'forecast_condition', 'pm2_5', 'pm10', 'us_aqi', 'european_aqi', 'aqi_category', 'data_source', 'created_at']
+#
+date,last_updated,measurement_time,latitude,longitude,timezone,elevation,current_temp_c,current_condition,wind_kph,wind_dir,forecast_max_temp,forecast_min_temp,precipitation_mm,uv_index,weather_code,forecast_condition,pm2_5,pm10,us_aqi,european_aqi,aqi_category,data_source,created_at
+2025-08-14,2025-08-14T17:47:13.961861,2025-08-18T23:00,28.375,84.0,Asia/Kathmandu,2345.0,14.0,Fog,7.3,N,15.7,12.1,45.0,0.35,95,Thunderstorm,13.6,13.8,45,36,Good,open-meteo,2025-08-14T17:47:13.961861
+2025-08-15,2025-08-14T17:47:13.961861,2025-08-18T23:00,28.375,84.0,Asia/Kathmandu,2345.0,14.0,Fog,7.3,N,15.7,12.5,0.0,2.15,45,Fog,13.6,13.8,45,36,Good,open-meteo,2025-08-14T17:47:13.961861
+2025-08-16,2025-08-14T17:47:13.961861,2025-08-18T23:00,28.375,84.0,Asia/Kathmandu,2345.0,14.0,Fog,7.3,N,15.6,12.8,2.9,3.9,95,Thunderstorm,13.6,13.8,45,36,Good,open-meteo,2025-08-14T17:47:13.961861
+2025-08-17,2025-08-14T17:47:13.961861,2025-08-18T23:00,28.375,84.0,Asia/Kathmandu,2345.0,14.0,Fog,7.3,N,15.4,12.6,8.7,4.7,61,Slight rain,13.6,13.8,45,36,Good,open-meteo,2025-08-14T17:47:13.961861
+2025-08-18,2025-08-14T17:47:13.961861,2025-08-18T23:00,28.375,84.0,Asia/Kathmandu,2345.0,14.0,Fog,7.3,N,14.7,12.2,0.0,5.3,45,Fog,13.6,13.8,45,36,Good,open-meteo,2025-08-14T17:47:13.961861
+2025-08-19,2025-08-14T17:47:13.961861,2025-08-18T23:00,28.375,84.0,Asia/Kathmandu,2345.0,14.0,Fog,7.3,N,15.7,10.7,34.2,6.75,63,Moderate rain,13.6,13.8,45,36,Good,open-meteo,2025-08-14T17:47:13.961861
+2025-08-20,2025-08-14T17:47:13.961861,2025-08-18T23:00,28.375,84.0,Asia/Kathmandu,2345.0,14.0,Fog,7.3,N,13.8,11.3,9.0,5.95,61,Slight rain,13.6,13.8,45,36,Good,open-meteo,2025-08-14T17:47:13.962881

@@ -83,14 +83,20 @@ History{% endblock %} {% block content %}
             <div class="text-sm text-gray-600 mt-2">Total Records</div>
           </div>
 
-          <!-- Date Range -->
+          <!-- Date Range - FIXED VERSION -->
           <div class="text-center p-4 bg-green-50 rounded-lg">
             <div class="text-lg font-bold text-green-600">
-              {% set oldest = history.records[-1] if history.records else None
-              %} {% set newest = history.records[0] if history.records else None
-              %} {% if oldest and newest %} {{ (newest.created_at.date() -
-              oldest.created_at.date()).days + 1 }} days {% else %} N/A {% endif
-              %}
+              {% set records_with_dates = history.records |
+              selectattr('created_at') | list %} {% if records_with_dates %} {%
+              set sorted_records = records_with_dates |
+              sort(attribute='created_at') %} {% set oldest_date =
+              sorted_records[0].created_at %} {% set newest_date =
+              sorted_records[-1].created_at %} {% if oldest_date and newest_date
+              %} {% if oldest_date.date and newest_date.date %} {{
+              (newest_date.date() - oldest_date.date()).days + 1 }} {% else %}
+              {{ sorted_records | length }} {% endif %} {% else %} {{
+              sorted_records | length }} {% endif %} {% else %} {{
+              history.records | length }} {% endif %} days
             </div>
             <div class="text-sm text-gray-600 mt-2">Data Span</div>
           </div>
@@ -187,11 +193,12 @@ History{% endblock %} {% block content %}
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               {% for record in history.records[:50] %}
-              <!-- Limit to first 50 records for performance -->
               <tr class="hover:bg-gray-50">
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {{ record.created_at.strftime('%Y-%m-%d %H:%M') if
-                  record.created_at else 'N/A' }}
+                  {% if record.created_at %} {% if record.created_at.strftime %}
+                  {{ record.created_at.strftime('%Y-%m-%d %H:%M') }} {% else %}
+                  {{ record.created_at|string }} {% endif %} {% else %} N/A {%
+                  endif %}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <span class="text-sm font-medium text-gray-900">
@@ -287,7 +294,7 @@ History{% endblock %} {% block content %}
   {% endif %}
 </div>
 
-<!-- Historical data as JSON for JavaScript -->
+<!-- Historical data as JSON for JavaScript - FIXED VERSION -->
 <script type="application/json" id="historyData">
   {
       "location": {
@@ -298,7 +305,7 @@ History{% endblock %} {% block content %}
       "records": [
           {% for record in history.records %}
           {
-              "date": "{{ record.created_at.isoformat() if record.created_at else '' }}",
+              "date": {% if record.created_at %}{% if record.created_at.isoformat %}"{{ record.created_at.isoformat() }}"{% else %}"{{ record.created_at|string }}"{% endif %}{% else %}null{% endif %},
               "temperature": {{ record.current_temp_c or 'null' }},
               "condition": "{{ record.current_condition or '' }}",
               "wind_kph": {{ record.wind_kph or 'null' }},

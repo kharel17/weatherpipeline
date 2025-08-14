@@ -188,6 +188,11 @@ def weather():
             'forecast': forecast_data,
             'forecast_error': forecast_error
         }
+
+    # --- ADD THIS DEBUG LINE ---
+    print(f"DEBUG: Data being sent to template is: {weather_data}")
+    print(f"DEBUG: The type of data is: {type(weather_data)}")
+    # ---------------------------
         
         logger.info(f"Rendering weather template for {location_name}")
         return render_template('weather.html', weather=weather_data)
@@ -197,36 +202,53 @@ def weather():
         flash('An error occurred while fetching weather data', 'error')
         return redirect(url_for('index'))
 
-
 @app.route('/history')
 def history():
-    """Historical weather data page"""
+    """Historical weather data page - FIXED VERSION"""
     try:
         # Get coordinates from query parameters
         lat = request.args.get('lat', type=float)
         lon = request.args.get('lon', type=float)
         
-        if not lat or not lon:
+        logger.info(f"History route called with lat={lat}, lon={lon}")
+        
+        if lat is None or lon is None:
             flash('Please provide valid coordinates', 'error')
+            logger.warning(f"Missing coordinates: lat={lat}, lon={lon}")
             return redirect(url_for('index'))
         
-        # Validate coordinates
+        # Check if coordinates are within valid ranges
+        if not (-90 <= lat <= 90) or not (-180 <= lon <= 180):
+            flash('Coordinates are out of valid range', 'error')
+            logger.warning(f"Coordinates out of range: lat={lat}, lon={lon}")
+            return redirect(url_for('index'))
+        
+        # Validate coordinates using existing function
         if not validate_coordinates(lat, lon):
             flash('Invalid coordinates provided', 'error')
             return redirect(url_for('index'))
         
         # Get location name
         location_name = get_location_name(lat, lon)
+        logger.info(f"Location name: {location_name}")
         
-        # Get historical records using your existing class methods
+        # Get historical records with progressive tolerance
         historical_records = []
+        
         try:
-            # Use your existing class method
-            historical_records = WeatherRecord.get_historical_for_location(lat, lon, days=30)
+            # First try with tight tolerance
+            historical_records = WeatherRecord.get_historical_for_location(lat, lon, days=30, tolerance=0.01)
+            logger.info(f"Found {len(historical_records)} records with tight tolerance (0.01)")
             
-            # If no records found, try with wider tolerance
+            # If no records, try with medium tolerance
             if not historical_records:
-                historical_records = WeatherRecord.get_historical_for_location(lat, lon, days=60, tolerance=0.1)
+                historical_records = WeatherRecord.get_historical_for_location(lat, lon, days=30, tolerance=0.1)
+                logger.info(f"Found {len(historical_records)} records with medium tolerance (0.1)")
+            
+            # If still no records, try with wide tolerance and more days
+            if not historical_records:
+                historical_records = WeatherRecord.get_historical_for_location(lat, lon, days=60, tolerance=0.5)
+                logger.info(f"Found {len(historical_records)} records with wide tolerance (0.5)")
                 
         except Exception as e:
             logger.error(f"Error getting historical records: {e}")
@@ -243,10 +265,13 @@ def history():
             'records': []
         }
         
-        # Convert records to dictionaries
+        # Convert records to dictionaries - use the FIXED to_dict method
         if historical_records:
             try:
+                # Sort records by created_at descending (newest first)
+                historical_records.sort(key=lambda r: r.created_at or datetime.min, reverse=True)
                 history_data['records'] = [record.to_dict() for record in historical_records]
+                logger.info(f"Successfully converted {len(historical_records)} records to dictionaries")
             except Exception as e:
                 logger.error(f"Error converting records to dict: {e}")
                 flash('Error processing historical data', 'error')
@@ -254,15 +279,17 @@ def history():
         
         if not history_data['records']:
             flash('No historical data available for this location. Try fetching current weather first.', 'info')
+            logger.info(f"No historical records found for {lat}, {lon}")
+        else:
+            logger.info(f"Rendering history template with {len(history_data['records'])} records")
         
         return render_template('history.html', history=history_data)
         
     except Exception as e:
-        logger.error(f"Error in history route: {e}")
+        logger.error(f"Error in history route: {e}", exc_info=True)
         flash('An error occurred while fetching historical data', 'error')
         return redirect(url_for('index'))
-
-
+    
 @app.route('/dashboard')
 def dashboard():
     """Multi-location dashboard"""
@@ -394,9 +421,11 @@ def api_weather(lat, lon):
         return jsonify({'error': 'Internal server error'}), 500
 
 
+# In your main Flask app file (e.g., frontend/app.py)
+
 @app.route('/api/history/<float:lat>/<float:lon>')
 def api_history(lat, lon):
-    """API endpoint for historical weather data"""
+    """API endpoint for historical weather data - FIXED VERSION"""
     try:
         if not validate_coordinates(lat, lon):
             return jsonify({'error': 'Invalid coordinates'}), 400
@@ -404,23 +433,21 @@ def api_history(lat, lon):
         days = request.args.get('days', 30, type=int)
         days = min(days, 365)  # Limit to 1 year
         
-        try:
-            records = WeatherRecord.get_history_for_location(lat, lon, days=days)
-        except AttributeError:
-            # Fallback if method doesn't exist
-            from sqlalchemy import desc
-            records = WeatherRecord.query.filter(
-                WeatherRecord.latitude.between(lat - 0.01, lat + 0.01),
-                WeatherRecord.longitude.between(lon - 0.01, lon + 0.01)
-            ).order_by(desc(WeatherRecord.created_at)).limit(days * 4).all()  # 4 records per day max
+        # Use the class method with progressive tolerance
+        records = WeatherRecord.get_historical_for_location(lat, lon, days=days, tolerance=0.01)
+        
+        # If no records found, try with wider tolerance
+        if not records:
+            records = WeatherRecord.get_historical_for_location(lat, lon, days=days, tolerance=0.1)
         
         if not records:
             return jsonify({'error': 'No historical data available'}), 404
         
+        # ✅ COMPLETE THE JSONIFY CALL HERE
         return jsonify({
             'success': True,
-            'data': [record.to_dict() for record in records],
-            'location_name': get_location_name(lat, lon)
+            'location_name': get_location_name(lat, lon),
+            'history': [record.to_json_dict() for record in records] # Convert each record
         })
         
     except Exception as e:

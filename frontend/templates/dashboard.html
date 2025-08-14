@@ -1,45 +1,210 @@
-{% extends "base.html" %} 0{% block title %}Dashboard - Weather Insight
-Engine{%endblock %} {% block content %}
+{% extends "base.html" %} {% block title %}Dashboard - Weather Insight Engine{%
+endblock %} {% block content %}
 <div class="min-h-screen bg-gray-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-8">Weather Dashboard</h1>
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Weather Dashboard</h1>
+      <div class="text-sm text-gray-600">
+        {{ dashboard_data|length if dashboard_data else 0 }} favorite locations
+      </div>
+    </div>
 
     {% if dashboard_data %}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for location in dashboard_data %}
-      <div class="bg-white rounded-lg shadow-md p-6">
-        <h3 class="text-lg font-semibold mb-2">{{ location.location.name }}</h3>
-        <div class="text-3xl font-bold text-blue-600 mb-2">
-          {{ "%.1f"|format(location.weather.current_temp_c) }}°C
+      <div
+        class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6"
+      >
+        <div class="flex justify-between items-start mb-4">
+          <h3 class="text-lg font-semibold text-gray-900">
+            {{ location.location.name }}
+          </h3>
+          <button
+            onclick="removeFromFavorites({{ location.location.lat }}, {{ location.location.lon }})"
+            class="text-red-500 hover:text-red-700 transition-colors"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fill-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+          </button>
         </div>
-        <p class="text-gray-600 mb-4">
-          {{ location.weather.current_condition }}
-        </p>
-        <a
-          href="{{ url_for('weather', lat=location.location.lat, lon=location.location.lon) }}"
-          class="text-blue-600 hover:text-blue-700 font-medium"
-        >
-          View Details →
-        </a>
+
+        <div class="mb-4">
+          <div class="text-3xl font-bold text-blue-600 mb-2">
+            {% if location.weather.current_temp_c %} {{
+            "%.1f"|format(location.weather.current_temp_c) }}°C {% else %} N/A
+            {% endif %}
+          </div>
+          <p class="text-gray-600 mb-2">
+            {{ location.weather.current_condition or 'Unknown' }}
+          </p>
+
+          <!-- Air Quality Badge -->
+          {% if location.air_quality %}
+          <span
+            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ location.air_quality.bg_color }} {{ location.air_quality.text_color }}"
+          >
+            AQI: {{ location.weather.us_aqi or 'N/A' }}
+          </span>
+          {% endif %}
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+          <div class="text-gray-600">
+            <span class="font-medium">Wind:</span> {{ location.weather.wind_kph
+            or 'N/A' }} km/h
+          </div>
+          <div class="text-gray-600">
+            <span class="font-medium">Precip:</span> {{
+            location.weather.precipitation_mm or 0 }} mm
+          </div>
+        </div>
+
+        <div class="flex space-x-2">
+          <a
+            href="{{ url_for('weather', lat=location.location.lat, lon=location.location.lon) }}"
+            class="flex-1 bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+          >
+            View Details
+          </a>
+
+          <a
+            href="{{ url_for('history', lat=location.location.lat, lon=location.location.lon) }}"
+            class="flex-1 bg-gray-600 text-white text-center py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
+          >
+            History
+          </a>
+        </div>
       </div>
       {% endfor %}
     </div>
+
+    <!-- Add more locations button -->
+    <div class="mt-8 text-center">
+      <a
+        href="{{ url_for('index') }}"
+        class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+      >
+        Add More Locations
+      </a>
+    </div>
+
     {% else %}
     <div class="text-center py-12">
+      <div
+        class="w-24 h-24 bg-gray-100 rounded-full mx-auto mb-6 flex items-center justify-center"
+      >
+        <svg
+          class="w-12 h-12 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+          ></path>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+          ></path>
+        </svg>
+      </div>
       <h3 class="text-lg font-medium text-gray-900 mb-2">
         No favorite locations yet
       </h3>
-      <p class="text-gray-600 mb-4">
-        Add some locations to see your personalized dashboard
+      <p class="text-gray-600 mb-6">
+        Add some locations to see your personalized weather dashboard with
+        current conditions and quick access to detailed forecasts.
       </p>
       <a
         href="{{ url_for('index') }}"
-        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+        class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
       >
-        Add Locations
+        Add Your First Location
       </a>
     </div>
     {% endif %}
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Remove from favorites functionality
+    window.removeFromFavorites = function (lat, lon) {
+      if (!confirm("Remove this location from favorites?")) {
+        return;
+      }
+
+      fetch("/remove-favorite", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ lat: lat, lon: lon }),
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.success) {
+            // Show success message
+            showMessage("Removed from favorites!", "success");
+            // Reload page after short delay
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          } else {
+            showMessage(
+              result.error || "Failed to remove from favorites",
+              "error"
+            );
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          showMessage("Failed to remove from favorites", "error");
+        });
+    };
+
+    // Message display function
+    function showMessage(message, type) {
+      const messageDiv = document.createElement("div");
+      messageDiv.className = `fixed top-24 right-4 z-50 px-4 py-3 rounded-lg shadow-lg text-white max-w-sm transform translate-x-full transition-transform duration-300 ${
+        type === "success" ? "bg-green-500" : "bg-red-500"
+      }`;
+      messageDiv.innerHTML = `
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    ${
+                      type === "success"
+                        ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>'
+                        : '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>'
+                    }
+                </svg>
+                ${message}
+            </div>
+        `;
+
+      document.body.appendChild(messageDiv);
+
+      // Animate in
+      setTimeout(() => {
+        messageDiv.style.transform = "translateX(0)";
+      }, 100);
+
+      // Remove after 3 seconds
+      setTimeout(() => {
+        messageDiv.style.transform = "translateX(100%)";
+        setTimeout(() => messageDiv.remove(), 300);
+      }, 3000);
+    }
+  });
+</script>
 {% endblock %}

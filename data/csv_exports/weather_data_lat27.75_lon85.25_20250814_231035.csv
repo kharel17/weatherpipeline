@@ -1,0 +1,16 @@
+# generated_at: 2025-08-14T23:10:35.931420
+# total_records: 7
+# date_range: 2025-08-14 to 2025-08-20
+# locations: 1 unique location(s)
+# data_source: open-meteo
+# format_version: 1.0
+# columns: ['date', 'last_updated', 'measurement_time', 'latitude', 'longitude', 'timezone', 'elevation', 'current_temp_c', 'current_condition', 'wind_kph', 'wind_dir', 'forecast_max_temp', 'forecast_min_temp', 'precipitation_mm', 'uv_index', 'weather_code', 'forecast_condition', 'pm2_5', 'pm10', 'us_aqi', 'european_aqi', 'aqi_category', 'data_source', 'created_at']
+#
+date,last_updated,measurement_time,latitude,longitude,timezone,elevation,current_temp_c,current_condition,wind_kph,wind_dir,forecast_max_temp,forecast_min_temp,precipitation_mm,uv_index,weather_code,forecast_condition,pm2_5,pm10,us_aqi,european_aqi,aqi_category,data_source,created_at
+2025-08-14,2025-08-14T17:25:35.885624,2025-08-18T23:00,27.75,85.25,Asia/Kathmandu,1288.0,21.2,Partly cloudy,4.1,SE,22.6,20.7,5.9,1.6,95,Thunderstorm,30.4,31.0,69,45,Moderate,open-meteo,2025-08-14T17:25:35.885624
+2025-08-15,2025-08-14T17:25:35.885624,2025-08-18T23:00,27.75,85.25,Asia/Kathmandu,1288.0,21.2,Partly cloudy,4.1,SE,26.6,20.2,1.7,8.15,80,Slight rain showers,30.4,31.0,69,45,Moderate,open-meteo,2025-08-14T17:25:35.885624
+2025-08-16,2025-08-14T17:25:35.885624,2025-08-18T23:00,27.75,85.25,Asia/Kathmandu,1288.0,21.2,Partly cloudy,4.1,SE,25.3,20.8,20.9,8.55,96,Thunderstorm with slight hail,30.4,31.0,69,45,Moderate,open-meteo,2025-08-14T17:25:35.885624
+2025-08-17,2025-08-14T17:25:35.885624,2025-08-18T23:00,27.75,85.25,Asia/Kathmandu,1288.0,21.2,Partly cloudy,4.1,SE,26.9,21.3,13.4,7.15,96,Thunderstorm with slight hail,30.4,31.0,69,45,Moderate,open-meteo,2025-08-14T17:25:35.885624
+2025-08-18,2025-08-14T17:25:35.885624,2025-08-18T23:00,27.75,85.25,Asia/Kathmandu,1288.0,21.2,Partly cloudy,4.1,SE,25.7,21.2,25.8,7.65,96,Thunderstorm with slight hail,30.4,31.0,69,45,Moderate,open-meteo,2025-08-14T17:25:35.885624
+2025-08-19,2025-08-14T17:25:35.885624,2025-08-18T23:00,27.75,85.25,Asia/Kathmandu,1288.0,21.2,Partly cloudy,4.1,SE,25.6,20.8,38.7,8.45,96,Thunderstorm with slight hail,30.4,31.0,69,45,Moderate,open-meteo,2025-08-14T17:25:35.885624
+2025-08-20,2025-08-14T17:25:35.885624,2025-08-18T23:00,27.75,85.25,Asia/Kathmandu,1288.0,21.2,Partly cloudy,4.1,SE,25.3,20.5,20.1,7.25,96,Thunderstorm with slight hail,30.4,31.0,69,45,Moderate,open-meteo,2025-08-14T17:25:35.885624
