@@ -252,7 +252,7 @@ def api_geocode(city_name):
         headers = {
             'User-Agent': 'WeatherInsightEngine/1.0'
         }
-        
+        # Backend makes request here
         response = requests.get(url, params=params, headers=headers, timeout=5)
         
         if response.status_code == 200:

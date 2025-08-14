@@ -2,14 +2,14 @@
 import pyrebase
 
 config = {
-    "apiKey": "AIzaSyDjpOIgNm8P2pdOhJ1tJ2RMm_CDkHVrIGU",
-    "authDomain": "name-417c5.firebaseapp.com",
+    "apiKey": "AIzaSyAnu26JMc-wAUdBg3dPGe4M-v0oWZsG_FA",
+    "authDomain": "weather-app-2a7aa.firebaseapp.com",
     "databaseURL": "https://name-417c5-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "projectId": "name-417c5",
-    "storageBucket": "name-417c5.firebasestorage.app",
-    "messagingSenderId": "940303807138",
-    "appId": "1:940303807138:web:69b88c3bfa525c74721dfb",
-    "measurementId": "G-QRXLDN97PN"
+    "projectId": "weather-app-2a7aa",
+    "storageBucket": "weather-app-2a7aa.firebasestorage.app",
+    "messagingSenderId": "870604441409",
+    "appId": "1:870604441409:web:e1b44107310dd4711403c0",
+    "measurementId": "G-XM1D5MT6W5"
 }
 
 firebase = pyrebase.initialize_app(config)

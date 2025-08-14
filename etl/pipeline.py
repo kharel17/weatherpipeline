@@ -216,7 +216,7 @@ class WeatherETLPipeline:
             logger.error(f"Data extraction failed: {e}")
             return None, None
 
-    def _transform_data(self, weather_data: Dict, air_data: Dict) -> Optional[List[Dict]]:
+    def _transform_data(self, weather_data: List[Dict], air_data: List[Dict]) -> Optional[List[Dict]]:
         """
         Execute data transformation step
         
@@ -230,7 +230,12 @@ class WeatherETLPipeline:
         transform_start_time = time.time()
         
         try:
-            transformer = WeatherTransformer(weather_data, air_data)
+            if not weather_data or not air_data:
+                logger.error("Received empty data list from extraction step.")
+                return None
+            weather_dict = weather_data[0]
+            air_dict  = air_data[0]
+            transformer = WeatherTransformer(weather_dict, air_dict)
             transformed_data = transformer.transform()
             
             transform_time = time.time() - transform_start_time

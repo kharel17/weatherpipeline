@@ -4,6 +4,8 @@ import sqlite3
 import pandas as pd
 import json
 import logging
+import firebase_admin 
+from firebase_admin import credentials, firestore
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Union
@@ -12,6 +14,15 @@ from sqlalchemy.orm import sessionmaker
 from models.database import WeatherRecord, Base
 
 logger = logging.getLogger(__name__)
+
+# --- Firebase Initialization (adding this after imports, before class) ---
+script_dir = os.path.dirname(os.path.abspath(__file__)) 
+key_path = os.path.join(script_dir, "firebase-key.json") 
+ # Ensure the key path is correct
+print(f"DEBUG: Attempting to load key from this path: {key_path}")
+cred = credentials.Certificate(key_path)
+firebase_admin.initialize_app(cred)
+db = firestore.client()
 
 class WeatherLoader:
     """
@@ -170,6 +181,18 @@ class WeatherLoader:
             session.rollback()
             session.close()
             return False
+        
+
+    @staticmethod
+    def push_weather_to_firebase(weather_data: dict) -> None:
+        """
+        Push a weather data dictionary to Firebase Firestore.
+
+        Args:
+            weather_data (dict): Example: {"city": "Kathmandu", "temp": 25, "humidity": 60, "time": "2025-08-14T10:00:00"}
+        """
+        db.collection("weather_data").add(weather_data)
+        logger.info(f"Weather data pushed to Firebase: {weather_data}")
 
     def save_all_formats(self, base_filename: Optional[str] = None) -> Dict[str, Optional[str]]:
         """
