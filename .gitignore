@@ -1,0 +1,4 @@
+# Ignore SQLite temp files and logs
+*.db-shm
+*.db-wal
+data/logs/etl_pipeline.log
