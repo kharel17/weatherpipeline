@@ -33,8 +33,27 @@ except ImportError as e:
     print("Or install the modules: pip install -e .")
     sys.exit(1)
 
+from flask.json.provider import DefaultJSONProvider
+
+class CustomJSONProvider(DefaultJSONProvider):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        try:
+            import numpy as np
+            if isinstance(obj, np.bool_):
+                return bool(obj)
+            elif isinstance(obj, (np.integer, np.floating)):
+                return float(obj)
+        except ImportError:
+            pass
+        if hasattr(obj, '__dict__'):
+            return obj.__dict__
+        return str(obj)
+
 # Initialize Flask app
 app = Flask(__name__)
+app.json = CustomJSONProvider(app)
 
 # Configuration
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'weather-insight-dev-key-2025')
@@ -144,7 +163,7 @@ def weather():
             except Exception as e:
                 logger.error(f"ETL pipeline error: {e}")
                 # Check if it's a duplicate record error (not actually an error)
-                if not handle_duplicate_record_error(str(e)):
+                if not _handle_duplicate_record_error(str(e)):
                     flash('Weather service temporarily unavailable. Please try again later.', 'error')
                     return redirect(url_for('index'))
                 # If it was just a duplicate, try to get the record again
@@ -189,14 +208,14 @@ def weather():
             'forecast_error': forecast_error
         }
 
-    # --- ADD THIS DEBUG LINE ---
-    print(f"DEBUG: Data being sent to template is: {weather_data}")
-    print(f"DEBUG: The type of data is: {type(weather_data)}")
-    # ---------------------------
-        
+        # --- ADD THIS DEBUG LINE ---
+        print(f"DEBUG: Data being sent to template is: {weather_data}")
+        print(f"DEBUG: The type of data is: {type(weather_data)}")
+        # ---------------------------
+    
         logger.info(f"Rendering weather template for {location_name}")
         return render_template('weather.html', weather=weather_data)
-        
+    
     except Exception as e:
         logger.error(f"Error in weather route: {e}", exc_info=True)
         flash('An error occurred while fetching weather data', 'error')
@@ -592,6 +611,19 @@ def remove_favorite():
 
 
 # Helper functions
+def _handle_duplicate_record_error(error_message):
+    """
+    Checks if the error message is related to a duplicate record in the database.
+    Returns True if it's a duplicate error, False otherwise.
+    """
+    duplicate_keywords = [
+        "UNIQUE constraint failed",
+        "duplicate key value violates unique constraint",
+        "IntegrityError",
+        "already exists"
+    ]
+    return any(keyword in error_message for keyword in duplicate_keywords)
+
 def _is_data_stale(record, hours=2):
     """Check if weather data is stale (older than specified hours)"""
     if not record.created_at:
