@@ -56,7 +56,7 @@ class WeatherExtractor:
                 logger.debug(f"Making request to {url}, attempt {attempt + 1}")
                 
                 response = requests.get(url, params=params, timeout=self.timeout)
-                response.raise_for_status()  # Raises HTTPError for bad responses
+                response.raise_for_status() 
                 
                 data = response.json()
                 logger.debug(f"Request successful on attempt {attempt + 1}")
